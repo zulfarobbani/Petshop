@@ -15,8 +15,8 @@
         <label>Kuantiti : </label><input type="text" name="kuantiti"><br>
         <label>Satuan : </label><input type="text" name="satuan"><br>
         <label>Harga : </label><input type="text" name="harga"><br>
-        <label>Waktu Masuk Produk : </label><input type="date" name="dateCreate"><br>
-        <label>Waktu Expiry Produk : </label><input type="date" name="dateexpire"><br>
+        <label>Waktu Masuk Produk : </label><input type="date" name="produkmasuk"><br>
+        <label>Waktu Expiry Produk : </label><input type="date" name="produkexpire"><br>
         <button type="submit">Simpan</button>
     </form>
 

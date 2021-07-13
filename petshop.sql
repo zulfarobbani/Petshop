@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 13, 2021 at 10:51 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.11
+-- Generation Time: Jul 13, 2021 at 04:58 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -45,6 +46,15 @@ CREATE TABLE `chronology` (
   `idTables` varchar(255) NOT NULL,
   `dateCreate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `chronology`
+--
+
+INSERT INTO `chronology` (`idChronology`, `deskripsiChronology`, `idTables`, `dateCreate`) VALUES
+('crn60ed9afe6dcba', 'User 1 telah menambah produk \"asdk\"', 'itm60ed9afe0cfda', '2021-07-13'),
+('crn60ed9ccfcfc2f', 'User 1 telah mengubah produk \"asdk 1\"', 'itm60ed9afe0cfda', '2021-07-13'),
+('crn60ed9d6cc46c2', 'User 1 telah menghapus produk \"asdk 1\"', 'itm60ed9afe0cfda', '2021-07-13');
 
 -- --------------------------------------------------------
 
@@ -98,12 +108,8 @@ CREATE TABLE `groupitem` (
 --
 
 INSERT INTO `groupitem` (`idGroupitem`, `idItem`, `pengurangItem`, `kuantitiItem`, `dateCreate`) VALUES
-('gi60ec380ff2f73', 'namaProduk1', '10000', '5', '2021-07-12'),
-('gi60ec44f9b8786', 'namaProduk3', '2000', '2', '2021-07-12'),
-('gi60ec44f9b8786', 'namaProduk1', '7000', '7', '2021-07-12'),
-('gi60ec37b0bd817', 'namaProduk3', '1000', '1', '2021-07-12'),
-('gi60ec37b0bd817', 'namaProduk2', '100', '4', '2021-07-12'),
-('gi60ec37b0bd817', 'namaProduk1', '22000', '24', '2021-07-12');
+('gi60ed6f89d3ab3', 'namaProduk1', '', '2', '2021-07-13'),
+('gi60ed6f89d3av2', 'namaProduk2', '', '2', '2021-07-13');
 
 -- --------------------------------------------------------
 
@@ -114,13 +120,24 @@ INSERT INTO `groupitem` (`idGroupitem`, `idItem`, `pengurangItem`, `kuantitiItem
 CREATE TABLE `item` (
   `idItem` varchar(255) NOT NULL,
   `namaItem` text NOT NULL,
+  `supplierItem` varchar(255) NOT NULL,
+  `satuanItem` varchar(255) NOT NULL,
   `stockItem` int(100) NOT NULL,
   `hargaItem` varchar(255) NOT NULL,
   `kuantitiItem` varchar(255) NOT NULL,
-  `dateCreate` date NOT NULL,
   `tanggalmasukProduk` date NOT NULL,
-  `tanggalexpireProduk` date NOT NULL
+  `tanggalexpiryProduk` date NOT NULL,
+  `dateCreate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `item`
+--
+
+INSERT INTO `item` (`idItem`, `namaItem`, `supplierItem`, `satuanItem`, `stockItem`, `hargaItem`, `kuantitiItem`, `tanggalmasukProduk`, `tanggalexpiryProduk`, `dateCreate`) VALUES
+('itm60ed143e58f22', 'produk 1', 'supplier 1', 'pcs', 100, '100000', '100', '2021-07-13', '2023-07-13', '2021-07-13'),
+('itm60ed27fc1bd95', 'produk 2', 'supplier 2', 'pcs', 100, '200000', '100', '2021-07-31', '2023-07-31', '2021-07-13'),
+('itm60ed28a480a88', 'produk 3', 'supplier 1', 'pcs', 200, '150000', '200', '2021-07-31', '2023-07-31', '2021-07-13');
 
 -- --------------------------------------------------------
 
@@ -87317,7 +87334,17 @@ CREATE TABLE `media` (
   `idEntity` varchar(255) NOT NULL,
   `jenisDokumen` varchar(255) NOT NULL,
   `dateCreate` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `media`
+--
+
+INSERT INTO `media` (`idMedia`, `pathMedia`, `idRelation`, `idEntity`, `jenisDokumen`, `dateCreate`) VALUES
+('med60ed143e6b918', '60ed143e6be1c.', 'itm60ed143e58f22', '1', '', '2021-07-13'),
+('med60ed1fffe03dc', '260ed1fffe03e8.jpg', '', '1', '', '2021-07-13'),
+('med60ed27fc5ce04', '60ed27fc5ce19.', 'itm60ed27fc1bd95', '1', '', '2021-07-13'),
+('med60ed28a4b0a74', '60ed28a4b0a86.', 'itm60ed28a480a88', '1', '', '2021-07-13');
 
 -- --------------------------------------------------------
 
@@ -87466,9 +87493,7 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`idTransaksi`, `nomorTransaksi`, `kasirTransaksi`, `pelangganTransaksi`, `tanggalTransaksi`, `idGroupitem`, `idClient`, `dateCreate`) VALUES
-('tran60ec37b0bd814', 'GKO/30/JLD/099', 'Khoirunnisa Farida Zahra', 'Caniago Andree Meilio', '2021-07-06', 'gi60ec37b0bd817', 'client1', '2021-07-12'),
-('tran60ec380ff2f71', 'RCP/007/FD/100', 'Aprillia Violet', 'Meilio Andree', '2021-07-06', 'gi60ec380ff2f73', 'client3', '2021-07-12'),
-('tran60ec44f9b8783', 'RCP/007/FD/100', 'Aprillia Violet', 'Meilio Andree', '2021-07-06', 'gi60ec44f9b8786', 'client3', '2021-07-12');
+('tran60ed6f89d3ac2', '10901923', 'kasir 1', 'pelanggan 1', '2021-07-13', 'gi60ed6f89d3ac5', 'client1', '2021-07-13');
 
 -- --------------------------------------------------------
 
@@ -87478,23 +87503,34 @@ INSERT INTO `transaksi` (`idTransaksi`, `nomorTransaksi`, `kasirTransaksi`, `pel
 
 CREATE TABLE `users` (
   `idUser` varchar(255) NOT NULL,
-  `namaUser` text NOT NULL,
+  `namaUser` varchar(255) NOT NULL,
   `passwordUser` varchar(255) NOT NULL,
-  `hirarkiUser` int(2) NOT NULL,
-  `nikUser` varchar(255) NOT NULL,
+  `hirarkiUser` varchar(255) NOT NULL,
+  `nikUser` varchar(19) NOT NULL,
   `dateCreate` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`idUser`, `namaUser`, `passwordUser`, `hirarkiUser`, `nikUser`, `dateCreate`) VALUES
-('user60ebe01a6fd7a', 'user1', '$2y$10$zNimQdAeSDPnImqTVtiBLellxPttlyikYqDd0n72P7e146eNWq3za', 1, '1920382992', '2021-07-12');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `chronology`
+--
+ALTER TABLE `chronology`
+  ADD PRIMARY KEY (`idChronology`);
+
+--
+-- Indexes for table `groupitem`
+--
+ALTER TABLE `groupitem`
+  ADD PRIMARY KEY (`idGroupitem`);
+
+--
+-- Indexes for table `item`
+--
+ALTER TABLE `item`
+  ADD PRIMARY KEY (`idItem`);
 
 --
 -- Indexes for table `kabupaten`
@@ -87534,6 +87570,12 @@ ALTER TABLE `provinsi`
 --
 ALTER TABLE `sosialmedia`
   ADD PRIMARY KEY (`idSosialmedia`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`idUser`);
 
 --
 -- Constraints for dumped tables

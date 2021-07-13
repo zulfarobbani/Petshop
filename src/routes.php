@@ -58,8 +58,25 @@ $routes->add('usersDelete', new Route('/users/{id_user}/delete', [
     '_controller' => 'App\Users\Controller\UsersController::delete',
 ]));
 
-$routes->add('transaksiCreate', new Route('transaksi/create', [
+//Transaksi
+$routes->add('transaksi', new Route('/transaksi', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::index'
+]));
+$routes->add('transaksiCreate', new Route('/transaksi/create', [
     '_controller' => 'App\Transaksi\Controller\TransaksiController::create'
 ]));
+$routes->add('transaksiStore', new Route('/transaksi/store', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::store'
+]));
+$routes->add('transaksiEdit', new Route('/transaksi/{idTransaksi}/edit', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::edit'
+]));
+$routes->add('transaksiUpdate', new Route('/transaksi/{idTransaksi}/update', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::update'
+]));
+$routes->add('transaksiDetail', new Route('/transaksi/{idTransaksi}/detail', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::detail'
+]));
+
 
 return $routes;

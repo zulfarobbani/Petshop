@@ -21,7 +21,7 @@ class TransaksiController extends GlobalFunc
     {
         $datas = $this->model->selectAll();
 
-        return $this->render_template('users/index', ['datas' => $datas]);
+        return $this->render_template('transaksi/index', ['datas' => $datas]);
     }
 
     public function create(Request $request)
@@ -31,87 +31,99 @@ class TransaksiController extends GlobalFunc
 
     public function store(Request $request)
     {
-        $idUser = uniqid('user');
+        
+        $idTransaksi = uniqid('tran');
+        $idGroupitem = uniqid('gi');
 
-        $namaUser = $request->request->get('namaUser');
-        $passwordUser = $request->request->get('passwordUser');
-        $confirmPasswordUser = $request->request->get('confirmPasswordUser');
-        $nikUser = $request->request->get('nikUser');
-        $hirarkiUser = $request->request->get('hirarkiUser');
-        $dateCreate = date("Y-m-d");
+        $nomorTransaksi = $request->request->get('nomorTransaksi');
+        $pelangganTransaksi = $request->request->get('pelangganTransaksi');
+        $kasirTransaksi = $request->request->get('kasirTransaksi');
+        $tanggalTransaksi = $request->request->get('tanggalTransaksi');
+        $idClient = $request->request->get('idClient');
+        $dateCreate = date('Y-m-d');
 
-        if ($passwordUser != $confirmPasswordUser)
-        {
-            return new JsonResponse("Password Dan Confirm Password Tidak Sesuai");
-        } else 
-        {
-            $user_arr = array(
-                "idUsers" => $idUser,
-                "namaUsers" => $namaUser,
-                "passwordUser" => password_hash($passwordUser, PASSWORD_DEFAULT),
-                "nikUser" => $nikUser,
-                "hirarkiUser" => $hirarkiUser,
-                "dateCreate" => $dateCreate
-            );
-    
-            $create = $this->model->create($user_arr);
+        $transaksi_arr = array(
+            "idTransaksi" => $idTransaksi,
+            "nomorTransaksi" => $nomorTransaksi,
+            "kasirTransaksi" => $kasirTransaksi,
+            "pelangganTransaksi" => $pelangganTransaksi,
+            "tanggalTransaksi" => $tanggalTransaksi,
+            "idGroupitem" => $idGroupitem,
+            "idClient" => $idClient,
+            "dateCreate" => $dateCreate
+        );
+
+        $idItem = $request->request->get('idItem');
+        $kuantitiItem = $request->request->get('kuantitiItem');
+        $pengurangItem = $request->request->get('pengurangItem');
+
+        for($index = 0; $index < count($idItem); $index++){
+            $this->model->createGroupItem($idGroupitem, $idItem[$index], $pengurangItem[$index], $kuantitiItem[$index], $dateCreate);
         }
 
-        return new RedirectResponse('/users');
+        $create = $this->model->create($transaksi_arr);
+
+        return new RedirectResponse('/transaksi');
     }
 
     public function edit(Request $request)
     {
-        $id_user = $request->attributes->get('id_user');
+        $idTransaksi = $request->attributes->get('idTransaksi');
 
-        $detail = $this->model->selectOne($id_user);
+        $detail = $this->model->selectOne($idTransaksi);
+        $groupItem = $this->model->selectGroupItem($detail['idGroupitem']);
 
-        return $this->render_template('users/edit', ['detail' => $detail]);
+
+        return $this->render_template('transaksi/edit', ['detail' => $detail, 'groupItem' => $groupItem]);
     }
 
     public function update(Request $request)
     {
-        $id_user = $request->attributes->get('id_user');
+        $idTransaksi = $request->attributes->get('idTransaksi');
 
-        $detail = $this->model->selectOne($id_user);
-        
-        $namaUser = $request->request->get('namaUser');
-        $currentPasswordUser = $request->request->get('currentPasswordUser');
-        $passwordUser = $request->request->get('passwordUser');
-        $confirmPasswordUser = $request->request->get('confirmPasswordUser');
-        $nikUser = $request->request->get('nikUser');
-        $hirarkiUser = $request->request->get('hirarkiUser');
+        $nomorTransaksi = $request->request->get('nomorTransaksi');
+        $pelangganTransaksi = $request->request->get('pelangganTransaksi');
+        $kasirTransaksi = $request->request->get('kasirTransaksi');
+        $tanggalTransaksi = $request->request->get('tanggalTransaksi');
+        $idClient = $request->request->get('idClient');
+        $dateCreate = date('Y-m-d');
 
-        if (!password_verify($currentPasswordUser, $detail['passwordUser'])){
+        $transaksi_arr = array(
+            "nomorTransaksi" => $nomorTransaksi,
+            "kasirTransaksi" => $kasirTransaksi,
+            "pelangganTransaksi" => $pelangganTransaksi,
+            "tanggalTransaksi" => $tanggalTransaksi,
+            // "idGroupitem" => $idGroupitem,
+            "idClient" => $idClient
+            // "dateCreate" => $dateCreate
+        );
 
-            return new JsonResponse("Current Password Salah Atau Tidak Sesuai");
+        $update = $this->model->update($idTransaksi, $transaksi_arr);
 
-        } else {
-            if ($passwordUser != $confirmPasswordUser){
-                return new JsonResponse("Password Dan Confirm Password Tidak Sesuai");
-            } else {
-                $user_arr = array(
-                    "namaUsers" => $namaUser,
-                    "passwordUser" => password_hash($passwordUser, PASSWORD_DEFAULT),
-                    "nikUser" => $nikUser,
-                    "hirarkiUser" => $hirarkiUser
-                );
-        
-                $update = $this->model->update($id_user, $user_arr);
-            }
+        $detail = $this->model->selectOne($idTransaksi);
+
+        $idItem = $request->request->get('idItem');
+        $kuantitiItem = $request->request->get('kuantitiItem');
+        $pengurangItem = $request->request->get('pengurangItem');
+
+        $this->model->deleteGroupItem($detail['idGroupitem']);
+
+        for($index = 0; $index < count($idItem); $index++){
+            $this->model->createGroupItem($detail['idGroupitem'], $idItem[$index], $pengurangItem[$index], $kuantitiItem[$index], $dateCreate);
         }
 
-        return new RedirectResponse('/users');
-        
+
+        return new RedirectResponse('/transaksi');
     }
 
     public function detail(Request $request)
     {
-        $id_user = $request->attributes->get('id_user');
-        
-        $detail = $this->model->selectOne($id_user);
+        $idTransaksi = $request->attributes->get('idTransaksi');
 
-        return $this->render_template('users/detail', ['detail' => $detail]);
+        $detail = $this->model->selectOne($idTransaksi);
+        $groupItem = $this->model->selectGroupItem($detail['idGroupitem']);
+
+        return $this->render_template('transaksi/detail', ['detail' => $detail, 'groupItem' => $groupItem]);
 
     }
 

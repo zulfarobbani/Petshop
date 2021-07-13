@@ -8,11 +8,11 @@ use PDOException;
 class Database{
  
 	var $host = "localhost";
-	var $username = "postgres";
-	var $pass = "oaxudowh9";
-	var $db = "bpnb";
-    var $driver = 'pgsql';
-    var $port = '5432';
+	var $username = "root";
+	var $pass = "";
+	var $db = "petshop";
+    var $driver = 'mysql';
+    var $port = '3306';
     var $conn;
  
 	function __construct(){

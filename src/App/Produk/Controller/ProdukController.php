@@ -3,8 +3,8 @@
 namespace App\Produk\Controller;
 
 use App\Produk\Model\Produk;
-use App\Media\Model\Media;
 use Core\GlobalFunc;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class ProdukController extends GlobalFunc
@@ -35,19 +35,23 @@ class ProdukController extends GlobalFunc
         $namaItem = $request->request->get('namaItem');
         $kuantiti = $request->request->get('kuantiti');
         $harga = $request->request->get('harga');
-        $dateCreate = $request->request->get('dateCreate');
+        $dateCreate = date('Y-m-d');
+        $produkMasuk = $request->request->get('produkmasuk');
+        $produkExpire = $request->request->get('produkexpire');
 
         $data_test = array(      
             'namaItem' => $namaItem,
             'kuantiti' => $kuantiti,
             'harga' => $harga,
-            'dateCreate' => $dateCreate
+            'dateCreate' => $dateCreate,
+            'produkMasuk' => $produkMasuk,
+            'produkExpire' => $produkExpire
         );
 
         
         $this->model->create($data_test);
         
-        return header("location:http://petshop.com/produk");
+      return new RedirectResponse('/produk');
     }
     public function ReadOne(Request $request)
     {
@@ -55,7 +59,7 @@ class ProdukController extends GlobalFunc
         $datas = $this->model->selectOne($id);
         
 
-        return $this->render_template('produk/edit', ['idItem' => $datas['idItem'], 'namaItem'=>$datas['namaItem'], 'kuantiti'=>$datas['kuantitiItem'], 'harga'=>$datas['hargaItem'], 'dateCreate'=>$datas['dateCreate']]);
+        return $this->render_template('produk/edit', ['datas'=>$datas]);
     }
     public function update(Request $request)
     {
@@ -63,18 +67,21 @@ class ProdukController extends GlobalFunc
         $namaItem = $request->request->get('namaItem');
         $kuantiti = $request->request->get('kuantiti');
         $harga = $request->request->get('harga');
-        $dateCreate = $request->request->get('dateCreate');
+        $produkMasuk = $request->request->get('produkmasuk');
+        $produkExpire = $request->request->get('produkexpire');
         $id = $request->attributes->get('id');
         $data_test = array(
             'namaItem' => $namaItem,
             'kuantiti' => $kuantiti,
             'harga' => $harga,
-            'dateCreate' => $dateCreate
+            'produkMasuk' => $produkMasuk,
+            'produkExpire' => $produkExpire
         );
+
         
        $this->model->update($id, $data_test);
 
-       return header("location:http://petshop.com/produk");
+       return new RedirectResponse('/produk');
     }
     public function delete(Request $request)
     {
@@ -82,6 +89,6 @@ class ProdukController extends GlobalFunc
         $this->model->delete($id);
 
 
-        return header("location:http://petshop.com/produk");
+        return new RedirectResponse('/produk');
     }
 }

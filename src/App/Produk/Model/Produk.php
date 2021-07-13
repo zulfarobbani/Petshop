@@ -39,8 +39,10 @@ class Produk extends GlobalFunc
          $kuantiti = $data_test['kuantiti'];
          $harga = $data_test['harga'];
          $dateCreate = $data_test['dateCreate'];
+         $produkMasuk = $data_test['produkMasuk'];
+         $produkExpire = $data_test['produkExpire'];
          
-        $sql = "INSERT INTO ".$this->table." VALUES ('$idItem','$namaItem', '', '$harga', '$kuantiti', '$dateCreate')";
+        $sql = "INSERT INTO ".$this->table." VALUES ('$idItem','$namaItem', '', '$harga', '$kuantiti', '$dateCreate', '$produkMasuk', '$produkExpire')";
 
         try {
             $data = $this->conn->prepare($sql);
@@ -72,9 +74,10 @@ class Produk extends GlobalFunc
         $namaItem = $data_test['namaItem'];
          $kuantiti = $data_test['kuantiti'];
          $harga = $data_test['harga'];
-         $dateCreate = $data_test['dateCreate'];
+         $produkMasuk = $data_test['produkMasuk'];
+         $produkExpire = $data_test['produkExpire'];
 
-        $sql = "UPDATE ".$this->table." SET namaItem = '$namaItem', kuantitiItem = '$kuantiti', hargaItem = '$harga', dateCreate = '$dateCreate' WHERE idItem='$id'";
+        $sql = "UPDATE ".$this->table." SET namaItem = '$namaItem', kuantitiItem = '$kuantiti', hargaItem = '$harga', tanggalmasukProduk = '$produkMasuk', tanggalexpireProduk = '$produkExpire' WHERE idItem='$id'";
 
         try{
             $data = $this->conn->prepare($sql);

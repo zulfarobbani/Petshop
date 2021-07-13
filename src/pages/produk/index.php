@@ -24,12 +24,12 @@
             <?php foreach($datas as $key => $values) { ?>
             <tr>
                 <td><?= $values['namaItem']?></td>
-                <td>Supplier</td>
+                <td>Supplier (static)</td>
                 <td><?= $values['kuantitiItem']?></td>
-                <td>Satuan</td>
-                <td><?= $values['dateCreate']?></td>
-                <td>Waktu Expiry</td>
-                <td><a href="produk/edit/<?= $values['idItem']?>">EDIT</a>||<a href="produk/delete/<?= $values['idItem']?>">DELETE</a></td>
+                <td>Satuan (static)</td>
+                <td><?= $values['tanggalmasukProduk']?></td>
+                <td><?= $values['tanggalexpireProduk']?></td>
+                <td><a href="produk/edit/<?= $values['idItem']?>">EDIT</a>||    ||<a href="produk/delete/<?= $values['idItem']?>">DELETE</a></td>
             </tr>
             <?php } ?>
         </tbody>

@@ -34,7 +34,32 @@ $routes->add('bank', new Route('/bank', [
 $routes->add('bankEdit', new Route('/bank/edit/{id}', [
     '_controller' => 'App\Bank\Controller\BankController::edit'
 ]));
+//
 
+//CRUD produk
+$routes->add('produk', new Route('/produk', [
+    '_controller' => 'App\Produk\Controller\ProdukController::index',
+]));
+
+$routes->add('produkcreate', new Route('/produk/create', [
+    '_controller' => 'App\Produk\Controller\ProdukController::create',
+]));
+
+$routes->add('produksimpan', new Route('/produk/store', [
+    '_controller' => 'App\Produk\Controller\ProdukController::store',
+]));
+
+$routes->add('produksedit', new Route('/produk/edit/{id}', [
+    '_controller' => 'App\Produk\Controller\ProdukController::ReadOne',
+]));
+
+$routes->add('produkupdate', new Route('/produk/edit/{id}/update', [
+    '_controller' => 'App\Produk\Controller\ProdukController::update',
+]));
+
+$routes->add('produkshapus', new Route('/produk/delete/{id}', [
+    '_controller' => 'App\Produk\Controller\ProdukController::delete',
+]));
 //User Management
 $routes->add('users', new Route('/users', [
     '_controller' => 'App\Users\Controller\UsersController::index',

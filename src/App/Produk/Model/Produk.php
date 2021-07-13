@@ -16,9 +16,9 @@ class Produk extends GlobalFunc
         $this->conn = $globalFunc->conn;
     }
 
-    public function selectAll()
+    public function selectAll($where = "")
     {
-        $sql = "SELECT * FROM ".$this->table;
+        $sql = "SELECT * FROM " . $this->table . " " . $where;
 
         try {
             $query = $this->conn->prepare($sql);
@@ -31,22 +31,26 @@ class Produk extends GlobalFunc
             die();
         }
     }
-    
-    public function create($data_test = [])
+
+    public function create($datas)
     {
-         $idItem = uniqid('itm');
-         $namaItem = $data_test['namaItem'];
-         $kuantiti = $data_test['kuantiti'];
-         $harga = $data_test['harga'];
-         $dateCreate = $data_test['dateCreate'];
-         
-        $sql = "INSERT INTO ".$this->table." VALUES ('$idItem','$namaItem', '', '$harga', '$kuantiti', '$dateCreate')";
+        $idItem = uniqid('itm');
+        $namaItem = $datas->get('namaItem');
+        $supplierItem = $datas->get('supplierItem');
+        $satuanItem = $datas->get('satuanItem');
+        $kuantiti = $datas->get('kuantitiItem');
+        $harga = $datas->get('hargaItem');
+        $tanggalmasukProduk = $datas->get('tanggalmasukProduk');
+        $tanggalexpiryProduk = $datas->get('tanggalexpiryProduk');
+        $dateCreate = date('Y-m-d');
+
+        $sql = "INSERT INTO " . $this->table . " VALUES ('$idItem','$namaItem', '$supplierItem', '$satuanItem', '$kuantiti', '$harga', '$kuantiti', '$tanggalmasukProduk', '$tanggalexpiryProduk', '$dateCreate')";
 
         try {
             $data = $this->conn->prepare($sql);
-
             $data->execute();
-            return $data->rowCount();
+
+            return $idItem;
         } catch (PDOException $e) {
             echo $e;
             die();
@@ -54,32 +58,37 @@ class Produk extends GlobalFunc
     }
     public function selectOne($id)
     {
-        $sql = "SELECT * FROM ".$this->table." WHERE idItem = '$id'";
+        $sql = "SELECT * FROM " . $this->table . " WHERE idItem = '$id'";
 
         try {
             $query = $this->conn->prepare($sql);
             $query->execute();
             $data = $query->fetch();
-            
+
             return $data;
         } catch (PDOException $e) {
             echo $e;
             die();
         }
     }
-    public function update($id, $data_test = [])
+    public function update($id, $datas)
     {
-        $namaItem = $data_test['namaItem'];
-         $kuantiti = $data_test['kuantiti'];
-         $harga = $data_test['harga'];
-         $dateCreate = $data_test['dateCreate'];
+        $namaItem = $datas->get('namaItem');
+        $supplierItem = $datas->get('supplierItem');
+        $satuanItem = $datas->get('satuanItem');
+        $kuantiti = $datas->get('kuantitiItem');
+        $harga = $datas->get('hargaItem');
+        $tanggalmasukProduk = $datas->get('tanggalmasukProduk');
+        $tanggalexpiryProduk = $datas->get('tanggalexpiryProduk');
 
-        $sql = "UPDATE ".$this->table." SET namaItem = '$namaItem', kuantitiItem = '$kuantiti', hargaItem = '$harga', dateCreate = '$dateCreate' WHERE idItem='$id'";
+        $sql = "UPDATE " . $this->table . " SET namaItem = '$namaItem', supplierItem = '$supplierItem', satuanItem = '$satuanItem', kuantitiItem = '$kuantiti', hargaItem = '$harga', tanggalmasukProduk = '$tanggalmasukProduk', tanggalexpiryProduk = '$tanggalexpiryProduk' WHERE idItem = '$id'";
 
-        try{
+        try {
             $data = $this->conn->prepare($sql);
-            $data->execute();  
-        }catch (PDOexception $e){
+            $data->execute();
+
+            return $id;
+        } catch (PDOexception $e) {
             echo $e;
             die();
         }
@@ -87,14 +96,13 @@ class Produk extends GlobalFunc
 
     public function delete($id)
     {
-        $sql = "DELETE FROM ".$this->table." WHERE idItem = '$id'";
+        $sql = "DELETE FROM " . $this->table . " WHERE idItem = '$id'";
 
-        try{
+        try {
             $query = $this->conn->prepare($sql);
             $query->execute();
             return $query;
-           
-        }catch(PDOException $e) {
+        } catch (PDOException $e) {
             dump($e);
             die();
         }

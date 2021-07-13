@@ -20,21 +20,6 @@ $routes->add('welcome', new Route('/', [
     }
 ]));
 
-$routes->add('hello', new Route('/hellos/get/{id}', [
-    '_controller' => 'App\Calendar\Controller\LeapYearController::testing',
-]));
-
-
-// CRUD Bank
-
-$routes->add('bank', new Route('/bank', [
-    '_controller' => 'App\Bank\Controller\BankController::index',
-]));
-
-$routes->add('bankEdit', new Route('/bank/edit/{id}', [
-    '_controller' => 'App\Bank\Controller\BankController::edit'
-]));
-//
 
 //CRUD produk
 $routes->add('produk', new Route('/produk', [
@@ -49,17 +34,18 @@ $routes->add('produksimpan', new Route('/produk/store', [
     '_controller' => 'App\Produk\Controller\ProdukController::store',
 ]));
 
-$routes->add('produksedit', new Route('/produk/edit/{id}', [
-    '_controller' => 'App\Produk\Controller\ProdukController::ReadOne',
+$routes->add('produksedit', new Route('/produk/{id}/edit', [
+    '_controller' => 'App\Produk\Controller\ProdukController::edit',
 ]));
 
-$routes->add('produkupdate', new Route('/produk/edit/{id}/update', [
+$routes->add('produkupdate', new Route('/produk/{id}/update', [
     '_controller' => 'App\Produk\Controller\ProdukController::update',
 ]));
 
-$routes->add('produkshapus', new Route('/produk/delete/{id}', [
+$routes->add('produkshapus', new Route('/produk/{id}/delete', [
     '_controller' => 'App\Produk\Controller\ProdukController::delete',
 ]));
+
 //User Management
 $routes->add('users', new Route('/users', [
     '_controller' => 'App\Users\Controller\UsersController::index',

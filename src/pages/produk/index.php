@@ -24,15 +24,29 @@
             <?php foreach($datas as $key => $values) { ?>
             <tr>
                 <td><?= $values['namaItem']?></td>
-                <td>Supplier</td>
+                <td><?= $values['supplierItem'] ?></td>
                 <td><?= $values['kuantitiItem']?></td>
-                <td>Satuan</td>
-                <td><?= $values['dateCreate']?></td>
-                <td>Waktu Expiry</td>
-                <td><a href="produk/edit/<?= $values['idItem']?>">EDIT</a>||<a href="produk/delete/<?= $values['idItem']?>">DELETE</a></td>
+                <td><?= $values['satuanItem'] ?></td>
+                <td><?= $values['tanggalmasukProduk']?></td>
+                <td><?= $values['tanggalexpiryProduk'] ?></td>
+                <td><a href="produk/<?= $values['idItem']?>/edit">EDIT</a>||<a href="produk/<?= $values['idItem']?>/delete">DELETE</a></td>
             </tr>
             <?php } ?>
         </tbody>
     </table>
+    <br>
+    
+    <form action="/produk" method="get">
+        Waktu Masuk<br>
+        dari<input type="date" name="filterWaktumasukFrom" value="<?= $filterWaktumasukFrom ?>">
+        sampai<input type="date" name="filterWaktumasukTo" value="<?= $filterWaktumasukTo ?>">
+        <br>
+        Waktu Expiry<br>
+        dari<input type="date" name="filterWaktuexpiryFrom" value="<?= $filterWaktuexpiryFrom ?>">
+        sampai<input type="date" name="filterWaktuexpiryTo" value="<?= $filterWaktuexpiryTo ?>">
+        <br>
+        <button type="reset">Reset</button>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>

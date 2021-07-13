@@ -7,7 +7,7 @@ use PDOException;
 
 class Users extends GlobalFunc
 {
-    private $table = 'useers';
+    private $table = 'users';
     public $conn;
 
     public function __construct()

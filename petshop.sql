@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 13, 2021 at 10:45 AM
+-- Generation Time: Jul 13, 2021 at 10:51 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.11
 
@@ -117,7 +117,9 @@ CREATE TABLE `item` (
   `stockItem` int(100) NOT NULL,
   `hargaItem` varchar(255) NOT NULL,
   `kuantitiItem` varchar(255) NOT NULL,
-  `dateCreate` date NOT NULL
+  `dateCreate` date NOT NULL,
+  `tanggalmasukProduk` date NOT NULL,
+  `tanggalexpireProduk` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

@@ -9,6 +9,7 @@
 <body>
     <form action="/users/<?= $detail['idUser']?>/update" method="POST" enctype="multipart/form-data"><br>
         <input type="text" name="namaUser" placeholder="Nama Pegawai" value="<?= $detail['namaUser']?>"><br>
+        <input type="text" name="emailUser" placeholder="Email Pegawai" value="<?= $detail['emailUser']?>"><br>
         <input type="password" name="currentPasswordUser" placeholder="Current Password"><br>
         <input type="password" name="passwordUser" placeholder="New Password"><br>
         <input type="password" name="confirmPasswordUser" placeholder="Confirm Password"><br>

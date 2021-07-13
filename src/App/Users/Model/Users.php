@@ -7,7 +7,7 @@ use PDOException;
 
 class Users extends GlobalFunc
 {
-    private $table = 'useers';
+    private $table = 'users';
     public $conn;
 
     public function __construct()
@@ -57,8 +57,9 @@ class Users extends GlobalFunc
         $nikUser = $data['nikUser'];
         $hirarkiUser = $data['hirarkiUser'];
         $dateCreate = $data['dateCreate'];
+        $emailUser = $data['emailUser'];
 
-        $sql = "INSERT INTO ". $this->table ." VALUES('$idUsers', '$namaUsers', '$passwordUser', '$hirarkiUser', '$nikUser', '$dateCreate')";
+        $sql = "INSERT INTO ". $this->table ." VALUES('$idUsers', '$namaUsers', '$passwordUser', '$hirarkiUser', '$nikUser', '$dateCreate', '$emailUser')";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -78,8 +79,9 @@ class Users extends GlobalFunc
         $passwordUser = $data['passwordUser'];
         $nikUser = $data['nikUser'];
         $hirarkiUser = $data['hirarkiUser'];
+        $emailUser = $data['emailUser'];
 
-        $sql = "UPDATE ".$this->table. " SET namaUser = '$namaUsers', passwordUser = '$passwordUser', nikUser = '$nikUser', hirarkiUser = '$hirarkiUser'";
+        $sql = "UPDATE ".$this->table. " SET namaUser = '$namaUsers', passwordUser = '$passwordUser', nikUser = '$nikUser', hirarkiUser = '$hirarkiUser', emailUser = '$emailUser'";
 
         try {
             $query = $this->conn->prepare($sql);

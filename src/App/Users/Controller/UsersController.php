@@ -39,6 +39,7 @@ class UsersController extends GlobalFunc
         $nikUser = $request->request->get('nikUser');
         $hirarkiUser = $request->request->get('hirarkiUser');
         $dateCreate = date("Y-m-d");
+        $emailUser = $request->request->get('emailUser');
 
         if ($passwordUser != $confirmPasswordUser)
         {
@@ -51,7 +52,8 @@ class UsersController extends GlobalFunc
                 "passwordUser" => password_hash($passwordUser, PASSWORD_DEFAULT),
                 "nikUser" => $nikUser,
                 "hirarkiUser" => $hirarkiUser,
-                "dateCreate" => $dateCreate
+                "dateCreate" => $dateCreate,
+                'emailUser' => $emailUser
             );
     
             $create = $this->model->create($user_arr);
@@ -81,6 +83,7 @@ class UsersController extends GlobalFunc
         $confirmPasswordUser = $request->request->get('confirmPasswordUser');
         $nikUser = $request->request->get('nikUser');
         $hirarkiUser = $request->request->get('hirarkiUser');
+        $emailUser = $request->request->get('emailUser');
 
         if (!password_verify($currentPasswordUser, $detail['passwordUser'])){
 
@@ -94,7 +97,8 @@ class UsersController extends GlobalFunc
                     "namaUsers" => $namaUser,
                     "passwordUser" => password_hash($passwordUser, PASSWORD_DEFAULT),
                     "nikUser" => $nikUser,
-                    "hirarkiUser" => $hirarkiUser
+                    "hirarkiUser" => $hirarkiUser,
+                    "emailUser" => $emailUser
                 );
         
                 $update = $this->model->update($id_user, $user_arr);

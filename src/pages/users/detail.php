@@ -16,6 +16,11 @@
             <td><?= $detail['namaUser']?></td>
         </tr>
         <tr>
+            <td>Email User</td>
+            <td> : </td>
+            <td><?= $detail['emailUser']?></td>
+        </tr>
+        <tr>
             <td>Nik User</td>
             <td> : </td>
             <td><?= $detail['nikUser']?></td>

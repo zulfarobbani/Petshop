@@ -2,6 +2,7 @@
 
 namespace App\Produk\Controller;
 
+use App\Chronology\Model\Chronology;
 use App\Media\Model\Media;
 use App\Produk\Model\Produk;
 use Core\GlobalFunc;
@@ -65,6 +66,13 @@ class ProdukController extends GlobalFunc
         $idUser = '1';
         $fotoItem = $media->create($idMedia, $_FILES['fotoItem'], $produk, $idUser);
 
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('store', 'User 1', [
+            'produk' => $request->request->get('namaItem')
+        ]);
+        $createChronology = $chronology->create($message, $produk);
+
         return new RedirectResponse('/produk');
     }
     public function edit(Request $request)
@@ -93,12 +101,35 @@ class ProdukController extends GlobalFunc
             $fotoItem = $media->create($idMedia, $_FILES['fotoItem'], $item, $idUser);
         }
 
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('update', 'User 1', [
+            'produk' => $request->request->get('namaItem')
+        ]);
+        $createChronology = $chronology->create($message, $item);
+
         return new RedirectResponse('/produk');
     }
     public function delete(Request $request)
     {
         $id = $request->attributes->get('id');
+        $datas = $this->model->selectOne($id);
         $this->model->delete($id);
+
+        $media = new Media();
+        // select existing media foto produk
+        $selectProduk = $media->selectOneMedia("idRelation = '$id'");
+        // delete existing media foto produk
+        $deleteFotoProduk = $media->delete($selectProduk['idMedia']);
+        // delete file media foto produk
+        $deleteFileFotoProduk = $media->deleteFile($selectProduk['pathMedia']);
+
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('delete', 'User 1', [
+            'produk' => $datas['namaItem']
+        ]);
+        $createChronology = $chronology->create($message, $id);
 
         return new RedirectResponse('/produk');
     }

@@ -107,4 +107,16 @@ class Produk extends GlobalFunc
             die();
         }
     }
+
+    public function chronologyMessage($action, $user, $object)
+    {
+        $message = [
+            'store' => $user." telah menambah produk \"".$object['produk']."\"",
+            'update' => $user." telah mengubah produk \"".$object['produk']."\"",
+            'delete' => $user." telah menghapus produk \"".$object['produk']."\"",
+            'retur' => $user." telah melakukan retur produk \"".$object['produk']."\" dengan kuantitas ".$object['retur']." ".$object['satuan'],
+        ];
+
+        return $message[$action];
+    }
 }

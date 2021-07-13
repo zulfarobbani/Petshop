@@ -20,8 +20,20 @@ class TransaksiController extends GlobalFunc
     public function index(Request $request)
     {
         $datas = $this->model->selectAll();
+        
+        $selectTransaksi = function($idTransaksi){
+            $data = $this->model->selectOne($idTransaksi);
 
-        return $this->render_template('transaksi/index', ['datas' => $datas]);
+            return $data;
+        };
+
+        $selectGroupItem = function($idTransaksi){
+            $data = $this->model->selectGroupItem($idTransaksi);
+
+            return $data;
+        };
+
+        return $this->render_template('transaksi/index', ['datas' => $datas, '$selectTransaksi' => $selectTransaksi, 'selectGroupItem' => $selectGroupItem]);
     }
 
     public function create(Request $request)
@@ -72,7 +84,6 @@ class TransaksiController extends GlobalFunc
 
         $detail = $this->model->selectOne($idTransaksi);
         $groupItem = $this->model->selectGroupItem($detail['idGroupitem']);
-
 
         return $this->render_template('transaksi/edit', ['detail' => $detail, 'groupItem' => $groupItem]);
     }
@@ -134,5 +145,17 @@ class TransaksiController extends GlobalFunc
         $delete = $this->model->delete($id_user);
 
         return new RedirectResponse('/users');
+    }
+
+    public function print_receipt(Request $request)
+    {
+        $idTransaksi = $request->attributes->get('idTransaksi');
+
+        $detail = $this->model->selectOne($idTransaksi);
+        $groupItem = $this->model->selectGroupItem($detail['idGroupitem']);
+        
+        $totalHarga = 0;
+
+        return $this->render_template('transaksi/receiptTransaksi', ['detail' => $detail, 'groupItem' => $groupItem, 'totalHarga' => $totalHarga]);
     }
 }

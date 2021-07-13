@@ -2,8 +2,8 @@
 
 namespace App\Produk\Controller;
 
-use App\Produk\Model\Produk;
 use App\Media\Model\Media;
+use App\Produk\Model\Produk;
 use Core\GlobalFunc;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,7 +99,6 @@ class ProdukController extends GlobalFunc
     {
         $id = $request->attributes->get('id');
         $this->model->delete($id);
-
 
         return new RedirectResponse('/produk');
     }

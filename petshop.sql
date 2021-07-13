@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2021 at 06:05 AM
--- Server version: 10.4.18-MariaDB
--- PHP Version: 7.4.18
+-- Generation Time: Jul 13, 2021 at 10:51 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -93,6 +93,18 @@ CREATE TABLE `groupitem` (
   `dateCreate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `groupitem`
+--
+
+INSERT INTO `groupitem` (`idGroupitem`, `idItem`, `pengurangItem`, `kuantitiItem`, `dateCreate`) VALUES
+('gi60ec380ff2f73', 'namaProduk1', '10000', '5', '2021-07-12'),
+('gi60ec44f9b8786', 'namaProduk3', '2000', '2', '2021-07-12'),
+('gi60ec44f9b8786', 'namaProduk1', '7000', '7', '2021-07-12'),
+('gi60ec37b0bd817', 'namaProduk3', '1000', '1', '2021-07-12'),
+('gi60ec37b0bd817', 'namaProduk2', '100', '4', '2021-07-12'),
+('gi60ec37b0bd817', 'namaProduk1', '22000', '24', '2021-07-12');
+
 -- --------------------------------------------------------
 
 --
@@ -105,7 +117,9 @@ CREATE TABLE `item` (
   `stockItem` int(100) NOT NULL,
   `hargaItem` varchar(255) NOT NULL,
   `kuantitiItem` varchar(255) NOT NULL,
-  `dateCreate` date NOT NULL
+  `dateCreate` date NOT NULL,
+  `tanggalmasukProduk` date NOT NULL,
+  `tanggalexpireProduk` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -87293,6 +87307,21 @@ INSERT INTO `kelurahan` (`id`, `kecamatan_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `media`
+--
+
+CREATE TABLE `media` (
+  `idMedia` varchar(255) NOT NULL,
+  `pathMedia` varchar(255) NOT NULL,
+  `idRelation` varchar(255) NOT NULL,
+  `idEntity` varchar(255) NOT NULL,
+  `jenisDokumen` varchar(255) NOT NULL,
+  `dateCreate` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pegawai`
 --
 
@@ -87432,13 +87461,22 @@ CREATE TABLE `transaksi` (
   `dateCreate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `transaksi`
+--
+
+INSERT INTO `transaksi` (`idTransaksi`, `nomorTransaksi`, `kasirTransaksi`, `pelangganTransaksi`, `tanggalTransaksi`, `idGroupitem`, `idClient`, `dateCreate`) VALUES
+('tran60ec37b0bd814', 'GKO/30/JLD/099', 'Khoirunnisa Farida Zahra', 'Caniago Andree Meilio', '2021-07-06', 'gi60ec37b0bd817', 'client1', '2021-07-12'),
+('tran60ec380ff2f71', 'RCP/007/FD/100', 'Aprillia Violet', 'Meilio Andree', '2021-07-06', 'gi60ec380ff2f73', 'client3', '2021-07-12'),
+('tran60ec44f9b8783', 'RCP/007/FD/100', 'Aprillia Violet', 'Meilio Andree', '2021-07-06', 'gi60ec44f9b8786', 'client3', '2021-07-12');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `useers`
+-- Table structure for table `users`
 --
 
-CREATE TABLE `useers` (
+CREATE TABLE `users` (
   `idUser` varchar(255) NOT NULL,
   `namaUser` text NOT NULL,
   `passwordUser` varchar(255) NOT NULL,
@@ -87446,6 +87484,13 @@ CREATE TABLE `useers` (
   `nikUser` varchar(255) NOT NULL,
   `dateCreate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`idUser`, `namaUser`, `passwordUser`, `hirarkiUser`, `nikUser`, `dateCreate`) VALUES
+('user60ebe01a6fd7a', 'user1', '$2y$10$zNimQdAeSDPnImqTVtiBLellxPttlyikYqDd0n72P7e146eNWq3za', 1, '1920382992', '2021-07-12');
 
 --
 -- Indexes for dumped tables
@@ -87471,6 +87516,12 @@ ALTER TABLE `kecamatan`
 ALTER TABLE `kelurahan`
   ADD PRIMARY KEY (`id`) USING BTREE,
   ADD KEY `villages_district_id_index` (`kecamatan_id`) USING BTREE;
+
+--
+-- Indexes for table `media`
+--
+ALTER TABLE `media`
+  ADD PRIMARY KEY (`idMedia`);
 
 --
 -- Indexes for table `provinsi`

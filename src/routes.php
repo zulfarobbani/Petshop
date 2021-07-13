@@ -88,6 +88,8 @@ $routes->add('transaksiUpdate', new Route('/transaksi/{idTransaksi}/update', [
 $routes->add('transaksiDetail', new Route('/transaksi/{idTransaksi}/detail', [
     '_controller' => 'App\Transaksi\Controller\TransaksiController::detail'
 ]));
-
+$routes->add('transaksiReceipt', new Route('/transaksi/{idTransaksi}/print-receipt', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::print_receipt'
+]));
 
 return $routes;

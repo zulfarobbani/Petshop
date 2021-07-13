@@ -21,6 +21,14 @@ $routes->add('welcome', new Route('/', [
 ]));
 
 
+//Login
+$routes->add('login', new Route('/login', [
+    '_controller' => 'App\Login\Controller\LoginController::index',
+]));
+$routes->add('loginProses', new Route('/login/proses', [
+    '_controller' => 'App\Login\Controller\LoginController::login_proses',
+]));
+
 //CRUD produk
 $routes->add('produk', new Route('/produk', [
     '_controller' => 'App\Produk\Controller\ProdukController::index',

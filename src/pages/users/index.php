@@ -13,6 +13,7 @@
         <thead>
             <tr>
                 <td>Nama User</td>
+                <td>Email User</td>
                 <td>Nik User</td>
                 <td>Hirarki User</td>
                 <td>Aksi</td>
@@ -22,6 +23,7 @@
             <?php foreach($datas as $value) {?>
                 <tr>
                     <td><?= $value['namaUser']?></td>
+                    <td><?= $value['emailUser']?></td>
                     <td><?= $value['nikUser']?></td>
                     <td><?= $value['hirarkiUser'] == '1' ? 'Hirarki Pertama' : 'Hirarki Kedua'?></td>
                     <td>

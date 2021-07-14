@@ -49,9 +49,9 @@ class Transaksi extends GlobalFunc
         }
     }
 
-    public function selectGroupItem($idGroupItem)
+    public function selectGroupItem($idTransaksi)
     {
-        $sql = "SELECT * FROM groupItem WHERE idGroupItem = '$idGroupItem'";
+        $sql = "SELECT * FROM groupItem WHERE idTransaksi = '$idTransaksi'";
 
         try{
             $query = $this->conn->prepare($sql);
@@ -66,80 +66,138 @@ class Transaksi extends GlobalFunc
         }
     }
 
-    public function create($data)
+    public function create($datas)
     {
-        $idTransaksi = $data['idTransaksi'];
-        $nomorTransaksi = $data['nomorTransaksi'];
-        $kasirTransaksi = $data['kasirTransaksi'];
-        $pelangganTransaksi = $data['pelangganTransaksi'];
-        $tanggalTransaksi = $data['tanggalTransaksi'];
-        $idGroupitem = $data['idGroupitem'];
-        $idClient = $data['idClient'];
-        $dateCreate = $data['dateCreate'];
+        //Data For Creating Transaksi
+        $idTransaksi = uniqid('tran');
+        $nomorTransaksi = $datas->get('nomorTransaksi');
+        $kasirTransaksi = $datas->get('kasirTransaksi');
+        $pelangganTransaksi = $datas->get('pelangganTransaksi');
+        $tanggalTransaksi = $datas->get('tanggalTransaksi');
+        $idClient = $datas->get('idClient');
+        $dateCreate = date('Y-m-d');
 
-        $sql = "INSERT INTO ".$this->table. " VALUES('$idTransaksi', '$nomorTransaksi', '$kasirTransaksi', '$pelangganTransaksi', '$tanggalTransaksi', '$idGroupitem', '$idClient', '$dateCreate')";
+        //Data For Creating Group Item
+        $idItem = $datas->get('idItem');
+        $kuantitiItem = $datas->get('kuantitiItem');
+        $pengurangItem = $datas->get('pengurangItem');
+        
+        //SQL Creating Transaksi
+        $sql = "INSERT INTO ".$this->table. " VALUES('$idTransaksi', '$nomorTransaksi', '$kasirTransaksi', '$pelangganTransaksi', '$tanggalTransaksi', '', '$idClient', '$dateCreate')";
+        
+        //SQL Creating Group Item
+        $sqlGroupitem = "INSERT INTO groupitem VALUES ";
+        
+        for ($index = 0; $index < count($idItem); $index++){
+            $idGroupitem = uniqid('gi');
+
+            if ($index + 1 != count($idItem)){
+                $sqlGroupitem .= "('$idGroupitem', '$idTransaksi', '$idItem[$index]', '$pengurangItem[$index]', '$kuantitiItem[$index]', '$dateCreate'),";
+            } else {
+                $sqlGroupitem .= "('$idGroupitem', '$idTransaksi', '$idItem[$index]', '$pengurangItem[$index]', '$kuantitiItem[$index]', '$dateCreate');";
+            }
+        }
 
         try{
             $query = $this->conn->prepare($sql);
-            $create = $query->execute();
+            $queryGroupitem = $this->conn->prepare($sqlGroupitem);
 
-            return $create;
+            $query->execute();
+            $queryGroupitem->execute();
+
+            return $idTransaksi;
         } catch(PDOException $e){
             echo $e;
             die();
         }
     }
 
-    public function createGroupItem($idGroupitem, $idItem, $pengurangItem, $kuantitiItem, $dateCreate)
+    // public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $pengurangItem, $kuantitiItem, $dateCreate)
+    // {
+    //     $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idTransaksi', '$idItem', '$pengurangItem', '$kuantitiItem', '$dateCreate')";
+
+    //     try{
+    //         $query = $this->conn->prepare($sql);
+    //         $create = $query->execute();
+
+    //         return $create;
+    //     } catch(PDOException $e){
+    //         echo $e;
+    //         die();
+    //     }
+    // }
+
+    public function update($idTransaksi ,$datas)
     {
-        $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idItem', '$pengurangItem', '$kuantitiItem', '$dateCreate')";
+        $nomorTransaksi = $datas->get('nomorTransaksi');
+        $kasirTransaksi = $datas->get('kasirTransaksi');
+        $pelangganTransaksi = $datas->get('pelangganTransaksi');
+        $tanggalTransaksi = $datas->get('tanggalTransaksi');
+        $idClient = $datas->get('idClient');
+        $dateCreate = date("Y-m-d");
 
-        try{
-            $query = $this->conn->prepare($sql);
-            $create = $query->execute();
-
-            return $create;
-        } catch(PDOException $e){
-            echo $e;
-            die();
-        }
-    }
-
-    public function update($idTransaksi ,$data)
-    {
-        $nomorTransaksi = $data['nomorTransaksi'];
-        $kasirTransaksi = $data['kasirTransaksi'];
-        $pelangganTransaksi = $data['pelangganTransaksi'];
-        $tanggalTransaksi = $data['tanggalTransaksi'];
-        // $idGroupitem = $data['idGroupitem'];
-        $idClient = $data['idClient'];
+        $idItem = $datas->get('idItem');
+        $kuantitiItem = $datas->get('kuantitiItem');
+        $pengurangItem = $datas->get('pengurangItem');
 
         $sql = "UPDATE ".$this->table. " SET nomorTransaksi = '$nomorTransaksi', kasirTransaksi = '$kasirTransaksi', pelangganTransaksi = '$pelangganTransaksi', tanggalTransaksi = '$tanggalTransaksi', idClient = '$idClient' WHERE idTransaksi = '$idTransaksi'";
 
+        //SQL Creating Group Item
+        $deleteGroupitem = "DELETE FROM groupitem WHERE idTransaksi = '$idTransaksi'";
+        $sqlGroupitem = "INSERT INTO groupitem VALUES ";
+        
+        for ($index = 0; $index < count($idItem); $index++){
+            $idGroupitem = uniqid('gi');
+
+            if ($index + 1 != count($idItem)){
+                $sqlGroupitem .= "('$idGroupitem', '$idTransaksi', '$idItem[$index]', '$pengurangItem[$index]', '$kuantitiItem[$index]', '$dateCreate'),";
+            } else {
+                $sqlGroupitem .= "('$idGroupitem', '$idTransaksi', '$idItem[$index]', '$pengurangItem[$index]', '$kuantitiItem[$index]', '$dateCreate');";
+            }
+        }
+
         try{
             $query = $this->conn->prepare($sql);
-            $create = $query->execute();
+            $query->execute();
 
-            return $create;
+            $queryDelGroupItem = $this->conn->prepare($deleteGroupitem);
+            $queryCreateGroupItem = $this->conn->prepare($sqlGroupitem);
+
+            $queryDelGroupItem->execute();
+            $queryCreateGroupItem->execute();
+
+            return $idTransaksi;
         } catch(PDOException $e){
             echo $e;
             die();
         }
     }
 
-    public function deleteGroupItem($idGroupitem)
+    // public function deleteGroupItem($idTransaksi)
+    // {
+    //     $sql = "DELETE FROM groupitem WHERE idTransaksi = '$idTransaksi'";
+
+    //     try{
+    //         $query = $this->conn->prepare($sql);
+    //         $delete = $query->execute();
+
+    //         return $delete;
+    //     } catch(PDOException $e){
+    //         echo $e;
+    //         die();
+    //     }
+    // }
+
+    public function chronologyMessage($action, $user, $object)
     {
-        $sql = "DELETE FROM groupitem WHERE idGroupitem = '$idGroupitem'";
+        $message = [
+            'store' => $user." telah menambah transaksi dengan no_transaksi \"".$object['transaksi']."\"",
+            'update' => $user." telah mengubah transaksi dengan no_transaksi \"".$object['transaksi']."\"",
+            'delete' => $user." telah menghapus transaksi dengan no_transaksi \"".$object['transaksi']."\"",
+            // 'retur' => $user." telah melakukan retur transaksi \"".$object['transaksi']."\" dengan kuantitas ".$object['retur']." ".$object['satuan'],
+        ];
 
-        try{
-            $query = $this->conn->prepare($sql);
-            $delete = $query->execute();
-
-            return $delete;
-        } catch(PDOException $e){
-            echo $e;
-            die();
-        }
+        return $message[$action];
     }
     
 }

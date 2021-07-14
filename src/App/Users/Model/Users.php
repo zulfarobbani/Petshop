@@ -48,47 +48,47 @@ class Users extends GlobalFunc
         }
     }
 
-    public function create($data)
+    public function create($datas)
     {
 
-        $idUsers = $data['idUsers'];
-        $namaUsers = $data['namaUsers'];
-        $passwordUser = $data['passwordUser'];
-        $nikUser = $data['nikUser'];
-        $hirarkiUser = $data['hirarkiUser'];
-        $dateCreate = $data['dateCreate'];
-        $emailUser = $data['emailUser'];
+        $idUser = uniqid('user');
+        $namaUser = $datas->get('namaUser');
+        $passwordUser = password_hash($datas->get('passwordUser'), PASSWORD_DEFAULT);
+        $hirarkiUser = $datas->get('hirarkiUser');
+        $nikUser = $datas->get('nikUser');
+        $dateCreate = date("Y-m-d");
+        $emailUser = $datas->get('emailUser');
 
-        $sql = "INSERT INTO ". $this->table ." VALUES('$idUsers', '$namaUsers', '$passwordUser', '$hirarkiUser', '$nikUser', '$dateCreate', '$emailUser')";
+        $sql = "INSERT INTO ". $this->table ." VALUES('$idUser', '$namaUser', '$passwordUser', '$hirarkiUser', '$nikUser', '$dateCreate', '$emailUser')";
 
         try {
             $query = $this->conn->prepare($sql);
 
-            $status = $query->execute();
+            $query->execute();
 
-            return $status;
+            return $idUser;
         } catch (PDOException $e) {
             echo $e;
             die();
         }
     }
 
-    public function update($id_user, $data)
+    public function update($id_user, $datas)
     {
-        $namaUsers = $data['namaUsers'];
-        $passwordUser = $data['passwordUser'];
-        $nikUser = $data['nikUser'];
-        $hirarkiUser = $data['hirarkiUser'];
-        $emailUser = $data['emailUser'];
+        $namaUser = $datas->get('namaUser');
+        $passwordUser = password_hash($datas->get('passwordUser'), PASSWORD_DEFAULT);
+        $hirarkiUser = $datas->get('hirarkiUser');
+        $nikUser = $datas->get('nikUser');
+        $emailUser = $datas->get('emailUser');
 
-        $sql = "UPDATE ".$this->table. " SET namaUser = '$namaUsers', passwordUser = '$passwordUser', nikUser = '$nikUser', hirarkiUser = '$hirarkiUser', emailUser = '$emailUser'";
+        $sql = "UPDATE ".$this->table. " SET namaUser = '$namaUser', passwordUser = '$passwordUser', nikUser = '$nikUser', hirarkiUser = '$hirarkiUser', emailUser = '$emailUser'";
 
         try {
             $query = $this->conn->prepare($sql);
 
-            $status = $query->execute();
+            $query->execute();
 
-            return $status;
+            return $id_user;
         } catch (PDOException $e) {
             echo $e;
             die();
@@ -109,5 +109,17 @@ class Users extends GlobalFunc
             echo $e;
             die();
         }
+    }
+    
+    public function chronologyMessage($action, $user, $object)
+    {
+        $message = [
+            'store' => $user." telah menambah user \"".$object['user']."\"",
+            'update' => $user." telah mengubah user \"".$object['user']."\"",
+            'delete' => $user." telah menghapus user \"".$object['user']."\"",
+            // 'retur' => $user." telah melakukan retur user \"".$object['user']."\" dengan kuantitas ".$object['retur']." ".$object['satuan'],
+        ];
+
+        return $message[$action];
     }
 }

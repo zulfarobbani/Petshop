@@ -68,7 +68,7 @@ class ProdukController extends GlobalFunc
 
         // create chronlogy
         $chronology = new Chronology();
-        $message = $this->model->chronologyMessage('retur', 'User 1', [
+        $message = $this->model->chronologyMessage('store', 'User 1', [
             'produk' => $request->request->get('namaItem')
         ]);
         $createChronology = $chronology->create($message, $produk);

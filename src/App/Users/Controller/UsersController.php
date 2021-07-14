@@ -2,6 +2,7 @@
 
 namespace App\Users\Controller;
 
+use App\Chronology\Model\Chronology;
 use App\Users\Model\Users;
 use Core\GlobalFunc;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,33 +32,23 @@ class UsersController extends GlobalFunc
 
     public function store(Request $request)
     {
-        $idUser = uniqid('user');
-
-        $namaUser = $request->request->get('namaUser');
         $passwordUser = $request->request->get('passwordUser');
         $confirmPasswordUser = $request->request->get('confirmPasswordUser');
-        $nikUser = $request->request->get('nikUser');
-        $hirarkiUser = $request->request->get('hirarkiUser');
-        $dateCreate = date("Y-m-d");
-        $emailUser = $request->request->get('emailUser');
 
         if ($passwordUser != $confirmPasswordUser)
         {
             return new JsonResponse("Password Dan Confirm Password Tidak Sesuai");
         } else 
         {
-            $user_arr = array(
-                "idUsers" => $idUser,
-                "namaUsers" => $namaUser,
-                "passwordUser" => password_hash($passwordUser, PASSWORD_DEFAULT),
-                "nikUser" => $nikUser,
-                "hirarkiUser" => $hirarkiUser,
-                "dateCreate" => $dateCreate,
-                'emailUser' => $emailUser
-            );
-    
-            $create = $this->model->create($user_arr);
+            $create = $this->model->create($request->request);
         }
+
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('store', 'User 1', [
+            'user' => $request->request->get('namaUser')
+        ]);
+        $createChronology = $chronology->create($message, $create);
 
         return new RedirectResponse('/users');
     }
@@ -76,14 +67,10 @@ class UsersController extends GlobalFunc
         $id_user = $request->attributes->get('id_user');
 
         $detail = $this->model->selectOne($id_user);
-        
-        $namaUser = $request->request->get('namaUser');
+
         $currentPasswordUser = $request->request->get('currentPasswordUser');
         $passwordUser = $request->request->get('passwordUser');
         $confirmPasswordUser = $request->request->get('confirmPasswordUser');
-        $nikUser = $request->request->get('nikUser');
-        $hirarkiUser = $request->request->get('hirarkiUser');
-        $emailUser = $request->request->get('emailUser');
 
         if (!password_verify($currentPasswordUser, $detail['passwordUser'])){
 
@@ -92,18 +79,17 @@ class UsersController extends GlobalFunc
         } else {
             if ($passwordUser != $confirmPasswordUser){
                 return new JsonResponse("Password Dan Confirm Password Tidak Sesuai");
-            } else {
-                $user_arr = array(
-                    "namaUsers" => $namaUser,
-                    "passwordUser" => password_hash($passwordUser, PASSWORD_DEFAULT),
-                    "nikUser" => $nikUser,
-                    "hirarkiUser" => $hirarkiUser,
-                    "emailUser" => $emailUser
-                );
-        
-                $update = $this->model->update($id_user, $user_arr);
+            } else {     
+                $update = $this->model->update($id_user, $request->request);
             }
         }
+
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('update', 'User 1', [
+            'user' => $detail['namaUser']
+        ]);
+        $createChronology = $chronology->create($message, $id_user);
 
         return new RedirectResponse('/users');
         
@@ -122,8 +108,16 @@ class UsersController extends GlobalFunc
     public function delete(Request $request)
     {
         $id_user = $request->attributes->get('id_user');
+        $detail = $this->model->selectOne($id_user);
 
         $delete = $this->model->delete($id_user);
+        
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('delete', 'User 1', [
+            'user' => $detail['namaUser']
+        ]);
+        $createChronology = $chronology->create($message, $id_user);
 
         return new RedirectResponse('/users');
     }

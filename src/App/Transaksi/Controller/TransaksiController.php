@@ -2,6 +2,7 @@
 
 namespace App\Transaksi\Controller;
 
+use App\Chronology\Model\Chronology;
 use App\Transaksi\Model\Transaksi;
 use Core\GlobalFunc;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,37 +44,15 @@ class TransaksiController extends GlobalFunc
 
     public function store(Request $request)
     {
-        
-        $idTransaksi = uniqid('tran');
-        $idGroupitem = uniqid('gi');
 
-        $nomorTransaksi = $request->request->get('nomorTransaksi');
-        $pelangganTransaksi = $request->request->get('pelangganTransaksi');
-        $kasirTransaksi = $request->request->get('kasirTransaksi');
-        $tanggalTransaksi = $request->request->get('tanggalTransaksi');
-        $idClient = $request->request->get('idClient');
-        $dateCreate = date('Y-m-d');
+        $create = $this->model->create($request->request);
 
-        $transaksi_arr = array(
-            "idTransaksi" => $idTransaksi,
-            "nomorTransaksi" => $nomorTransaksi,
-            "kasirTransaksi" => $kasirTransaksi,
-            "pelangganTransaksi" => $pelangganTransaksi,
-            "tanggalTransaksi" => $tanggalTransaksi,
-            "idGroupitem" => $idGroupitem,
-            "idClient" => $idClient,
-            "dateCreate" => $dateCreate
-        );
-
-        $idItem = $request->request->get('idItem');
-        $kuantitiItem = $request->request->get('kuantitiItem');
-        $pengurangItem = $request->request->get('pengurangItem');
-
-        for($index = 0; $index < count($idItem); $index++){
-            $this->model->createGroupItem($idGroupitem, $idItem[$index], $pengurangItem[$index], $kuantitiItem[$index], $dateCreate);
-        }
-
-        $create = $this->model->create($transaksi_arr);
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('store', 'User 1', [
+            'transaksi' => $request->request->get('nomorTransaksi')
+        ]);
+        $createChronology = $chronology->create($message, $create);
 
         return new RedirectResponse('/transaksi');
     }
@@ -83,7 +62,7 @@ class TransaksiController extends GlobalFunc
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $detail = $this->model->selectOne($idTransaksi);
-        $groupItem = $this->model->selectGroupItem($detail['idGroupitem']);
+        $groupItem = $this->model->selectGroupItem($idTransaksi);
 
         return $this->render_template('transaksi/edit', ['detail' => $detail, 'groupItem' => $groupItem]);
     }
@@ -92,37 +71,16 @@ class TransaksiController extends GlobalFunc
     {
         $idTransaksi = $request->attributes->get('idTransaksi');
 
-        $nomorTransaksi = $request->request->get('nomorTransaksi');
-        $pelangganTransaksi = $request->request->get('pelangganTransaksi');
-        $kasirTransaksi = $request->request->get('kasirTransaksi');
-        $tanggalTransaksi = $request->request->get('tanggalTransaksi');
-        $idClient = $request->request->get('idClient');
-        $dateCreate = date('Y-m-d');
-
-        $transaksi_arr = array(
-            "nomorTransaksi" => $nomorTransaksi,
-            "kasirTransaksi" => $kasirTransaksi,
-            "pelangganTransaksi" => $pelangganTransaksi,
-            "tanggalTransaksi" => $tanggalTransaksi,
-            // "idGroupitem" => $idGroupitem,
-            "idClient" => $idClient
-            // "dateCreate" => $dateCreate
-        );
-
-        $update = $this->model->update($idTransaksi, $transaksi_arr);
+        $update = $this->model->update($idTransaksi, $request->request);
 
         $detail = $this->model->selectOne($idTransaksi);
 
-        $idItem = $request->request->get('idItem');
-        $kuantitiItem = $request->request->get('kuantitiItem');
-        $pengurangItem = $request->request->get('pengurangItem');
-
-        $this->model->deleteGroupItem($detail['idGroupitem']);
-
-        for($index = 0; $index < count($idItem); $index++){
-            $this->model->createGroupItem($detail['idGroupitem'], $idItem[$index], $pengurangItem[$index], $kuantitiItem[$index], $dateCreate);
-        }
-
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('update', 'User 1', [
+            'transaksi' => $detail['nomorTransaksi']
+        ]);
+        $createChronology = $chronology->create($message, $idTransaksi);
 
         return new RedirectResponse('/transaksi');
     }
@@ -138,14 +96,21 @@ class TransaksiController extends GlobalFunc
 
     }
 
-    public function delete(Request $request)
-    {
-        $id_user = $request->attributes->get('id_user');
+    // public function delete(Request $request)
+    // {
+    //     $id_user = $request->attributes->get('id_user');
 
-        $delete = $this->model->delete($id_user);
+    //     $delete = $this->model->delete($id_user);
 
-        return new RedirectResponse('/users');
-    }
+    //     // create chronlogy
+    //     $chronology = new Chronology();
+    //     $message = $this->model->chronologyMessage('update', 'User 1', [
+    //         'transaksi' => $detail['nomorTransaksi']
+    //     ]);
+    //     $createChronology = $chronology->create($message, $idTransaksi);
+
+    //     return new RedirectResponse('/users');
+    // }
 
     public function print_receipt(Request $request)
     {

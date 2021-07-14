@@ -29,6 +29,11 @@ $routes->add('loginProses', new Route('/login/proses', [
     '_controller' => 'App\Login\Controller\LoginController::login_proses',
 ]));
 
+//Dashboard
+$routes->add('dashboard', new Route('/dashboard', [
+    '_controller' => 'App\Dashboard\Controller\DashboardController::index',
+]));
+
 //CRUD produk
 $routes->add('produk', new Route('/produk', [
     '_controller' => 'App\Produk\Controller\ProdukController::index',

@@ -28,6 +28,9 @@ $routes->add('login', new Route('/login', [
 $routes->add('loginProses', new Route('/login/proses', [
     '_controller' => 'App\Login\Controller\LoginController::login_proses',
 ]));
+$routes->add('logoutProses', new Route('/logout', [
+    '_controller' => 'App\Login\Controller\LoginController::logout_proses',
+]));
 
 //CRUD produk
 $routes->add('produk', new Route('/produk', [
@@ -54,6 +57,14 @@ $routes->add('produkshapus', new Route('/produk/{id}/delete', [
     '_controller' => 'App\Produk\Controller\ProdukController::delete',
 ]));
 
+$routes->add('produkgetall', new Route('/produk/get-all', [
+    '_controller' => 'App\Produk\Controller\ProdukController::get_all',
+]));
+
+$routes->add('produkget', new Route('/produk/{id}/get', [
+    '_controller' => 'App\Produk\Controller\ProdukController::get',
+]));
+
 //User Management
 $routes->add('users', new Route('/users', [
     '_controller' => 'App\Users\Controller\UsersController::index',
@@ -75,6 +86,23 @@ $routes->add('usersDetail', new Route('/users/{id_user}/detail', [
 ]));
 $routes->add('usersDelete', new Route('/users/{id_user}/delete', [
     '_controller' => 'App\Users\Controller\UsersController::delete',
+]));
+$routes->add('usersGet', new Route('/users/{id_user}/get', [
+    '_controller' => 'App\Users\Controller\UsersController::get',
+]));
+$routes->add('usersResetPassword', new Route('/users/{id_user}/reset-password', [
+    '_controller' => 'App\Users\Controller\UsersController::reset_password',
+]));
+// profile
+$routes->add('profile', new Route('/profile', [
+    '_controller' => 'App\Users\Controller\UsersController::profile',
+]));
+// akun
+$routes->add('akun', new Route('/akun', [
+    '_controller' => 'App\Users\Controller\UsersController::akun',
+]));
+$routes->add('akunUpdate', new Route('/akun/{id_user}/update', [
+    '_controller' => 'App\Users\Controller\UsersController::akun_update',
 ]));
 
 //Transaksi
@@ -98,6 +126,15 @@ $routes->add('transaksiDetail', new Route('/transaksi/{idTransaksi}/detail', [
 ]));
 $routes->add('transaksiReceipt', new Route('/transaksi/{idTransaksi}/print-receipt', [
     '_controller' => 'App\Transaksi\Controller\TransaksiController::print_receipt'
+]));
+$routes->add('transaksiRetur', new Route('/transaksi/{idTransaksi}/retur', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::retur'
+]));
+$routes->add('transaksiReturStore', new Route('/transaksi/{idTransaksi}/retur-store', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::retur_store'
+]));
+$routes->add('transaksiGet', new Route('/transaksi/{idTransaksi}/get', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::get'
 ]));
 
 return $routes;

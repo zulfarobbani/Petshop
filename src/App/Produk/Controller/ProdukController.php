@@ -6,6 +6,7 @@ use App\Chronology\Model\Chronology;
 use App\Media\Model\Media;
 use App\Produk\Model\Produk;
 use Core\GlobalFunc;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -49,7 +50,7 @@ class ProdukController extends GlobalFunc
 
         $datas = $this->model->selectAll($where);
 
-        return $this->render_template('produk/index', ['datas' => $datas, 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo, 'filterWaktuexpiryFrom' => $filterWaktuexpiryFrom, 'filterWaktuexpiryTo' => $filterWaktuexpiryTo]);
+        return $this->render_template('produk/produk', ['datas' => $datas, 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo, 'filterWaktuexpiryFrom' => $filterWaktuexpiryFrom, 'filterWaktuexpiryTo' => $filterWaktuexpiryTo]);
     }
 
     public function create(Request $request)
@@ -132,5 +133,24 @@ class ProdukController extends GlobalFunc
         $createChronology = $chronology->create($message, $id);
 
         return new RedirectResponse('/produk');
+    }
+
+    public function get_all(Request $request)
+    {
+        $datas = $this->model->selectAll();
+
+        return new JsonResponse([
+            'datas' => $datas
+        ]);
+    }
+
+    public function get(Request $request)
+    {
+        $id = $request->attributes->get('id');
+        $data = $this->model->selectOne($id);
+
+        return new JsonResponse([
+            'data' => $data
+        ]);
     }
 }

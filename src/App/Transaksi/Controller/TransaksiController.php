@@ -2,6 +2,7 @@
 
 namespace App\Transaksi\Controller;
 
+use App\Produk\Model\Produk;
 use App\Transaksi\Model\Transaksi;
 use Core\GlobalFunc;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,25 +34,31 @@ class TransaksiController extends GlobalFunc
             return $data;
         };
 
-        return $this->render_template('transaksi/index', ['datas' => $datas, '$selectTransaksi' => $selectTransaksi, 'selectGroupItem' => $selectGroupItem]);
+        $produk = new Produk();
+        $data_produk = $produk->selectAll();
+
+        return $this->render_template('transaksi/transaksi', ['datas' => $datas, '$selectTransaksi' => $selectTransaksi, 'selectGroupItem' => $selectGroupItem, 'produk' => $data_produk]);
     }
 
     public function create(Request $request)
     {
-        return $this->render_template('transaksi/create');
+        $produk = new Produk();
+        $data_produk = $produk->selectAll();
+
+        return $this->render_template('transaksi/create', ['produk' => $data_produk]);
     }
 
     public function store(Request $request)
     {
-        
+        // $this->dd($request->request);
         $idTransaksi = uniqid('tran');
-        $idGroupitem = uniqid('gi');
 
         $nomorTransaksi = $request->request->get('nomorTransaksi');
         $pelangganTransaksi = $request->request->get('pelangganTransaksi');
         $kasirTransaksi = $request->request->get('kasirTransaksi');
         $tanggalTransaksi = $request->request->get('tanggalTransaksi');
         $idClient = $request->request->get('idClient');
+        $statusTransaksi = $request->request->get('statusTransaksi');
         $dateCreate = date('Y-m-d');
 
         $transaksi_arr = array(
@@ -60,8 +67,9 @@ class TransaksiController extends GlobalFunc
             "kasirTransaksi" => $kasirTransaksi,
             "pelangganTransaksi" => $pelangganTransaksi,
             "tanggalTransaksi" => $tanggalTransaksi,
-            "idGroupitem" => $idGroupitem,
+            "idGroupitem" => null,
             "idClient" => $idClient,
+            "statusTransaksi" => $statusTransaksi,
             "dateCreate" => $dateCreate
         );
 
@@ -69,8 +77,17 @@ class TransaksiController extends GlobalFunc
         $kuantitiItem = $request->request->get('kuantitiItem');
         $pengurangItem = $request->request->get('pengurangItem');
 
-        for($index = 0; $index < count($idItem); $index++){
-            $this->model->createGroupItem($idGroupitem, $idItem[$index], $pengurangItem[$index], $kuantitiItem[$index], $dateCreate);
+        for($index = 0; $index < count($idItem); $index++) {
+            $idGroupitem = uniqid('gi');
+            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index], $dateCreate);
+            
+            // get item
+            $produk = new Produk();
+            $data_produk = $produk->selectOne($idItem[$index]);
+
+            // update stock product
+            $sisaStock = $data_produk['stockItem'] - intval($kuantitiItem[$index]);
+            $produk->updateStock($idItem[$index], $sisaStock);
         }
 
         $create = $this->model->create($transaksi_arr);
@@ -83,9 +100,12 @@ class TransaksiController extends GlobalFunc
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $detail = $this->model->selectOne($idTransaksi);
-        $groupItem = $this->model->selectGroupItem($detail['idGroupitem']);
+        $groupItem = $this->model->selectGroupItem($detail['idTransaksi']);
 
-        return $this->render_template('transaksi/edit', ['detail' => $detail, 'groupItem' => $groupItem]);
+        $produk = new Produk();
+        $data_produk = $produk->selectAll();
+
+        return $this->render_template('transaksi/edit', ['detail' => $detail, 'groupItem' => $groupItem, 'produk' => $data_produk]);
     }
 
     public function update(Request $request)
@@ -120,9 +140,16 @@ class TransaksiController extends GlobalFunc
         $this->model->deleteGroupItem($detail['idGroupitem']);
 
         for($index = 0; $index < count($idItem); $index++){
-            $this->model->createGroupItem($detail['idGroupitem'], $idItem[$index], $pengurangItem[$index], $kuantitiItem[$index], $dateCreate);
-        }
+            $this->model->createGroupItem($detail['idGroupitem'], $idTransaksi, $idItem[$index], $pengurangItem[$index], $kuantitiItem[$index], $dateCreate);
 
+            // get item
+            $produk = new Produk();
+            $data_produk = $produk->selectOne($idItem[$index]);
+
+            // update stock product
+            $sisaStock = $data_produk['stockItem'] - intval($kuantitiItem[$index]);
+            $produk->updateStock($idItem[$index], $sisaStock);
+        }
 
         return new RedirectResponse('/transaksi');
     }
@@ -132,10 +159,10 @@ class TransaksiController extends GlobalFunc
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $detail = $this->model->selectOne($idTransaksi);
-        $groupItem = $this->model->selectGroupItem($detail['idGroupitem']);
+        // $this->dd($detail);
+        $groupItem = $this->model->selectGroupItem($detail['idTransaksi']);
 
         return $this->render_template('transaksi/detail', ['detail' => $detail, 'groupItem' => $groupItem]);
-
     }
 
     public function delete(Request $request)
@@ -157,5 +184,39 @@ class TransaksiController extends GlobalFunc
         $totalHarga = 0;
 
         return $this->render_template('transaksi/receiptTransaksi', ['detail' => $detail, 'groupItem' => $groupItem, 'totalHarga' => $totalHarga]);
+    }
+
+    public function retur(Request $request)
+    {
+        $idTransaksi = $request->attributes->get('idTransaksi');
+
+        $detail = $this->model->selectOne($idTransaksi);
+        $groupItem = $this->model->selectGroupItem($detail['idTransaksi']);
+
+        $produk = new Produk();
+        $data_produk = $produk->selectAll();
+
+        return $this->render_template('transaksi/retur', ['detail' => $detail, 'groupItem' => $groupItem, 'produk' => $data_produk]);
+    }
+
+    public function retur_store(Request $request)
+    {
+        $idTransaksi = $request->attributes->get('idTransaksi');
+        $this->model->returProduk($idTransaksi, $request->request);
+
+        return new RedirectResponse('/transaksi');
+    }
+
+    public function get(Request $request)
+    {
+        $idTransaksi = $request->attributes->get('idTransaksi');
+
+        $detail = $this->model->selectOne($idTransaksi);
+        $groupItem = $this->model->selectGroupItem($detail['idTransaksi']);
+
+        $produk = new Produk();
+        $data_produk = $produk->selectAll();
+
+        return new JsonResponse(['detail' => $detail, 'groupItem' => $groupItem, 'produk' => $data_produk]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Produk\Model;
 
+use App\GroupItem\Model\GroupItem;
+use App\Transaksi\Model\Transaksi;
 use Core\GlobalFunc;
 use PDOException;
 
@@ -58,12 +60,18 @@ class Produk extends GlobalFunc
     }
     public function selectOne($id)
     {
-        $sql = "SELECT * FROM " . $this->table . " WHERE idItem = '$id'";
+        $sql = "SELECT * FROM " . $this->table . " LEFT JOIN media ON media.idRelation = ".$this->table.".idItem WHERE idItem = '$id'";
 
         try {
             $query = $this->conn->prepare($sql);
             $query->execute();
             $data = $query->fetch();
+
+            // $transaksi = new GroupItem();
+            // $transaksi_item = $transaksi->selectAll("WHERE groupItem.idItem = '$id'");
+            
+            // // kurangi stock terpakai dengan stock awal
+            // $data['sisaStock'] => $data['']
 
             return $data;
         } catch (PDOException $e) {
@@ -118,5 +126,20 @@ class Produk extends GlobalFunc
         ];
 
         return $message[$action];
+    }
+
+    public function updateStock($id, $sisaStock)
+    {
+        $sql = "UPDATE " . $this->table . " SET stockItem = '$sisaStock' WHERE idItem = '$id'";
+
+        try {
+            $data = $this->conn->prepare($sql);
+            $data->execute();
+
+            return $id;
+        } catch (PDOexception $e) {
+            echo $e;
+            die();
+        }
     }
 }

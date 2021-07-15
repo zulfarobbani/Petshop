@@ -8,6 +8,7 @@ use PDOException;
 class Users extends GlobalFunc
 {
     private $table = 'users';
+    private $primaryKey = 'idUser';
     public $conn;
 
     public function __construct()
@@ -34,7 +35,7 @@ class Users extends GlobalFunc
 
     public function selectOne($id_user)
     {
-        $sql = "SELECT * FROM ".$this->table." WHERE idUser = '$id_user'";
+        $sql = "SELECT * FROM ".$this->table." LEFT JOIN media ON media.idRelation = ".$this->table.".".$this->primaryKey." WHERE ".$this->primaryKey." = '$id_user'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -50,23 +51,21 @@ class Users extends GlobalFunc
 
     public function create($data)
     {
-
         $idUsers = $data['idUsers'];
-        $namaUsers = $data['namaUsers'];
+        $namaUser = $data['namaUser'];
         $passwordUser = $data['passwordUser'];
-        $nikUser = $data['nikUser'];
         $hirarkiUser = $data['hirarkiUser'];
         $dateCreate = $data['dateCreate'];
         $emailUser = $data['emailUser'];
+        $nohpUser = $data['nohpUser'];
 
-        $sql = "INSERT INTO ". $this->table ." VALUES('$idUsers', '$namaUsers', '$passwordUser', '$hirarkiUser', '$nikUser', '$dateCreate', '$emailUser')";
+        $sql = "INSERT INTO ". $this->table ." VALUES('$idUsers', '$emailUser', '$namaUser', '$nohpUser', '$passwordUser', '$hirarkiUser', '$dateCreate')";
 
         try {
             $query = $this->conn->prepare($sql);
-
             $status = $query->execute();
 
-            return $status;
+            return $idUsers;
         } catch (PDOException $e) {
             echo $e;
             die();
@@ -75,20 +74,19 @@ class Users extends GlobalFunc
 
     public function update($id_user, $data)
     {
-        $namaUsers = $data['namaUsers'];
-        $passwordUser = $data['passwordUser'];
-        $nikUser = $data['nikUser'];
+        $namaUser = $data['namaUser'];
         $hirarkiUser = $data['hirarkiUser'];
         $emailUser = $data['emailUser'];
+        $nohpUser = $data['nohpUser'];
 
-        $sql = "UPDATE ".$this->table. " SET namaUser = '$namaUsers', passwordUser = '$passwordUser', nikUser = '$nikUser', hirarkiUser = '$hirarkiUser', emailUser = '$emailUser'";
+        $sql = "UPDATE ".$this->table. " SET namaUser = '$namaUser', hirarkiUser = '$hirarkiUser', emailUser = '$emailUser', nohpUser = '$nohpUser' WHERE ".$this->primaryKey." = '$id_user'";
 
         try {
             $query = $this->conn->prepare($sql);
 
             $status = $query->execute();
 
-            return $status;
+            return $id_user;
         } catch (PDOException $e) {
             echo $e;
             die();
@@ -105,6 +103,38 @@ class Users extends GlobalFunc
             $status = $query->execute();
 
             return $status;
+        } catch (PDOException $e) {
+            echo $e;
+            die();
+        }
+    }
+
+    public function resetPassword($id_user)
+    {
+        $passwordUser = password_hash('123', PASSWORD_DEFAULT);
+        $sql = "UPDATE ".$this->table. " SET passwordUser = '$passwordUser' WHERE ".$this->primaryKey." = '$id_user'";
+
+        try {
+            $query = $this->conn->prepare($sql);
+            $status = $query->execute();
+
+            return $id_user;
+        } catch (PDOException $e) {
+            echo $e;
+            die();
+        }
+    }
+
+    public function updatePassword($id_user, $passwordBaru)
+    {
+        $passwordUser = password_hash($passwordBaru, PASSWORD_DEFAULT);
+        $sql = "UPDATE ".$this->table. " SET passwordUser = '$passwordUser' WHERE ".$this->primaryKey." = '$id_user'";
+
+        try {
+            $query = $this->conn->prepare($sql);
+            $status = $query->execute();
+
+            return $id_user;
         } catch (PDOException $e) {
             echo $e;
             die();

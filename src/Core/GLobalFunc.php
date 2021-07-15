@@ -76,4 +76,10 @@ class GlobalFunc
     {
         return pg_escape_string($conn, $data);
     }
+
+    public function dd($var)
+    {
+        dump($var);
+        die();
+    }
 }

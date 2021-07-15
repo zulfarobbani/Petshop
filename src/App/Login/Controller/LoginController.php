@@ -22,7 +22,7 @@ class LoginController extends GlobalFunc
     {
         $errors = $this->session->getFlashBag()->get('errors', []);
 
-        return $this->render_template('login/index', ['errors' => $errors]);
+        return $this->render_template('login/login', ['errors' => $errors]);
     }
 
     public function login_proses(Request $request)
@@ -32,6 +32,7 @@ class LoginController extends GlobalFunc
             $passwordUser = $request->request->get('passwordUser');
 
             $data = $this->model->selectOne($emailUser);
+            // $this->dd($data);
 
             if ($data != false){
                 if (password_verify($passwordUser, $data['passwordUser'])){
@@ -55,6 +56,12 @@ class LoginController extends GlobalFunc
         } else {
             return new RedirectResponse('/login');
         }
+    }
+
+    public function logout_proses(Request $request)
+    {
+        $this->session->invalidate();
+        return new RedirectResponse('/login');
     }
 }
 

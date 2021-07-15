@@ -42,7 +42,7 @@
                     <?php foreach($groupItem as $value) {?>
                         <li>
                             <ul>
-                                <li><?= $value['idItem']?></li>
+                                <li><?= $value['namaItem']?></li>
                                 <li><?= $value['kuantitiItem']?></li>
                                 <li><?= $value['pengurangItem']?></li>
                             </ul>

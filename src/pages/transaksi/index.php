@@ -32,6 +32,7 @@
                         <a href="/transaksi/<?= $value['idTransaksi']?>/edit">Edit</a>
                         <a href="/transaksi/<?= $value['idTransaksi']?>/detail">Detail</a>
                         <a href="/transaksi/<?= $value['idTransaksi']?>/print-receipt" class="cetakReceipt">Cetak</a>
+                        <a href="/transaksi/<?= $value['idTransaksi']?>/retur">Retur</a>
                     </td>
                 </tr>
             <?php }?>

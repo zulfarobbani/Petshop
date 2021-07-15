@@ -1,0 +1,21 @@
+body {
+	background-color: #fcecec;
+}
+.header-body{
+	background-color: #48466d!important;
+}
+.image-upload>input {
+  display: none;
+}
+#btnMerah{
+	background-color: #c1272d;
+}
+#btnKuning{
+	background-color: #f7931e;
+}
+#btnBiru{
+	background-color: #0071bc;
+}
+#btnIjo{
+	background-color: #8cc63f;
+}

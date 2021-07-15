@@ -49,15 +49,15 @@ class Users extends GlobalFunc
         }
     }
 
-    public function create($data)
+    public function create($datas)
     {
-        $idUsers = $data['idUsers'];
-        $namaUser = $data['namaUser'];
-        $passwordUser = $data['passwordUser'];
-        $hirarkiUser = $data['hirarkiUser'];
-        $dateCreate = $data['dateCreate'];
-        $emailUser = $data['emailUser'];
-        $nohpUser = $data['nohpUser'];
+        $idUsers = $datas['idUsers'];
+        $namaUser = $datas['namaUser'];
+        $passwordUser = $datas['passwordUser'];
+        $hirarkiUser = $datas['hirarkiUser'];
+        $dateCreate = $datas['dateCreate'];
+        $emailUser = $datas['emailUser'];
+        $nohpUser = $datas['nohpUser'];
 
         $sql = "INSERT INTO ". $this->table ." VALUES('$idUsers', '$emailUser', '$namaUser', '$nohpUser', '$passwordUser', '$hirarkiUser', '$dateCreate')";
 
@@ -72,19 +72,19 @@ class Users extends GlobalFunc
         }
     }
 
-    public function update($id_user, $data)
+    public function update($id_user, $datas)
     {
-        $namaUser = $data['namaUser'];
-        $hirarkiUser = $data['hirarkiUser'];
-        $emailUser = $data['emailUser'];
-        $nohpUser = $data['nohpUser'];
+        $namaUser = $datas['namaUser'];
+        $hirarkiUser = $datas['hirarkiUser'];
+        $emailUser = $datas['emailUser'];
+        $nohpUser = $datas['nohpUser'];
 
         $sql = "UPDATE ".$this->table. " SET namaUser = '$namaUser', hirarkiUser = '$hirarkiUser', emailUser = '$emailUser', nohpUser = '$nohpUser' WHERE ".$this->primaryKey." = '$id_user'";
 
         try {
             $query = $this->conn->prepare($sql);
 
-            $status = $query->execute();
+            $query->execute();
 
             return $id_user;
         } catch (PDOException $e) {
@@ -107,6 +107,18 @@ class Users extends GlobalFunc
             echo $e;
             die();
         }
+    }
+
+    public function chronologyMessage($action, $user, $object)
+    {
+        $message = [
+            'store' => $user." telah menambah user \"".$object['user']."\"",
+            'update' => $user." telah mengubah user \"".$object['user']."\"",
+            'delete' => $user." telah menghapus user \"".$object['user']."\"",
+            // 'retur' => $user." telah melakukan retur user \"".$object['user']."\" dengan kuantitas ".$object['retur']." ".$object['satuan'],
+        ];
+
+        return $message[$action];
     }
 
     public function resetPassword($id_user)

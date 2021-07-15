@@ -53,7 +53,7 @@ class Transaksi extends GlobalFunc
 
     public function selectGroupItem($idTransaksi)
     {
-        $sql = "SELECT *, groupItem.kuantitiItem as jumlahBeli FROM groupItem LEFT JOIN item ON item.idItem = groupItem.idItem WHERE groupItem.idTransaksi = '$idTransaksi'";
+        $sql = "SELECT *, groupItem.kuantitiItem as jumlahBeli FROM groupItem LEFT JOIN item ON item.idItem = groupItem.idItem WHERE idTransaksi = '$idTransaksi'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -69,34 +69,35 @@ class Transaksi extends GlobalFunc
         }
     }
 
-    public function create($data)
+    public function create($datas)
     {
-        $idTransaksi = $data['idTransaksi'];
-        $nomorTransaksi = $data['nomorTransaksi'];
-        $kasirTransaksi = $data['kasirTransaksi'];
-        $pelangganTransaksi = $data['pelangganTransaksi'];
-        $tanggalTransaksi = $data['tanggalTransaksi'];
-        $idGroupitem = $data['idGroupitem'];
-        $idClient = $data['idClient'];
-        $dateCreate = $data['dateCreate'];
+        $idTransaksi = $datas['idTransaksi'];
+        $nomorTransaksi = $datas['nomorTransaksi'];
+        $kasirTransaksi = $datas['kasirTransaksi'];
+        $pelangganTransaksi = $datas['pelangganTransaksi'];
+        $tanggalTransaksi = $datas['tanggalTransaksi'];
+        $idGroupitem = $datas['idGroupitem'];
+        $idClient = $datas['idClient'];
+        $dateCreate = $datas['dateCreate'];
         $kasirTransaksi = 'user98123jsh';
-        $statusTransaksi = $data['statusTransaksi'];
+        $statusTransaksi = $datas['statusTransaksi'];
 
         $sql = "INSERT INTO " . $this->table . " VALUES('$idTransaksi', '$nomorTransaksi', '$kasirTransaksi', '$pelangganTransaksi', '$tanggalTransaksi', '$idGroupitem', '$idClient', '$statusTransaksi', '$dateCreate')";
 
         try {
             $query = $this->conn->prepare($sql);
-            $create = $query->execute();
+            $query->execute();
 
-            return $create;
-        } catch (PDOException $e) {
+            return $idTransaksi;
+        } catch(PDOException $e){
             echo $e;
             die();
         }
     }
 
-    public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $kuantitiItem, $dateCreate)
+    public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $kuantitiItem)
     {
+        $dateCreate = date('Y-m-d');
         $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idTransaksi', '$idItem', '', '$kuantitiItem', '$dateCreate')";
 
         try {
@@ -110,31 +111,35 @@ class Transaksi extends GlobalFunc
         }
     }
 
-    public function update($idTransaksi, $data)
+    public function update($idTransaksi, $datas)
     {
-        $nomorTransaksi = $data['nomorTransaksi'];
-        $kasirTransaksi = $data['kasirTransaksi'];
-        $pelangganTransaksi = $data['pelangganTransaksi'];
-        $tanggalTransaksi = $data['tanggalTransaksi'];
-        // $idGroupitem = $data['idGroupitem'];
-        $idClient = $data['idClient'];
+        $nomorTransaksi = $datas->get('nomorTransaksi');
+        $kasirTransaksi = $datas->get('kasirTransaksi');
+        $pelangganTransaksi = $datas->get('pelangganTransaksi');
+        $tanggalTransaksi = $datas->get('tanggalTransaksi');
+        $idClient = $datas->get('idClient');
+        $dateCreate = date("Y-m-d");
+
+        $idItem = $datas->get('idItem');
+        $kuantitiItem = $datas->get('kuantitiItem');
+        $pengurangItem = $datas->get('pengurangItem');
 
         $sql = "UPDATE " . $this->table . " SET nomorTransaksi = '$nomorTransaksi', kasirTransaksi = '$kasirTransaksi', pelangganTransaksi = '$pelangganTransaksi', tanggalTransaksi = '$tanggalTransaksi', idClient = '$idClient' WHERE idTransaksi = '$idTransaksi'";
 
         try {
             $query = $this->conn->prepare($sql);
-            $create = $query->execute();
+            $query->execute();
 
-            return $create;
+            return $idTransaksi;
         } catch (PDOException $e) {
             echo $e;
             die();
         }
     }
 
-    public function deleteGroupItem($idGroupitem)
+    public function deleteGroupItem($idTransaksi)
     {
-        $sql = "DELETE FROM groupitem WHERE idGroupitem = '$idGroupitem'";
+        $sql = "DELETE FROM groupitem WHERE idTransaksi = '$idTransaksi'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -171,5 +176,17 @@ class Transaksi extends GlobalFunc
         }
 
         return true;
+    }
+
+    public function chronologyMessage($action, $user, $object)
+    {
+        $message = [
+            'store' => $user." telah menambah transaksi dengan no_transaksi \"".$object['transaksi']."\"",
+            'update' => $user." telah mengubah transaksi dengan no_transaksi \"".$object['transaksi']."\"",
+            'delete' => $user." telah menghapus transaksi dengan no_transaksi \"".$object['transaksi']."\"",
+            // 'retur' => $user." telah melakukan retur transaksi \"".$object['transaksi']."\" dengan kuantitas ".$object['retur']." ".$object['satuan'],
+        ];
+
+        return $message[$action];
     }
 }

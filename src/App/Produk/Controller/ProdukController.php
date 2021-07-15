@@ -69,7 +69,7 @@ class ProdukController extends GlobalFunc
 
         // create chronlogy
         $chronology = new Chronology();
-        $message = $this->model->chronologyMessage('retur', 'User 1', [
+        $message = $this->model->chronologyMessage('store', 'User 1', [
             'produk' => $request->request->get('namaItem')
         ]);
         $createChronology = $chronology->create($message, $produk);
@@ -151,6 +151,18 @@ class ProdukController extends GlobalFunc
 
         return new JsonResponse([
             'data' => $data
+        ]);
+    }
+
+    public function activity(Request $request)
+    {
+        $id = $request->attributes->get('id');
+        $data = $this->model->selectOne($id);
+        $aktivitas = new Chronology();
+        $data_aktivitas = $aktivitas->selectAll("WHERE idTables = '".$data['idItem']."'");
+
+        return new JsonResponse([
+            'data' => $data_aktivitas
         ]);
     }
 }

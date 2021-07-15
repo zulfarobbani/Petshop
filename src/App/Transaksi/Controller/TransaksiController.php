@@ -3,6 +3,8 @@
 namespace App\Transaksi\Controller;
 
 use App\Produk\Model\Produk;
+use App\Chronology\Model\Chronology;
+use App\GroupItem\Model\GroupItem;
 use App\Transaksi\Model\Transaksi;
 use Core\GlobalFunc;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,23 +23,21 @@ class TransaksiController extends GlobalFunc
     public function index(Request $request)
     {
         $datas = $this->model->selectAll();
-        
-        $selectTransaksi = function($idTransaksi){
-            $data = $this->model->selectOne($idTransaksi);
-
-            return $data;
-        };
-
-        $selectGroupItem = function($idTransaksi){
-            $data = $this->model->selectGroupItem($idTransaksi);
-
-            return $data;
-        };
 
         $produk = new Produk();
         $data_produk = $produk->selectAll();
 
-        return $this->render_template('transaksi/transaksi', ['datas' => $datas, '$selectTransaksi' => $selectTransaksi, 'selectGroupItem' => $selectGroupItem, 'produk' => $data_produk]);
+        $groupItem = new GroupItem();
+        foreach ($datas as $key => $value) {
+            $detail_produk = $groupItem->selectAll("WHERE idTransaksi = '".$value['idTransaksi']."'");
+            $total_harga = 0;
+            foreach ($detail_produk as $key1 => $value1) {
+                $total_harga += intval($value1['hargaItem']);
+            }
+            $datas[$key]['totalHargaTransaksi'] = $total_harga;
+        }
+
+        return $this->render_template('transaksi/transaksi', ['datas' => $datas, 'produk' => $data_produk]);
     }
 
     public function create(Request $request)
@@ -79,7 +79,7 @@ class TransaksiController extends GlobalFunc
 
         for($index = 0; $index < count($idItem); $index++) {
             $idGroupitem = uniqid('gi');
-            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index], $dateCreate);
+            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index]);
             
             // get item
             $produk = new Produk();
@@ -91,6 +91,13 @@ class TransaksiController extends GlobalFunc
         }
 
         $create = $this->model->create($transaksi_arr);
+
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('store', 'User 1', [
+            'transaksi' => $request->request->get('nomorTransaksi')
+        ]);
+        $createChronology = $chronology->create($message, $create);
 
         return new RedirectResponse('/transaksi');
     }
@@ -112,24 +119,7 @@ class TransaksiController extends GlobalFunc
     {
         $idTransaksi = $request->attributes->get('idTransaksi');
 
-        $nomorTransaksi = $request->request->get('nomorTransaksi');
-        $pelangganTransaksi = $request->request->get('pelangganTransaksi');
-        $kasirTransaksi = $request->request->get('kasirTransaksi');
-        $tanggalTransaksi = $request->request->get('tanggalTransaksi');
-        $idClient = $request->request->get('idClient');
-        $dateCreate = date('Y-m-d');
-
-        $transaksi_arr = array(
-            "nomorTransaksi" => $nomorTransaksi,
-            "kasirTransaksi" => $kasirTransaksi,
-            "pelangganTransaksi" => $pelangganTransaksi,
-            "tanggalTransaksi" => $tanggalTransaksi,
-            // "idGroupitem" => $idGroupitem,
-            "idClient" => $idClient
-            // "dateCreate" => $dateCreate
-        );
-
-        $update = $this->model->update($idTransaksi, $transaksi_arr);
+        $update = $this->model->update($idTransaksi, $request->request);
 
         $detail = $this->model->selectOne($idTransaksi);
 
@@ -137,10 +127,11 @@ class TransaksiController extends GlobalFunc
         $kuantitiItem = $request->request->get('kuantitiItem');
         $pengurangItem = $request->request->get('pengurangItem');
 
-        $this->model->deleteGroupItem($detail['idGroupitem']);
+        $this->model->deleteGroupItem($detail['idTransaksi']);
 
         for($index = 0; $index < count($idItem); $index++){
-            $this->model->createGroupItem($detail['idGroupitem'], $idTransaksi, $idItem[$index], $pengurangItem[$index], $kuantitiItem[$index], $dateCreate);
+            $idGroupitem = uniqid('gi');
+            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index]);
 
             // get item
             $produk = new Produk();
@@ -150,6 +141,13 @@ class TransaksiController extends GlobalFunc
             $sisaStock = $data_produk['stockItem'] - intval($kuantitiItem[$index]);
             $produk->updateStock($idItem[$index], $sisaStock);
         }
+
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('update', 'User 1', [
+            'transaksi' => $detail['nomorTransaksi']
+        ]);
+        $createChronology = $chronology->create($message, $idTransaksi);
 
         return new RedirectResponse('/transaksi');
     }
@@ -165,21 +163,28 @@ class TransaksiController extends GlobalFunc
         return $this->render_template('transaksi/detail', ['detail' => $detail, 'groupItem' => $groupItem]);
     }
 
-    public function delete(Request $request)
-    {
-        $id_user = $request->attributes->get('id_user');
+    // public function delete(Request $request)
+    // {
+    //     $id_user = $request->attributes->get('id_user');
 
-        $delete = $this->model->delete($id_user);
+    //     $delete = $this->model->delete($id_user);
 
-        return new RedirectResponse('/users');
-    }
+    //     // create chronlogy
+    //     $chronology = new Chronology();
+    //     $message = $this->model->chronologyMessage('update', 'User 1', [
+    //         'transaksi' => $detail['nomorTransaksi']
+    //     ]);
+    //     $createChronology = $chronology->create($message, $idTransaksi);
+
+    //     return new RedirectResponse('/users');
+    // }
 
     public function print_receipt(Request $request)
     {
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $detail = $this->model->selectOne($idTransaksi);
-        $groupItem = $this->model->selectGroupItem($detail['idGroupitem']);
+        $groupItem = $this->model->selectGroupItem($detail['idTransaksi']);
         
         $totalHarga = 0;
 

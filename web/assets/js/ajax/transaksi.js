@@ -1,6 +1,9 @@
 $(document).ready(function () {
   $(".tambahListProduk").on("click", function () {
-    var lastElementId = $(".transaksiProduk > .listProduk:last").attr("id");
+    var container = $(this).parent();
+    var lastElementId = container
+      .find(".transaksiProduk > .listProduk:last")
+      .attr("id");
     var lastId = lastElementId.split("_")[1];
     var numberNextId = ++lastId;
     var nextId = "listproduk_" + numberNextId;
@@ -26,11 +29,11 @@ $(document).ready(function () {
       }
 
       tampilanHtml +=
-        '</select></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+        '</select></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control"><b>Stock Produk : <span class="stockItem"></span></b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
         numberNextId +
         '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
 
-      $(".transaksiProduk").append(tampilanHtml);
+      container.find(".transaksiProduk").append(tampilanHtml);
     });
   });
 
@@ -42,14 +45,21 @@ $(document).ready(function () {
   });
 
   $(document).on("change", ".produk", function () {
-    var parent = $(this).parent();
+    var parent = $(this).parent().parent();
+    var kuantiti = 0;
+    var hargaItem = 0;
     if ($(this).val() != "") {
       $.ajax({
         type: "get",
         url: "/produk/" + $(this).val() + "/get",
       }).done(function (data) {
-        parent.find(".kuantiti").val(data.data.stockItem);
+        kuantiti = parent.find(".kuantiti").val();
+        hargaItem = parseInt(data.data.hargaItem);
+        totalhargaItem = kuantiti * parseInt(data.data.hargaItem);
         parent.find(".kuantiti").prop("max", data.data.stockItem);
+        parent.find(".stockItem").html(data.data.stockItem);
+        parent.find(".hargaItem").html("Rp."+hargaItem.toLocaleString())
+        // parent.find(".totalHargaitem").html("Rp."+totalHargaitem.toLocaleString())
       });
     }
   });
@@ -76,15 +86,62 @@ $(document).ready(function () {
         .find(".formEdit")
         .prop("action", "/transaksi/" + data.detail.idTransaksi + "/update");
 
-      // $("#transaksiProduk").html('');
-      var tampilanHtml = "";
-      for (let index1 = 0; index1 < data.groupItem.length; index1++) {
-        const element1 = data.groupItem[index1];
+      if (data.groupItem.length > 0) {
+        var tampilanHtml = "";
+        for (let index1 = 0; index1 < data.groupItem.length; index1++) {
+          const element1 = data.groupItem[index1];
 
-        var lastElementId = $(".transaksiProduk > .listProduk:last").attr("id");
-        var lastId = lastElementId.split("_")[1];
-        var numberNextId = ++lastId;
-        var nextId = "listproduk_" + numberNextId;
+          var lastElementId = modal
+            .find(".transaksiProduk > .listProduk:last")
+            .attr("id");
+          var lastId = lastElementId.split("_")[1];
+          var numberNextId = ++lastId;
+          var nextId = "listproduk_" + numberNextId;
+
+          tampilanHtml +=
+            '<div class="listProduk" id="' +
+            nextId +
+            '"><div class="row"><div class="col-7"><select name="idItem[]" class="produk form-control"><option value="-">Nama Produk</option>';
+
+          for (let index = 0; index < data.produk.length; index++) {
+            const element = data.produk[index];
+            tampilanHtml +=
+              '<option value="' +
+              element.idItem +
+              '"' +
+              (element1.idItem == element.idItem ? "selected" : "") +
+              ">" +
+              element.namaItem +
+              "</option>";
+          }
+
+          var totalHargaitem = parseInt(element1.hargaItem) * element1.jumlahBeli;
+          tampilanHtml +=
+            '</select><b>Harga Produk : <span class="hargaItem">Rp.'+parseInt(element1.hargaItem).toLocaleString()+'</span></b></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" max="' +
+            element1.stockItem +
+            '" placeholder="Qty" class="kuantiti form-control" value="' +
+            element1.jumlahBeli +
+            '"><b>Stock Produk : ' +
+            element1.stockItem +
+            '</b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+            numberNextId +
+            '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+            // tampilanHtml +=
+            // '</select><b>Harga Produk : <span class="hargaItem">Rp.'+parseInt(element1.hargaItem).toLocaleString()+'</span></b><br><b>Total Harga: <span class="totalHargaitem">Rp.'+totalHargaitem.toLocaleString()+'</span></b></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" max="' +
+            // element1.stockItem +
+            // '" placeholder="Qty" class="kuantiti form-control" value="' +
+            // element1.jumlahBeli +
+            // '"><b>Stock Produk : ' +
+            // element1.stockItem +
+            // '</b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+            // numberNextId +
+            // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+        }
+
+        modal.find(".transaksiProduk").html(tampilanHtml);
+      } else {
+        var tampilanHtml = "";
+        var nextId = "listproduk_1";
 
         tampilanHtml +=
           '<div class="listProduk" id="' +
@@ -96,6 +153,99 @@ $(document).ready(function () {
           tampilanHtml +=
             '<option value="' +
             element.idItem +
+            '">' +
+            element.namaItem +
+            '</option>';
+        }
+
+        tampilanHtml +=
+          '</select></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" max="" placeholder="Qty" class="kuantiti form-control" value=""><b>Stock Produk : <span class="stockItem"></span></b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="1"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+
+        modal.find(".transaksiProduk").html(tampilanHtml);
+      }
+
+      var modalAktivitas = $("#modalaktivitasproduct");
+      var isiAktivitas = "";
+      $.ajax({
+        type: "get",
+        url: "/produk/" + id + "/activity",
+      }).done(function (data) {
+        for (let index = 0; index < data.data.length; index++) {
+          const element = data.data[index];
+          isiAktivitas +=
+            "<tr><td>" +
+            (index + 1) +
+            "</td><td>" +
+            element.deskripsiChronology +
+            "</td><td>" +
+            element.dateCreate +
+            "</td></tr>";
+        }
+        modalAktivitas.find(".bodyAktivitas").html(isiAktivitas);
+      });
+    });
+  });
+
+  $(document).on("click", ".btnRetur", function () {
+    var id = $(this).attr("data-bs-idTransaksi");
+    var modal = $("#modalreturproduct");
+    $.ajax({
+      type: "get",
+      url: "/transaksi/" + id + "/get",
+    }).done(function (data) {
+      modal.find(".nomorTransaksi").val(data.detail.nomorTransaksi);
+      modal.find(".pelangganTransaksi").val(data.detail.pelangganTransaksi);
+      modal.find(".tanggalTransaksi").val(data.detail.tanggalTransaksi);
+      modal.find(".statusTransaksi").val(data.detail.statusTransaksi);
+      // modal
+      //   .find(".cetakReceipt")
+      //   .prop(
+      //     "href",
+      //     "/transaksi/" + data.detail.idTransaksi + "/print-receipt"
+      //   );
+
+      modal
+        .find(".formRetur")
+        .prop(
+          "action",
+          "/transaksi/" + data.detail.idTransaksi + "/retur-store"
+        );
+
+      // $("#transaksiProduk").html('');
+      var tampilanHtml = "";
+      var tampilanHtmlDetail = "";
+      for (let index1 = 0; index1 < data.groupItem.length; index1++) {
+        const element1 = data.groupItem[index1];
+
+        var lastElementId = $(".transaksiProduk > .listProduk:last").attr("id");
+        var lastId = lastElementId.split("_")[1];
+        var numberNextId = ++lastId;
+        var nextId = "listproduk_" + numberNextId;
+
+        tampilanHtml +=
+          '<div class="listProduk" id="' +
+          nextId +
+          '"><div class="row"><div class="col-7"><select name="idItem[]" class="produk form-control" disabled><option value="-">Nama Produk</option>';
+
+        tampilanHtmlDetail +=
+          '<div class="listProduk" id="' +
+          nextId +
+          '"><div class="row"><div class="col-7"><select name="idItem[]" class="produk form-control" disabled><option value="-">Nama Produk</option>';
+
+        for (let index = 0; index < data.produk.length; index++) {
+          const element = data.produk[index];
+          tampilanHtml +=
+            '<option value="' +
+            element.idItem +
+            '"' +
+            (element1.idItem == element.idItem ? "selected" : "") +
+            ">" +
+            element.namaItem +
+            "</option>";
+
+          tampilanHtmlDetail +=
+            '<option value="' +
+            element.idItem +
             '"' +
             (element1.idItem == element.idItem ? "selected" : "") +
             ">" +
@@ -104,14 +254,27 @@ $(document).ready(function () {
         }
 
         tampilanHtml +=
-          '</select></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
+          '</select></div><div class="col"><input type="number" name="' +
+          element1.idItem +
+          '" min="1" max="' +
+          element1.stockItem +
+          '" placeholder="Qty" class="kuantiti form-control" value="' +
+          element1.pengurangItem +
+          '"><b>Stock Barang : ' +
+          element1.stockItem +
+          "</b></div></div></div></div>";
+
+        tampilanHtmlDetail +=
+          '</select></div><div class="col"><input type="number" name="' +
+          element1.idItem +
+          '" min="1" placeholder="Qty" class="kuantiti form-control" disabled value="' +
           element1.jumlahBeli +
-          '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
-          numberNextId +
-          '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+          '"></div></div></div></div>';
       }
 
-      $(".transaksiProduk").html(tampilanHtml);
+      modal.find(".transaksiProduk").html(tampilanHtml);
+
+      modal.find(".transaksiProdukDetail").html(tampilanHtmlDetail);
     });
   });
 
@@ -142,7 +305,9 @@ $(document).ready(function () {
       for (let index1 = 0; index1 < data.groupItem.length; index1++) {
         const element1 = data.groupItem[index1];
 
-        var lastElementId = modal.find(".transaksiProduk > .listProduk:last").attr("id");
+        var lastElementId = modal
+          .find(".transaksiProduk > .listProduk:last")
+          .attr("id");
         var lastId = lastElementId.split("_")[1];
         var numberNextId = ++lastId;
         var nextId = "listproduk_" + numberNextId;
@@ -165,9 +330,11 @@ $(document).ready(function () {
         }
 
         tampilanHtml +=
-          '</select></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
+          '</select><b>Harga Produk : <span class="hargaItem">Rp.'+parseInt(element1.hargaItem).toLocaleString()+'</span></b></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
           element1.jumlahBeli +
-          '" disabled></div></div></div></div>';
+          '" disabled><b>Stock Produk : ' +
+          element1.stockItem +
+          "</b></div></div></div></div>";
       }
 
       modal.find(".transaksiProduk").html(tampilanHtml);

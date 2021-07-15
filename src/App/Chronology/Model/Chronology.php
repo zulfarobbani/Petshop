@@ -16,9 +16,9 @@ class Chronology extends GlobalFunc
         $this->conn = $globalFunc->conn;
     }    
     
-    public function selectAll()
+    public function selectAll($where)
     {
-        $sql = "SELECT * FROM " . $this->table;
+        $sql = "SELECT * FROM " . $this->table . " " . $where;
 
         try {
             $query = $this->conn->prepare($sql);

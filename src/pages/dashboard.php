@@ -23,36 +23,36 @@
 
     <!-- Vendor CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/vendor/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="assets/vendor/animate/animate.min.css">
-    <link rel="stylesheet" href="assets/vendor/simple-line-icons/css/simple-line-icons.min.css">
-    <link rel="stylesheet" href="assets/vendor/owl.carousel/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="assets/vendor/owl.carousel/assets/owl.theme.default.min.css">
-    <link rel="stylesheet" href="assets/vendor/magnific-popup/magnific-popup.min.css">
+    <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/assets/vendor/animate/animate.min.css">
+    <link rel="stylesheet" href="/assets/vendor/simple-line-icons/css/simple-line-icons.min.css">
+    <link rel="stylesheet" href="/assets/vendor/owl.carousel/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="/assets/vendor/owl.carousel/assets/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/assets/vendor/magnific-popup/magnific-popup.min.css">
 
     <!-- Theme CSS -->
-    <link rel="stylesheet" href="assets/css/theme.css">
-    <link rel="stylesheet" href="assets/css/theme-elements.css">
-    <link rel="stylesheet" href="assets/css/theme-blog.css">
-    <link rel="stylesheet" href="assets/css/theme-shop.css">
+    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/css/theme-elements.css">
+    <link rel="stylesheet" href="/assets/css/theme-blog.css">
+    <link rel="stylesheet" href="/assets/css/theme-shop.css">
     
     <!-- Demo CSS -->
 
 
     <!-- Skin CSS -->
-    <link rel="stylesheet" href="assets/css/skins/default.css"> 
+    <link rel="stylesheet" href="/assets/css/skins/default.css"> 
 
     <!-- Theme Custom CSS -->
-    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
 
     <!-- Head Libs -->
-    <script src="vendor/modernizr/modernizr.min.js"></script>
+    <script src="/assets/vendor/modernizr/modernizr.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="assets/style/style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/style/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
   </head>
   <body>
-     <?php include(__DIR__.'/helper/header.php' )?>
+     <?php include(__DIR__.'/../helper/header.php' )?>
         <div class="container mt-4">
           <div class="row">
             <div class="col">
@@ -226,31 +226,31 @@
       
 
     <!-- Vendor -->
-    <script src="assets/vendor/jquery/jquery.min.js"></script>
-    <script src="assets/vendor/jquery.appear/jquery.appear.min.js"></script>
-    <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
-    <script src="assets/vendor/jquery.cookie/jquery.cookie.min.js"></script>
-    <script src="assets/vendor/popper/umd/popper.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/vendor/common/common.min.js"></script>
-    <script src="assets/vendor/jquery.validation/jquery.validate.min.js"></script>
-    <script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
-    <script src="assets/vendor/jquery.gmap/jquery.gmap.min.js"></script>
-    <script src="assets/vendor/jquery.lazyload/jquery.lazyload.min.js"></script>
-    <script src="assets/vendor/isotope/jquery.isotope.min.js"></script>
-    <script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
-    <script src="assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
-    <script src="assets/vendor/vide/jquery.vide.min.js"></script>
-    <script src="assets/vendor/vivus/vivus.min.js"></script>
+    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="/assets/vendor/jquery.appear/jquery.appear.min.js"></script>
+    <script src="/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+    <script src="/assets/vendor/jquery.cookie/jquery.cookie.min.js"></script>
+    <script src="/assets/vendor/popper/umd/popper.min.js"></script>
+    <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/vendor/common/common.min.js"></script>
+    <script src="/assets/vendor/jquery.validation/jquery.validate.min.js"></script>
+    <script src="/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+    <script src="/assets/vendor/jquery.gmap/jquery.gmap.min.js"></script>
+    <script src="/assets/vendor/jquery.lazyload/jquery.lazyload.min.js"></script>
+    <script src="/assets/vendor/isotope/jquery.isotope.min.js"></script>
+    <script src="/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+    <script src="/assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="/assets/vendor/vide/jquery.vide.min.js"></script>
+    <script src="/assets/vendor/vivus/vivus.min.js"></script>
     
     <!-- Theme Base, Components and Settings -->
-    <script src="assets/js/theme.js"></script>
+    <script src="/assets/js/theme.js"></script>
 
     <!-- Theme Custom -->
-    <script src="assets/js/custom.js"></script>
+    <script src="/assets/js/custom.js"></script>
     
     <!-- Theme Initialization Files -->
-    <script src="assets/js/theme.init.js"></script>
+    <script src="/assets/js/theme.init.js"></script>
 
   </body>
 </html>

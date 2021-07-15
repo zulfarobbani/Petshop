@@ -19,7 +19,7 @@
 											<nav class="collapse">
 												<ul class="nav nav-pills" id="mainNav">
 													<li class="dropdown">
-														<a class="dropdown-item dropdown-toggle text-white" href="/produk">
+														<a class="dropdown-item dropdown-toggle text-white" href="/dashboard">
 															Dashboard
 														</a>
 													</li>

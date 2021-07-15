@@ -71,7 +71,7 @@
                     </div>
                     <div class="d-flex flex-row-reverse mt-3" id="divbtn">
                         <button class="btn rounded-pill px-3 text-white ms-3" id="btnlogin" name="login" type="submit">Login</button>
-                        <a href="" class="mt-1" id="lupass">Lupa pass?</a>
+                        <!-- <a href="" class="mt-1" id="lupass">Lupa pass?</a> -->
                     </div>
                     <!-- <div class="d-flex">
         		<img src="img/logo.png" width="150px" height="100px">

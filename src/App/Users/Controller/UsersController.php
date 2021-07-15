@@ -3,6 +3,7 @@
 namespace App\Users\Controller;
 
 use App\Media\Model\Media;
+use App\Chronology\Model\Chronology;
 use App\Users\Model\Users;
 use Core\GlobalFunc;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,6 +62,13 @@ class UsersController extends GlobalFunc
             $fotoUser = $media->create($idMedia, $_FILES['fotoUser'], $user, $idUser);
         }
 
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('store', 'User 1', [
+            'user' => $request->request->get('namaUser')
+        ]);
+        $createChronology = $chronology->create($message, $user);
+
         return new RedirectResponse('/users');
     }
 
@@ -108,6 +116,13 @@ class UsersController extends GlobalFunc
             $FotoUser = $media->create($idMedia, $_FILES['fotoUser'], $user, $idUser);
         }
 
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('update', 'User 1', [
+            'user' => $detail['namaUser']
+        ]);
+        $createChronology = $chronology->create($message, $id_user);
+
         $redirect = !is_null($hirarkiUser) ? '/users' : '/profile';
         return new RedirectResponse($redirect);
     }
@@ -124,8 +139,16 @@ class UsersController extends GlobalFunc
     public function delete(Request $request)
     {
         $id_user = $request->attributes->get('id_user');
+        $detail = $this->model->selectOne($id_user);
 
         $delete = $this->model->delete($id_user);
+        
+        // create chronlogy
+        $chronology = new Chronology();
+        $message = $this->model->chronologyMessage('delete', 'User 1', [
+            'user' => $detail['namaUser']
+        ]);
+        $createChronology = $chronology->create($message, $id_user);
 
         return new RedirectResponse('/users');
     }
@@ -183,4 +206,5 @@ class UsersController extends GlobalFunc
 
         return new RedirectResponse('/akun');
     }
+    
 }

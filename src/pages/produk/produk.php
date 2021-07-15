@@ -37,6 +37,36 @@
     <?php include(__DIR__ . '/../helper/header.php') ?>
 
     <div class="container mt-4">
+        <div class="row mt-2 mb-3">
+            <div class="col-6">
+                <form action="/produk" method="get">
+                    <label for=""><b>Waktu Masuk</b></label><br>
+                    <div class="row justify-content-center">
+                        <div class="col-6">
+                            Dari <input type="date" class="form-control" name="filterWaktumasukFrom" value="<?= $filterWaktumasukFrom ?>">
+                            <br>
+                            <button type="reset" class="btn btn-danger btn-sm">Reset</button>
+                            <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                        </div>
+                        <div class="col-6">
+                            Sampai<input type="date" class="form-control" name="filterWaktumasukTo" value="<?= $filterWaktumasukTo ?>">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-6">
+                <label for=""><b>Waktu Expiry</b></label><br>
+                <div class="row">
+                    <div class="col-6">
+                        Dari <input type="date" class="form-control" name="filterWaktuexpiryFrom" value="<?= $filterWaktuexpiryFrom ?>">
+                    </div>
+                    <div class="col-6">
+                        Sampai <input type="date" class="form-control" name="filterWaktuexpiryTo" value="<?= $filterWaktuexpiryTo ?>">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="card p-3">
             <div class="row">
                 <div class="col-6">
@@ -82,6 +112,7 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Supplier</th>
+                            <th scope="col">Stock</th>
                             <th scope="col">Kuantiti</th>
                             <th scope="col">Satuan</th>
                             <th scope="col">Waktu Masuk</th>
@@ -94,6 +125,7 @@
                             <tr>
                                 <td><?= $data['namaItem'] ?></td>
                                 <td><?= $data['supplierItem'] ?></td>
+                                <td><?= $data['stockItem'] ?></td>
                                 <td><?= $data['kuantitiItem'] ?></td>
                                 <td><?= $data['satuanItem'] ?></td>
                                 <td><?= date('d M Y', strtotime($data['tanggalmasukProduk'])) ?></td>
@@ -103,7 +135,7 @@
 
                                     <button type="button" class="btn px-2 py-1 me-1 text-white btnDetail" id="btnKuning" data-bs-toggle="modal" data-bs-target="#modalrincianproduct" data-bs-idItem="<?= $data['idItem'] ?>"><i class="fa fa-search-plus"></i></button>
 
-                                    <button type="button" class="btn px-2 py-1 text-white btnHapus" id="btnMerah" data-bs-toggle="modal" data-bs-target="#modalhapusproduct" data-bs-idItem="<?= $data['idItem'] ?>"><i class="fa fa-trash-alt"></i></button>
+                                    <button type="button" class="btn px-2 py-1 me-1 text-white btnHapus" id="btnMerah" data-bs-toggle="modal" data-bs-target="#modalhapusproduct" data-bs-idItem="<?= $data['idItem'] ?>"><i class="fa fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -211,6 +243,7 @@
                                 <div class="mb-1">
                                     <label for="">Kuantiti Produk</label>
                                     <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100">
+                                    <b>Stock Produk : <span class="stockItem"></span></b>
                                 </div>
                                 <div class="mb-1">
                                     <label for="">Satuan Produk</label>
@@ -316,6 +349,10 @@
                                 <input type="text" class="form-control supplierItem" name="supplierItem" placeholder="Supplier A" disabled>
                             </div>
                             <div class="mb-1">
+                                <label for="">Stock Produk</label>
+                                <input type="text" class="form-control stockItem" placeholder="100" disabled>
+                            </div>
+                            <div class="mb-1">
                                 <label for="">Kuantiti Produk</label>
                                 <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100" disabled>
                             </div>
@@ -341,12 +378,38 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-8">
-                            Ditambahkan oleh pegawai A pada pukul 07.00 WIB,3 Juli 2021
+                            <!-- Ditambahkan oleh pegawai A pada pukul 07.00 WIB,3 Juli 2021 -->
                         </div>
                         <div class="col-4">
-                            <a href="#"><button class="btn btn-secondary btn-sm rounded-pill px-3 btn-sm text-white float-end">Rincian Selengkapnya</button></a>
+                            <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3 btn-sm text-white float-end btnAktivitas" data-bs-toggle="modal" data-bs-target="#modalaktivitasproduct">Rincian Selengkapnya</button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Aktivitas Produk-->
+    <div class="modal fade" id="modalaktivitasproduct" tabindex="-1" aria-labelledby="rincianproduct" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rincianproduct"><b>Aktivitas Product</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Activitas</th>
+                                <th>Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bodyAktivitas">
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

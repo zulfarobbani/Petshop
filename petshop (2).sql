@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 13, 2021 at 04:58 PM
+-- Generation Time: Jul 15, 2021 at 08:53 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -54,7 +54,20 @@ CREATE TABLE `chronology` (
 INSERT INTO `chronology` (`idChronology`, `deskripsiChronology`, `idTables`, `dateCreate`) VALUES
 ('crn60ed9afe6dcba', 'User 1 telah menambah produk \"asdk\"', 'itm60ed9afe0cfda', '2021-07-13'),
 ('crn60ed9ccfcfc2f', 'User 1 telah mengubah produk \"asdk 1\"', 'itm60ed9afe0cfda', '2021-07-13'),
-('crn60ed9d6cc46c2', 'User 1 telah menghapus produk \"asdk 1\"', 'itm60ed9afe0cfda', '2021-07-13');
+('crn60ed9d6cc46c2', 'User 1 telah menghapus produk \"asdk 1\"', 'itm60ed9afe0cfda', '2021-07-13'),
+('crn60ee3f7f3235e', 'User 1 telah melakukan retur produk \"produk 1\" dengan kuantitas  ', 'itm60ee3f7e98dfc', '2021-07-14'),
+('crn60ee3faecdd1e', 'User 1 telah melakukan retur produk \"produk 2\" dengan kuantitas  ', 'itm60ee3faeb02cb', '2021-07-14'),
+('crn60ee77445a754', 'User 1 telah mengubah produk \"produk 1\"', 'itm60ee3f7e98dfc', '2021-07-14'),
+('crn60ee78b48cf5a', 'User 1 telah mengubah produk \"produk 1\"', 'itm60ee3f7e98dfc', '2021-07-14'),
+('crn60ee78bc806c8', 'User 1 telah mengubah produk \"produk 1\"', 'itm60ee3f7e98dfc', '2021-07-14'),
+('crn60ee78da0b30a', 'User 1 telah mengubah produk \"produk 1\"', 'itm60ee3f7e98dfc', '2021-07-14'),
+('crn60ee7aa9ce01d', 'User 1 telah melakukan retur produk \"\" dengan kuantitas  ', 'itm60ee7aa97ce1b', '2021-07-14'),
+('crn60ee7b2bef41c', 'User 1 telah melakukan retur produk \"produk 3\" dengan kuantitas  ', 'itm60ee7b2bcd62c', '2021-07-14'),
+('crn60ee7c4f8c718', 'User 1 telah menghapus produk \"produk 3\"', 'itm60ee7b2bcd62c', '2021-07-14'),
+('crn60efc15dab7d4', 'User 1 telah mengubah produk \"produk 1\"', 'itm60ee3f7e98dfc', '2021-07-15'),
+('crn60efc213cb43d', 'User 1 telah mengubah transaksi dengan no_transaksi \"10901923112\"', 'tran60ee3ffd1951d', '2021-07-15'),
+('crn60efcacc5865b', 'User 1 telah mengubah transaksi dengan no_transaksi \"1090192312\"', 'tran60eeecfe55c0a', '2021-07-15'),
+('crn60efce7b9ec24', 'User 1 telah mengubah transaksi dengan no_transaksi \"1090192312\"', 'tran60eeecfe55c0a', '2021-07-15');
 
 -- --------------------------------------------------------
 
@@ -97,8 +110,9 @@ CREATE TABLE `entitas` (
 
 CREATE TABLE `groupitem` (
   `idGroupitem` varchar(255) NOT NULL,
+  `idTransaksi` varchar(255) NOT NULL,
   `idItem` varchar(255) NOT NULL,
-  `pengurangItem` varchar(255) NOT NULL,
+  `pengurangItem` varchar(255) DEFAULT NULL,
   `kuantitiItem` varchar(255) NOT NULL,
   `dateCreate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -107,9 +121,10 @@ CREATE TABLE `groupitem` (
 -- Dumping data for table `groupitem`
 --
 
-INSERT INTO `groupitem` (`idGroupitem`, `idItem`, `pengurangItem`, `kuantitiItem`, `dateCreate`) VALUES
-('gi60ed6f89d3ab3', 'namaProduk1', '', '2', '2021-07-13'),
-('gi60ed6f89d3av2', 'namaProduk2', '', '2', '2021-07-13');
+INSERT INTO `groupitem` (`idGroupitem`, `idTransaksi`, `idItem`, `pengurangItem`, `kuantitiItem`, `dateCreate`) VALUES
+('gi60ee3ffd1bd48', 'tran60ee3ffd1951d', 'itm60ee3f7e98dfc', '1', '1', '2021-07-14'),
+('gi60ee3ffd1bd49', 'tran60eeecfe55c0a', 'itm60ee3faeb02cb', '', '2', '2021-07-15'),
+('gi60ee3ffd30ed5', 'tran60ee3ffd1951d', 'itm60ee3faeb02cb', '1', '2', '2021-07-14');
 
 -- --------------------------------------------------------
 
@@ -135,9 +150,8 @@ CREATE TABLE `item` (
 --
 
 INSERT INTO `item` (`idItem`, `namaItem`, `supplierItem`, `satuanItem`, `stockItem`, `hargaItem`, `kuantitiItem`, `tanggalmasukProduk`, `tanggalexpiryProduk`, `dateCreate`) VALUES
-('itm60ed143e58f22', 'produk 1', 'supplier 1', 'pcs', 100, '100000', '100', '2021-07-13', '2023-07-13', '2021-07-13'),
-('itm60ed27fc1bd95', 'produk 2', 'supplier 2', 'pcs', 100, '200000', '100', '2021-07-31', '2023-07-31', '2021-07-13'),
-('itm60ed28a480a88', 'produk 3', 'supplier 1', 'pcs', 200, '150000', '200', '2021-07-31', '2023-07-31', '2021-07-13');
+('itm60ee3f7e98dfc', 'produk 1', 'supplier 1', 'pcs', 18, '150000', '20', '2021-07-14', '2023-07-14', '2021-07-14'),
+('itm60ee3faeb02cb', 'produk 2', 'supplier 1', 'pcs', 16, '300000', '20', '2021-07-01', '2023-07-01', '2021-07-14');
 
 -- --------------------------------------------------------
 
@@ -87341,10 +87355,9 @@ CREATE TABLE `media` (
 --
 
 INSERT INTO `media` (`idMedia`, `pathMedia`, `idRelation`, `idEntity`, `jenisDokumen`, `dateCreate`) VALUES
-('med60ed143e6b918', '60ed143e6be1c.', 'itm60ed143e58f22', '1', '', '2021-07-13'),
-('med60ed1fffe03dc', '260ed1fffe03e8.jpg', '', '1', '', '2021-07-13'),
-('med60ed27fc5ce04', '60ed27fc5ce19.', 'itm60ed27fc1bd95', '1', '', '2021-07-13'),
-('med60ed28a4b0a74', '60ed28a4b0a86.', 'itm60ed28a480a88', '1', '', '2021-07-13');
+('med60ee3faebc927', '260ee3faebc95b.jpg', 'itm60ee3faeb02cb', '1', '', '2021-07-14'),
+('med60ee78d9f2164', '160ee78d9f2173.jpg', 'itm60ee3f7e98dfc', '1', '', '2021-07-14'),
+('med60ef16eee68cf', '360ef16eee68dc.jpg', 'user60eefe5a7a23d', '1', '', '2021-07-14');
 
 -- --------------------------------------------------------
 
@@ -87483,8 +87496,9 @@ CREATE TABLE `transaksi` (
   `kasirTransaksi` varchar(255) NOT NULL,
   `pelangganTransaksi` varchar(255) NOT NULL,
   `tanggalTransaksi` date NOT NULL,
-  `idGroupitem` varchar(255) NOT NULL,
+  `idGroupitem` varchar(255) DEFAULT NULL,
   `idClient` varchar(255) NOT NULL,
+  `statusTransaksi` varchar(2) NOT NULL,
   `dateCreate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -87492,8 +87506,9 @@ CREATE TABLE `transaksi` (
 -- Dumping data for table `transaksi`
 --
 
-INSERT INTO `transaksi` (`idTransaksi`, `nomorTransaksi`, `kasirTransaksi`, `pelangganTransaksi`, `tanggalTransaksi`, `idGroupitem`, `idClient`, `dateCreate`) VALUES
-('tran60ed6f89d3ac2', '10901923', 'kasir 1', 'pelanggan 1', '2021-07-13', 'gi60ed6f89d3ac5', 'client1', '2021-07-13');
+INSERT INTO `transaksi` (`idTransaksi`, `nomorTransaksi`, `kasirTransaksi`, `pelangganTransaksi`, `tanggalTransaksi`, `idGroupitem`, `idClient`, `statusTransaksi`, `dateCreate`) VALUES
+('tran60ee3ffd1951d', '10901923112', '', 'pelanggan 1', '2021-07-14', '', '', '1', '2021-07-14'),
+('tran60eeecfe55c0a', '1090192312', '', 'pelanggan 1', '2021-07-14', '', '', '2', '2021-07-14');
 
 -- --------------------------------------------------------
 
@@ -87503,12 +87518,20 @@ INSERT INTO `transaksi` (`idTransaksi`, `nomorTransaksi`, `kasirTransaksi`, `pel
 
 CREATE TABLE `users` (
   `idUser` varchar(255) NOT NULL,
+  `emailUser` varchar(255) NOT NULL,
   `namaUser` varchar(255) NOT NULL,
+  `nohpUser` varchar(15) NOT NULL,
   `passwordUser` varchar(255) NOT NULL,
-  `hirarkiUser` varchar(255) NOT NULL,
-  `nikUser` varchar(19) NOT NULL,
+  `hirarkiUser` varchar(2) NOT NULL COMMENT '0=admin,1=kasir,2=pegawai',
   `dateCreate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`idUser`, `emailUser`, `namaUser`, `nohpUser`, `passwordUser`, `hirarkiUser`, `dateCreate`) VALUES
+('user60eefe5a7a23d', 'admin@mail.com', 'Admin', '08912312', '$2y$10$dBNVu.k2IXbmkRZmA4nbVeIGig.0Tt.leAcmGoiWrdC1NRSU1hJYa', '1', '2021-07-14');
 
 --
 -- Indexes for dumped tables
@@ -87570,6 +87593,12 @@ ALTER TABLE `provinsi`
 --
 ALTER TABLE `sosialmedia`
   ADD PRIMARY KEY (`idSosialmedia`);
+
+--
+-- Indexes for table `transaksi`
+--
+ALTER TABLE `transaksi`
+  ADD PRIMARY KEY (`idTransaksi`);
 
 --
 -- Indexes for table `users`

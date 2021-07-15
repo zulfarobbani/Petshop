@@ -32,6 +32,11 @@ $routes->add('logoutProses', new Route('/logout', [
     '_controller' => 'App\Login\Controller\LoginController::logout_proses',
 ]));
 
+//Dashboard
+$routes->add('dashboard', new Route('/dashboard', [
+    '_controller' => 'App\Dashboard\Controller\DashboardController::index',
+]));
+
 //CRUD produk
 $routes->add('produk', new Route('/produk', [
     '_controller' => 'App\Produk\Controller\ProdukController::index',
@@ -63,6 +68,10 @@ $routes->add('produkgetall', new Route('/produk/get-all', [
 
 $routes->add('produkget', new Route('/produk/{id}/get', [
     '_controller' => 'App\Produk\Controller\ProdukController::get',
+]));
+
+$routes->add('produkactivity', new Route('/produk/{id}/activity', [
+    '_controller' => 'App\Produk\Controller\ProdukController::activity',
 ]));
 
 //User Management

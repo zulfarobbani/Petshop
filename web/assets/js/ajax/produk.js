@@ -8,6 +8,7 @@ $(document).on("click", ".btnDetail", function () {
     modal.find(".namaItem").val(data.data.namaItem);
     modal.find(".supplierItem").val(data.data.supplierItem);
     modal.find(".kuantitiItem").val(data.data.kuantitiItem);
+    modal.find(".stockItem").val(data.data.stockItem);
     modal.find(".satuanItem").val(data.data.satuanItem);
     modal
       .find(".hargaItem")
@@ -15,6 +16,22 @@ $(document).on("click", ".btnDetail", function () {
     modal.find(".tanggalmasukProduk").val(data.data.tanggalmasukProduk);
     modal.find(".tanggalexpiryProduk").val(data.data.tanggalexpiryProduk);
     modal.find(".fotoItem").prop("src", "/assets/media/" + data.data.pathMedia);
+    // console.log()
+    modal.find(".btnAktivitas").prop("idproduk", id);
+    // modal.find(".btnAktivitas").setAttribute('idproduk', id)
+
+    var modalAktivitas = $('#modalaktivitasproduct');
+    var isiAktivitas = "";
+    $.ajax({
+      type: "get",
+      url: "/produk/"+id+"/activity"
+    }).done(function(data) {
+      for (let index = 0; index < data.data.length; index++) {
+        const element = data.data[index];
+        isiAktivitas+= "<tr><td>"+(index+1)+"</td><td>"+element.deskripsiChronology+"</td><td>"+element.dateCreate+"</td></tr>";
+      }
+      modalAktivitas.find('.bodyAktivitas').html(isiAktivitas);
+    })
   });
 });
 
@@ -28,6 +45,7 @@ $(document).on("click", ".btnEdit", function () {
     modal.find(".namaItem").val(data.data.namaItem);
     modal.find(".supplierItem").val(data.data.supplierItem);
     modal.find(".kuantitiItem").val(data.data.kuantitiItem);
+    modal.find(".stockItem").html(data.data.stockItem);
     modal.find(".satuanItem").val(data.data.satuanItem);
     modal.find(".hargaItem").val(data.data.hargaItem);
     modal.find(".tanggalmasukProduk").val(data.data.tanggalmasukProduk);

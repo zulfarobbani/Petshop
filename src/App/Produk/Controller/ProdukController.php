@@ -13,14 +13,29 @@ use Symfony\Component\HttpFoundation\Request;
 class ProdukController extends GlobalFunc
 {
     public $model;
+    public $idUser;
+    public $namaUser;
+    public $hirarkiUser;
+    public $nikUser;
+    public $emailUser;
 
     public function __construct()
     {
         $this->model = new Produk();
+        parent::beginSession();
+        $this->idUser = $this->session->get('idUser');
+        $this->namaUser = $this->session->get('namaUser');
+        $this->hirarkiUser = $this->session->get('hirarkiUser');
+        $this->nikUser = $this->session->get('nikUser');
+        $this->emailUser = $this->session->get('emailUser');
     }
 
     public function index(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $where = "";
         
         // filter waktu masuk
@@ -55,10 +70,18 @@ class ProdukController extends GlobalFunc
 
     public function create(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         return $this->render_template('produk/create');
     }
     public function store(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+        
         $produk = $this->model->create($request->request);
 
         // store foto produk
@@ -78,6 +101,10 @@ class ProdukController extends GlobalFunc
     }
     public function edit(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id = $request->attributes->get('id');
         $datas = $this->model->selectOne($id);
 
@@ -85,6 +112,10 @@ class ProdukController extends GlobalFunc
     }
     public function update(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id = $request->attributes->get('id');
         $item = $this->model->update($id, $request->request);
 
@@ -113,6 +144,10 @@ class ProdukController extends GlobalFunc
     }
     public function delete(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id = $request->attributes->get('id');
         $datas = $this->model->selectOne($id);
         $this->model->delete($id);
@@ -137,6 +172,10 @@ class ProdukController extends GlobalFunc
 
     public function get_all(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+        
         $datas = $this->model->selectAll();
 
         return new JsonResponse([
@@ -146,6 +185,10 @@ class ProdukController extends GlobalFunc
 
     public function get(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id = $request->attributes->get('id');
         $data = $this->model->selectOne($id);
 
@@ -156,6 +199,10 @@ class ProdukController extends GlobalFunc
 
     public function activity(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+        
         $id = $request->attributes->get('id');
         $data = $this->model->selectOne($id);
         $aktivitas = new Chronology();

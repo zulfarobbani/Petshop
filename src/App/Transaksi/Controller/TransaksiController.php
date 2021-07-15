@@ -14,14 +14,29 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class TransaksiController extends GlobalFunc
 {
     public $model;
+    public $idUser;
+    public $namaUser;
+    public $hirarkiUser;
+    public $nikUser;
+    public $emailUser;
 
     public function __construct()
     {
         $this->model = new Transaksi();
+        parent::beginSession();
+        $this->idUser = $this->session->get('idUser');
+        $this->namaUser = $this->session->get('namaUser');
+        $this->hirarkiUser = $this->session->get('hirarkiUser');
+        $this->nikUser = $this->session->get('nikUser');
+        $this->emailUser = $this->session->get('emailUser');
     }
 
     public function index(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+        
         $datas = $this->model->selectAll();
 
         $produk = new Produk();
@@ -42,6 +57,10 @@ class TransaksiController extends GlobalFunc
 
     public function create(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $produk = new Produk();
         $data_produk = $produk->selectAll();
 
@@ -50,6 +69,10 @@ class TransaksiController extends GlobalFunc
 
     public function store(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         // $this->dd($request->request);
         $idTransaksi = uniqid('tran');
 
@@ -104,6 +127,10 @@ class TransaksiController extends GlobalFunc
 
     public function edit(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $detail = $this->model->selectOne($idTransaksi);
@@ -117,6 +144,10 @@ class TransaksiController extends GlobalFunc
 
     public function update(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $update = $this->model->update($idTransaksi, $request->request);
@@ -154,6 +185,10 @@ class TransaksiController extends GlobalFunc
 
     public function detail(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $detail = $this->model->selectOne($idTransaksi);
@@ -181,6 +216,10 @@ class TransaksiController extends GlobalFunc
 
     public function print_receipt(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $detail = $this->model->selectOne($idTransaksi);
@@ -193,6 +232,10 @@ class TransaksiController extends GlobalFunc
 
     public function retur(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $detail = $this->model->selectOne($idTransaksi);
@@ -206,6 +249,10 @@ class TransaksiController extends GlobalFunc
 
     public function retur_store(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $idTransaksi = $request->attributes->get('idTransaksi');
         $this->model->returProduk($idTransaksi, $request->request);
 
@@ -214,6 +261,10 @@ class TransaksiController extends GlobalFunc
 
     public function get(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+        
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $detail = $this->model->selectOne($idTransaksi);

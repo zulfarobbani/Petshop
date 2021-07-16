@@ -12,16 +12,19 @@ $app = new GlobalFunc;
 // ROUTE APPLICATION START BELOW!!! 
 // --------------------------------
 
-$routes->add('welcome', new Route('/', [
-    '_controller' => function(Request $request) {
-        global $app;
+// $routes->add('welcome', new Route('/', [
+//     '_controller' => function(Request $request) {
+//         global $app;
 
-        return $app->render_template('welcome');
-    }
-]));
+//         return $app->render_template('welcome');
+//     }
+// ]));
 
 
 //Login
+$routes->add('base', new Route('/', [
+    '_controller' => 'App\Login\Controller\LoginController::index',
+]));
 $routes->add('login', new Route('/login', [
     '_controller' => 'App\Login\Controller\LoginController::index',
 ]));

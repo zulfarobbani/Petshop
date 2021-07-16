@@ -13,15 +13,29 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class UsersController extends GlobalFunc
 {
     public $model;
+    public $idUser;
+    public $namaUser;
+    public $hirarkiUser;
+    public $nikUser;
+    public $emailUser;
 
     public function __construct()
     {
         $this->model = new Users();
         parent::beginSession();
+        $this->idUser = $this->session->get('idUser');
+        $this->namaUser = $this->session->get('namaUser');
+        $this->hirarkiUser = $this->session->get('hirarkiUser');
+        $this->nikUser = $this->session->get('nikUser');
+        $this->emailUser = $this->session->get('emailUser');
     }
 
     public function index(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $datas = $this->model->selectAll();
 
         return $this->render_template('users/users', ['datas' => $datas]);
@@ -29,11 +43,19 @@ class UsersController extends GlobalFunc
 
     public function create(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         return $this->render_template('users/create');
     }
 
     public function store(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $idUser = uniqid('user');
 
         $namaUser = $request->request->get('namaUser');
@@ -74,6 +96,10 @@ class UsersController extends GlobalFunc
 
     public function edit(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id_user = $request->attributes->get('id_user');
 
         $detail = $this->model->selectOne($id_user);
@@ -83,6 +109,10 @@ class UsersController extends GlobalFunc
 
     public function update(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id_user = $request->attributes->get('id_user');
         $detail = $this->model->selectOne($id_user);
 
@@ -129,6 +159,10 @@ class UsersController extends GlobalFunc
 
     public function detail(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id_user = $request->attributes->get('id_user');
 
         $detail = $this->model->selectOne($id_user);
@@ -138,6 +172,10 @@ class UsersController extends GlobalFunc
 
     public function delete(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id_user = $request->attributes->get('id_user');
         $detail = $this->model->selectOne($id_user);
 
@@ -155,6 +193,10 @@ class UsersController extends GlobalFunc
 
     public function get(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id_user = $request->attributes->get('id_user');
         $detail = $this->model->selectOne($id_user);
 
@@ -163,6 +205,10 @@ class UsersController extends GlobalFunc
 
     public function reset_password(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id_user = $request->attributes->get('id_user');
         $this->model->resetPassword($id_user);
 
@@ -171,6 +217,10 @@ class UsersController extends GlobalFunc
 
     public function profile(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+        
         $id_user = 'user60eefe5a7a23d';
         $user = $this->model->selectOne($id_user);
 
@@ -179,6 +229,10 @@ class UsersController extends GlobalFunc
 
     public function akun(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+
         $id_user = 'user60eefe5a7a23d';
         $user = $this->model->selectOne($id_user);
         $errors = $this->session->getFlashBag()->get('errors', []);
@@ -188,6 +242,10 @@ class UsersController extends GlobalFunc
 
     public function akun_update(Request $request)
     {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+        
         $id_user = $request->attributes->get('id_user');
         $user = $this->model->selectOne($id_user);
         $passwordLama = $request->request->get('passwordLama');

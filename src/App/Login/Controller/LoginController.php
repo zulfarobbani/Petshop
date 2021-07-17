@@ -31,7 +31,7 @@ class LoginController extends GlobalFunc
     public function index(Request $request)
     {
         if ($this->emailUser != null){
-            return new RedirectResponse('/login');
+            return new RedirectResponse('/dashboard');
         }
 
         $errors = $this->session->getFlashBag()->get('errors', []);

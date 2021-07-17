@@ -37,7 +37,7 @@
     <?php include(__DIR__ . '/../helper/header.php') ?>
 
     <div class="container mt-4">
-        <div class="row mt-2 mb-3">
+        <!-- <div class="row mt-2 mb-3">
             <div class="col-6">
                 <form action="/produk" method="get">
                     <label for=""><b>Waktu Masuk</b></label><br>
@@ -65,7 +65,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="card p-3">
             <div class="row">
@@ -75,7 +75,7 @@
                 <div class="col-6 text-end">
                     <button type="button" class="btn btn-sm text-white rounded-pill h-75 px-4" data-bs-toggle="modal" data-bs-target="#modaltambahproduct" id="btnIjo">
                         <span class="material-icons-outlined">add_box</span>
-                        <span class="align-top">Tambah Transaksi</span></button>
+                        <span class="align-top">Tambah Produk</span></button>
                 </div>
             </div>
 
@@ -128,8 +128,8 @@
                                 <td><?= $data['stockItem'] ?></td>
                                 <td><?= $data['kuantitiItem'] ?></td>
                                 <td><?= $data['satuanItem'] ?></td>
-                                <td><?= date('d M Y', strtotime($data['tanggalmasukProduk'])) ?></td>
-                                <td><?= date('d M Y', strtotime($data['tanggalexpiryProduk'])) ?></td>
+                                <td><?= $data['tanggalmasukProduk'] == '0000-00-00' ? '' : date('d M Y', strtotime($data['tanggalmasukProduk'])) ?></td>
+                                <td><?= $data['tanggalexpiryProduk'] == '0000-00-00' ? '' : date('d M Y', strtotime($data['tanggalexpiryProduk'])) ?></td>
                                 <td class="d-flex">
                                     <button type="button" class="btn px-2 py-1 me-1 text-white btnEdit" id="btnBiru" data-bs-toggle="modal" data-bs-target="#modalubahproduct" data-bs-idItem="<?= $data['idItem'] ?>"><i class="fa fa-edit"></i></button>
 

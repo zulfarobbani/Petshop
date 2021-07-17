@@ -43,7 +43,7 @@
           <div class="col-6 text-end">
             <button type="button" class="btn btn-sm text-white rounded-pill h-75 px-4" data-bs-toggle="modal" data-bs-target="#modaltambahproduct" id="btnIjo">
               <span class="material-icons-outlined">add_box</span>
-              <span class="align-top">Tambah Transaksi</span></button>
+              <span class="align-top">Tambah Produk</span></button>
           </div>
         </div>
 

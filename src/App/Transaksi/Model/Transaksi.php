@@ -53,7 +53,7 @@ class Transaksi extends GlobalFunc
 
     public function selectGroupItem($idTransaksi)
     {
-        $sql = "SELECT *, groupItem.kuantitiItem as jumlahBeli FROM groupItem LEFT JOIN item ON item.idItem = groupItem.idItem WHERE idTransaksi = '$idTransaksi'";
+        $sql = "SELECT *, groupItem.satuanItem as satuanItemgr, groupItem.hargaItem as hargaItemgr, groupItem.kuantitiItem as jumlahBeli FROM groupItem LEFT JOIN item ON item.idItem = groupItem.idItem WHERE idTransaksi = '$idTransaksi'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -95,10 +95,10 @@ class Transaksi extends GlobalFunc
         }
     }
 
-    public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $kuantitiItem)
+    public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $kuantitiItem, $jenishargaItem, $satuanItem, $hargaItem)
     {
         $dateCreate = date('Y-m-d');
-        $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idTransaksi', '$idItem', '', '$kuantitiItem', '$dateCreate')";
+        $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idTransaksi', '$idItem', '', '$kuantitiItem', '$dateCreate', '$jenishargaItem', '$satuanItem', '$hargaItem')";
 
         try {
             $query = $this->conn->prepare($sql);

@@ -11,7 +11,7 @@ $(document).ready(function () {
     var tampilanHtml =
       '<div class="listProduk" id="' +
       nextId +
-      '"><div class="row"><div class="col-7"><select name="idItem[]" class="produk form-control"><option value="-">Nama Produk</option>';
+      '"><div class="row"><div class="col-3"><select name="idItem[]" class="produk form-control"><option value="-">Nama Produk</option>';
 
     // ajax get all produk
     $.ajax({
@@ -29,7 +29,7 @@ $(document).ready(function () {
       }
 
       tampilanHtml +=
-        '</select></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control"><b>Stock Produk : <span class="stockItem"></span></b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+        '</select></div><div class="col-2"> <input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control"><b>Stock: <span class="stockItem"></span></b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
         numberNextId +
         '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
 
@@ -101,7 +101,7 @@ $(document).ready(function () {
           tampilanHtml +=
             '<div class="listProduk" id="' +
             nextId +
-            '"><div class="row"><div class="col-7"><select name="idItem[]" class="produk form-control"><option value="-">Nama Produk</option>';
+            '"><div class="row"><div class="col-3"><select name="idItem[]" class="produk form-control"><option value="-">Nama Produk</option>';
 
           for (let index = 0; index < data.produk.length; index++) {
             const element = data.produk[index];
@@ -117,11 +117,17 @@ $(document).ready(function () {
 
           var totalHargaitem = parseInt(element1.hargaItem) * element1.jumlahBeli;
           tampilanHtml +=
-            '</select><b>Harga Produk : <span class="hargaItem">Rp.'+parseInt(element1.hargaItem).toLocaleString()+'</span></b></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" max="' +
+            '</select><b>Harga Produk : <span class="hargaItem">Rp.'+parseInt(element1.hargaItem).toLocaleString()+'</span></b></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="'+
+            element1.jenishargaItem+
+            '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="'+
+            element1.satuanItemgr+
+            '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="'+
+            element1.hargaItemgr+
+            '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
             element1.stockItem +
             '" placeholder="Qty" class="kuantiti form-control" value="' +
             element1.jumlahBeli +
-            '"><b>Stock Produk : ' +
+            '"><b>Stock: ' +
             element1.stockItem +
             '</b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
             numberNextId +

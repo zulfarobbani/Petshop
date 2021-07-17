@@ -13,6 +13,10 @@ $(document).on("click", ".btnDetail", function () {
     modal
       .find(".hargaItem")
       .val("Rp." + parseInt(data.data.hargaItem).toLocaleString());
+    
+    modal
+    .find(".hargaperpcsItem")
+    .val("Rp." + parseInt(data.data.hargaperpcsItem).toLocaleString());
     modal.find(".tanggalmasukProduk").val(data.data.tanggalmasukProduk);
     modal.find(".tanggalexpiryProduk").val(data.data.tanggalexpiryProduk);
     modal.find(".fotoItem").prop("src", "/assets/media/" + data.data.pathMedia);
@@ -48,6 +52,7 @@ $(document).on("click", ".btnEdit", function () {
     modal.find(".stockItem").html(data.data.stockItem);
     modal.find(".satuanItem").val(data.data.satuanItem);
     modal.find(".hargaItem").val(data.data.hargaItem);
+    modal.find(".hargaperpcsItem").val(data.data.hargaperpcsItem);
     modal.find(".tanggalmasukProduk").val(data.data.tanggalmasukProduk);
     modal.find(".tanggalexpiryProduk").val(data.data.tanggalexpiryProduk);
     modal.find(".fotoItem").prop("src", "/assets/media/" + data.data.pathMedia);
@@ -69,6 +74,7 @@ $(document).on("click", ".btnHapus", function () {
     modal.find(".kuantitiItem").val(data.data.kuantitiItem);
     modal.find(".satuanItem").val(data.data.satuanItem);
     modal.find(".hargaItem").val(data.data.hargaItem);
+    modal.find(".hargaperpcsItem").val(data.data.hargaperpcsItem);
     modal.find(".tanggalmasukProduk").val(data.data.tanggalmasukProduk);
     modal.find(".tanggalexpiryProduk").val(data.data.tanggalexpiryProduk);
     modal.find(".fotoItem").prop("src", "/assets/media/" + data.data.pathMedia);

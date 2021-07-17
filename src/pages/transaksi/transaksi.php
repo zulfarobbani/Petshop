@@ -174,17 +174,26 @@
                             <div class="col-6">
                                 <button type="button" class="btn rounded-pill px-3 btn-sm text-white mb-3 tambahListProduk" id="btnIjo"><i class="fas fa-plus-square"> Tambah Produk</i></button>
                                 <div class="row">
-                                    <div class="col-7">
+                                    <div class="col-3">
                                         <h6>Produk</h6>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-2">
+                                        <h6>Jenis Harga</h6>
+                                    </div>
+                                    <div class="col-2">
+                                        <h6>Satuan</h6>
+                                    </div>
+                                    <div class="col-2">
+                                        <h6>Harga</h6>
+                                    </div>
+                                    <div class="col-2">
                                         <h6>Kuantiti</h6>
                                     </div>
                                 </div>
                                 <div class="transaksiProduk">
                                     <div class="listProduk" id="listproduk_1">
                                         <div class="row">
-                                            <div class="col-7">
+                                            <div class="col-3">
                                                 <select name="idItem[]" class="produk form-control">
                                                     <option value="">Nama Produk</option>
                                                     <?php foreach ($produk as $key => $value) { ?>
@@ -192,9 +201,19 @@
                                                     <?php } ?>
                                                 </select>
                                             </div>
-                                            <div class="col">
+                                            <div class="col-2">
+                                                <input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control">
+                                            </div>
+                                            <div class="col-2">
+                                                <input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control">
+                                            </div>
+                                            <div class="col-2">
+                                                <input type="number" name="hargaItem[]" placeholder="Harga" min='1' class="harga form-control">
+                                            </div>
+
+                                            <div class="col-2">
                                                 <input type="number" name="kuantitiItem[]" min='1' placeholder="Qty" class="kuantiti form-control">
-                                                <b>Stock Produk : <span class="stockItem"></span></b>
+                                                <b>Stock: <span class="stockItem"></span></b>
                                             </div>
                                         </div>
 
@@ -251,7 +270,7 @@
                                 <div class="transaksiProduk">
                                     <div class="listProduk" id="listproduk_1">
                                         <div class="row">
-                                            <div class="col-7">
+                                            <div class="col-3">
                                                 <select name="idItem[]" class="produk form-control">
                                                     <option value="">Nama Produk</option>
                                                     <?php foreach ($produk as $key => $value) { ?>
@@ -259,7 +278,7 @@
                                                     <?php } ?>
                                                 </select>
                                             </div>
-                                            <div class="col">
+                                            <div class="col-2">
                                                 <input type="number" name="kuantitiItem[]" min='1' placeholder="Qty" class="kuantiti form-control">
                                             </div>
                                         </div>

@@ -98,11 +98,15 @@ class TransaksiController extends GlobalFunc
 
         $idItem = $request->request->get('idItem');
         $kuantitiItem = $request->request->get('kuantitiItem');
+        $jenishargaItem = $request->request->get('jenishargaItem');
+        $satuanItem = $request->request->get('satuanItem');
+        $hargaItem = $request->request->get('hargaItem');
+        
         $pengurangItem = $request->request->get('pengurangItem');
 
         for($index = 0; $index < count($idItem); $index++) {
             $idGroupitem = uniqid('gi');
-            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index]);
+            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index], $jenishargaItem[$index], $satuanItem[$index], $hargaItem[$index]);
             
             // get item
             $produk = new Produk();

@@ -197,6 +197,10 @@
                                     <input type="text" class="form-control hargaItem" name="hargaItem" placeholder="1.000.000">
                                 </div>
                                 <div class="mb-1">
+                                    <label for="">Harga Per pcs</label>
+                                    <input type="text" class="form-control hargaperpcsItem" name="hargaperpcsItem" placeholder="1.000.000">
+                                </div>
+                                <div class="mb-1">
                                     <label for="">Tanggal Masuk Produk</label>
                                     <input type="date" class="form-control tanggalmasukProduk" name="tanggalmasukProduk" placeholder="Tanggal Masuk Produk">
                                 </div>
@@ -254,6 +258,10 @@
                                     <input type="text" class="form-control hargaItem" name="hargaItem" placeholder="1.000.000">
                                 </div>
                                 <div class="mb-1">
+                                    <label for="">Harga Per pcs</label>
+                                    <input type="text" class="form-control hargaperpcsItem" name="hargaperpcsItem" placeholder="1.000.000">
+                                </div>
+                                <div class="mb-1">
                                     <label for="">Tanggal Masuk Produk</label>
                                     <input type="date" class="form-control tanggalmasukProduk" name="tanggalmasukProduk" placeholder="Tanggal Masuk Produk">
                                 </div>
@@ -306,6 +314,10 @@
                             <div class="mb-1">
                                 <label for="">Harga Produk</label>
                                 <input type="text" class="form-control hargaItem" name="hargaItem" placeholder="1.000.000" disabled>
+                            </div>
+                            <div class="mb-1">
+                                <label for="">Harga Per pcs</label>
+                                <input type="text" class="form-control hargaperpcsItem" name="hargaperpcsItem" placeholder="1.000.000">
                             </div>
                             <div class="mb-1">
                                 <label for="">Tanggal Masuk Produk</label>
@@ -363,6 +375,10 @@
                             <div class="mb-1">
                                 <label for="">Harga Produk</label>
                                 <input type="text" class="form-control hargaItem" name="hargaItem" placeholder="1.000.000" disabled>
+                            </div>
+                            <div class="mb-1">
+                                <label for="">Harga Per pcs</label>
+                                <input type="text" class="form-control hargaperpcsItem" name="hargaperpcsItem" placeholder="1.000.000">
                             </div>
                             <div class="mb-1">
                                 <label for="">Tanggal Masuk Produk</label>

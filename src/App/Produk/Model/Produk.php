@@ -42,11 +42,12 @@ class Produk extends GlobalFunc
         $satuanItem = $datas->get('satuanItem');
         $kuantiti = $datas->get('kuantitiItem');
         $harga = $datas->get('hargaItem');
+        $hargaperpcsItem = $datas->get('hargaperpcsItem');
         $tanggalmasukProduk = $datas->get('tanggalmasukProduk');
         $tanggalexpiryProduk = $datas->get('tanggalexpiryProduk');
         $dateCreate = date('Y-m-d');
 
-        $sql = "INSERT INTO " . $this->table . " VALUES ('$idItem','$namaItem', '$supplierItem', '$satuanItem', '$kuantiti', '$harga', '$kuantiti', '$tanggalmasukProduk', '$tanggalexpiryProduk', '$dateCreate')";
+        $sql = "INSERT INTO " . $this->table . " VALUES ('$idItem','$namaItem', '$supplierItem', '$satuanItem', '$kuantiti', '$harga', '$hargaperpcsItem', '$kuantiti', '$tanggalmasukProduk', '$tanggalexpiryProduk', '$dateCreate')";
 
         try {
             $data = $this->conn->prepare($sql);
@@ -86,10 +87,11 @@ class Produk extends GlobalFunc
         $satuanItem = $datas->get('satuanItem');
         $kuantiti = $datas->get('kuantitiItem');
         $harga = $datas->get('hargaItem');
+        $hargaperpcsItem = $datas->get('hargaperpcsItem');
         $tanggalmasukProduk = $datas->get('tanggalmasukProduk');
         $tanggalexpiryProduk = $datas->get('tanggalexpiryProduk');
 
-        $sql = "UPDATE " . $this->table . " SET namaItem = '$namaItem', supplierItem = '$supplierItem', satuanItem = '$satuanItem', kuantitiItem = '$kuantiti', hargaItem = '$harga', tanggalmasukProduk = '$tanggalmasukProduk', tanggalexpiryProduk = '$tanggalexpiryProduk' WHERE idItem = '$id'";
+        $sql = "UPDATE " . $this->table . " SET namaItem = '$namaItem', supplierItem = '$supplierItem', satuanItem = '$satuanItem', kuantitiItem = '$kuantiti', hargaItem = '$harga', hargaperpcsItem = '$hargaperpcsItem', tanggalmasukProduk = '$tanggalmasukProduk', tanggalexpiryProduk = '$tanggalexpiryProduk' WHERE idItem = '$id'";
 
         try {
             $data = $this->conn->prepare($sql);

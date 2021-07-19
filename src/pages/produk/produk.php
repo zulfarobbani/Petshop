@@ -79,7 +79,7 @@
                 </div>
             </div>
 
-            <div class="row mt-2 mb-2">
+            <!-- <div class="row mt-2 mb-2">
                 <div class="col-1">
                     <select class="form-select float-start" aria-label="Default select example">
                         <option selected>No</option>
@@ -103,7 +103,7 @@
                         <input class="form-control w-50 float-end" type="search" placeholder="Search" aria-label="Search">
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="table-responsive">
 
@@ -111,8 +111,8 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Supplier</th>
-                            <th scope="col">Stock</th>
+                            <!-- <th scope="col">Supplier</th>
+                            <th scope="col">Stock</th> -->
                             <th scope="col">Kuantiti</th>
                             <th scope="col">Satuan</th>
                             <th scope="col">Waktu Masuk</th>
@@ -124,8 +124,8 @@
                         <?php foreach ($datas as $key => $data) { ?>
                             <tr>
                                 <td><?= $data['namaItem'] ?></td>
-                                <td><?= $data['supplierItem'] ?></td>
-                                <td><?= $data['stockItem'] ?></td>
+                                <!-- <td><?= $data['supplierItem'] ?></td>
+                                <td><?= $data['stockItem'] ?></td> -->
                                 <td><?= $data['kuantitiItem'] ?></td>
                                 <td><?= $data['satuanItem'] ?></td>
                                 <td><?= $data['tanggalmasukProduk'] == '0000-00-00' ? '' : date('d M Y', strtotime($data['tanggalmasukProduk'])) ?></td>

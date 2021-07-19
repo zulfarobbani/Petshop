@@ -117,6 +117,38 @@ $routes->add('akunUpdate', new Route('/akun/{id_user}/update', [
     '_controller' => 'App\Users\Controller\UsersController::akun_update',
 ]));
 
+// //Transaksi
+// $routes->add('transaksi', new Route('/transaksi', [
+//     '_controller' => 'App\Transaksi\Controller\TransaksiController::index'
+// ]));
+// $routes->add('transaksiCreate', new Route('/transaksi/create', [
+//     '_controller' => 'App\Transaksi\Controller\TransaksiController::create'
+// ]));
+// $routes->add('transaksiStore', new Route('/transaksi/store', [
+//     '_controller' => 'App\Transaksi\Controller\TransaksiController::store'
+// ]));
+// $routes->add('transaksiEdit', new Route('/transaksi/{idTransaksi}/edit', [
+//     '_controller' => 'App\Transaksi\Controller\TransaksiController::edit'
+// ]));
+// $routes->add('transaksiUpdate', new Route('/transaksi/{idTransaksi}/update', [
+//     '_controller' => 'App\Transaksi\Controller\TransaksiController::update'
+// ]));
+// $routes->add('transaksiDetail', new Route('/transaksi/{idTransaksi}/detail', [
+//     '_controller' => 'App\Transaksi\Controller\TransaksiController::detail'
+// ]));
+// $routes->add('transaksiReceipt', new Route('/transaksi/{idTransaksi}/print-receipt', [
+//     '_controller' => 'App\Transaksi\Controller\TransaksiController::print_receipt'
+// ]));
+// $routes->add('transaksiRetur', new Route('/transaksi/{idTransaksi}/retur', [
+//     '_controller' => 'App\Transaksi\Controller\TransaksiController::retur'
+// ]));
+// $routes->add('transaksiReturStore', new Route('/transaksi/{idTransaksi}/retur-store', [
+//     '_controller' => 'App\Transaksi\Controller\TransaksiController::retur_store'
+// ]));
+// $routes->add('transaksiGet', new Route('/transaksi/{idTransaksi}/get', [
+//     '_controller' => 'App\Transaksi\Controller\TransaksiController::get'
+// ]));
+
 //Transaksi
 $routes->add('transaksi', new Route('/transaksi', [
     '_controller' => 'App\Transaksi\Controller\TransaksiController::index'

@@ -78,7 +78,7 @@ class TransaksiController extends GlobalFunc
 
         $nomorTransaksi = $request->request->get('nomorTransaksi');
         $pelangganTransaksi = $request->request->get('pelangganTransaksi');
-        $kasirTransaksi = $this->namaUser;
+        $kasirTransaksi = $request->request->get('kasirTransaksi');
         $tanggalTransaksi = $request->request->get('tanggalTransaksi');
         $idClient = $request->request->get('idClient');
         $statusTransaksi = $request->request->get('statusTransaksi');
@@ -121,7 +121,7 @@ class TransaksiController extends GlobalFunc
 
         // create chronlogy
         $chronology = new Chronology();
-        $message = $this->model->chronologyMessage('store', $this->idUser, [
+        $message = $this->model->chronologyMessage('store', 'User 1', [
             'transaksi' => $request->request->get('nomorTransaksi')
         ]);
         $createChronology = $chronology->create($message, $create);
@@ -154,23 +154,19 @@ class TransaksiController extends GlobalFunc
 
         $idTransaksi = $request->attributes->get('idTransaksi');
 
-        $kasirTransaksi = $this->namaUser;
-        $update = $this->model->update($idTransaksi, $request->request, $kasirTransaksi);
+        $update = $this->model->update($idTransaksi, $request->request);
 
         $detail = $this->model->selectOne($idTransaksi);
 
         $idItem = $request->request->get('idItem');
         $kuantitiItem = $request->request->get('kuantitiItem');
         $pengurangItem = $request->request->get('pengurangItem');
-        $jenishargaItem = $request->request->get('jenishargaItem');
-        $satuanItem = $request->request->get('satuanItem');
-        $hargaItem = $request->request->get('hargaItem');
 
         $this->model->deleteGroupItem($detail['idTransaksi']);
 
         for($index = 0; $index < count($idItem); $index++){
             $idGroupitem = uniqid('gi');
-            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index], $jenishargaItem[$index], $satuanItem[$index], $hargaItem[$index]);
+            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index]);
 
             // get item
             $produk = new Produk();
@@ -183,7 +179,7 @@ class TransaksiController extends GlobalFunc
 
         // create chronlogy
         $chronology = new Chronology();
-        $message = $this->model->chronologyMessage('update', $this->idUser, [
+        $message = $this->model->chronologyMessage('update', 'User 1', [
             'transaksi' => $detail['nomorTransaksi']
         ]);
         $createChronology = $chronology->create($message, $idTransaksi);
@@ -214,7 +210,7 @@ class TransaksiController extends GlobalFunc
 
     //     // create chronlogy
     //     $chronology = new Chronology();
-    //     $message = $this->model->chronologyMessage('update', $this->idUser, [
+    //     $message = $this->model->chronologyMessage('update', 'User 1', [
     //         'transaksi' => $detail['nomorTransaksi']
     //     ]);
     //     $createChronology = $chronology->create($message, $idTransaksi);

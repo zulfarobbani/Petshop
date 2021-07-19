@@ -108,7 +108,16 @@
 
     <div class="card mt-5">
       <div class="card-body">
-        <h4 class="card-title">Riwayat Transaksi</h4>
+        <div class="card-title">
+          <div class="row">
+            <div class="col-md-6"><h3>Riwayat Transaksi</h3></div>
+            <div class="col-md-6">
+              <div class="text-end">
+                <a href="/transaksi/report-pdf" class="btn btn-primary">REPORT PDF</a>
+              </div>
+            </div>
+          </div>
+        </div>
         <table class="table" id="tableTransaksi">
           <tbody>
             <?php foreach($dataTransaksi as $value) {?>

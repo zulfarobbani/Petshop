@@ -283,4 +283,27 @@ class TransaksiController extends GlobalFunc
 
         return new JsonResponse(['detail' => $detail, 'groupItem' => $groupItem, 'produk' => $data_produk]);
     }
+
+    public function report_pdf(Request $request)
+    {
+        $fromDate = '2021-07-16';
+        $toDate = date('Y-m-d');
+
+        $datas = $this->model->selectAll("WHERE tanggalTransaksi BETWEEN '".$fromDate."' AND '".$toDate."'");
+
+        $produk = new Produk();
+        $data_produk = $produk->selectAll();
+
+        $groupItem = new GroupItem();
+        foreach ($datas as $key => $value) {
+            $detail_produk = $groupItem->selectAll("WHERE idTransaksi = '".$value['idTransaksi']."'");
+            $total_harga = 0;
+            foreach ($detail_produk as $key1 => $value1) {
+                $total_harga += intval($value1['hargaItem']);
+            }
+            $datas[$key]['totalHargaTransaksi'] = $total_harga;
+        }
+
+        return $this->render_template('transaksi/riwayatTransaksi', ['datas' => $datas, 'produk' => $data_produk, 'fromDate' => $fromDate, 'toDate' => $toDate]);
+    }
 }

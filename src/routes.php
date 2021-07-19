@@ -148,5 +148,8 @@ $routes->add('transaksiReturStore', new Route('/transaksi/{idTransaksi}/retur-st
 $routes->add('transaksiGet', new Route('/transaksi/{idTransaksi}/get', [
     '_controller' => 'App\Transaksi\Controller\TransaksiController::get'
 ]));
+$routes->add('transaksiReportPdf', new Route('/transaksi/report-pdf', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::report_pdf'
+]));
 
 return $routes;

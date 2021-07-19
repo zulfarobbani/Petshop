@@ -133,6 +133,10 @@
                     </ul>
                 </div>
             </div> -->
+
+            <div class="text-end">
+                <a href="/transaksi/report-pdf" class="btn btn-secondary">Report Pdf</a>
+            </div>
         </div>
     </div>
 

@@ -42,7 +42,23 @@ class TransaksiController extends GlobalFunc
         }
         $jenis = $request->attributes->get('jenis') == 'grosir' ? '1' : '2';
 
-        $datas = $this->model->selectAll("WHERE jenisTransaksi = '$jenis'");
+        
+        // pagination
+        $countRows = $this->model->countRows()['count'];
+        $page = $request->query->get('page') ? $request->query->get('page') : '1';
+        $result_per_page = 10;
+        $page_first_result = ($page-1)*$result_per_page;
+        $number_of_page = ceil($countRows/$result_per_page);
+        
+        $datas = $this->model->selectAll("WHERE jenisTransaksi = '$jenis' LIMIT ".$page_first_result.",".$result_per_page);
+
+        $pagination = [
+            'current_page' => $page,
+            'number_of_page' => $number_of_page,
+            'page_first_result' => $page_first_result,
+            'result_per_page' => $result_per_page,
+            'countRows' => $countRows
+        ];
 
         $produk = new Produk();
         $data_produk = $produk->selectAll();
@@ -57,7 +73,7 @@ class TransaksiController extends GlobalFunc
             $datas[$key]['totalHargaTransaksi'] = $total_harga;
         }
 
-        return $this->render_template('transaksi/transaksi', ['datas' => $datas, 'produk' => $data_produk, 'jenis_transaksi' => $jenis]);
+        return $this->render_template('transaksi/transaksi', ['datas' => $datas, 'produk' => $data_produk, 'jenis_transaksi' => $jenis, 'pagination' => $pagination]);
     }
 
     public function create(Request $request)

@@ -23,7 +23,7 @@
     <!-- HTML FOR PRINT RECEIPT TRANSACTION -->
     <div id="receiptTemplate" >
         <center>
-            <p style="font-size : 60px; margin : 35px">Sambat Sauna Shop</p><hr style="border : 1px dashed black">
+            <p style="font-size : 60px; margin : 35px">Sambat Fauna Shop</p><hr style="border : 1px dashed black">
             <div style="margin : 20px">
                 <p style="font-size : 30px; margin : 10px" >Jl. Babakan Ciparay No. 17</p>
                 <p style="font-size : 30px; margin : 10px" >Kota Bandung, Jawa Barat</p>
@@ -78,6 +78,7 @@
             <p>Teliti Sebelum Membeli, Barang Yang Telah Dibeli Tidak Dapat Dikembalikan</p>
             <p>Instagram : sambatfs</p>
             <p>Facebook : Sambat Fauna Shop</p>
+            <p>Email : example@gmail.com</p>
         </center>
     </div>
 

@@ -17,9 +17,25 @@ class Users extends GlobalFunc
         $this->conn = $globalFunc->conn;
     }
 
-    public function selectAll()
+    public function countRows()
     {
-        $sql = "SELECT * FROM ".$this->table;
+        $sql = "SELECT COUNT(".$this->primaryKey.") as count FROM " . $this->table;
+
+        try {
+            $query = $this->conn->prepare($sql);
+            $query->execute();
+            $data = $query->fetch();
+
+            return $data;
+        } catch (PDOException $e) {
+            echo $e;
+            die();
+        }
+    }
+
+    public function selectAll($where = "")
+    {
+        $sql = "SELECT * FROM ".$this->table. " ".$where;
 
         try {
             $query = $this->conn->prepare($sql);

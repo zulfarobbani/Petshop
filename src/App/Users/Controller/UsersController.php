@@ -36,9 +36,24 @@ class UsersController extends GlobalFunc
             return new RedirectResponse('/login');
         }
 
-        $datas = $this->model->selectAll();
+        // pagination
+        $countRows = $this->model->countRows()['count'];
+        $page = $request->query->get('page') ? $request->query->get('page') : '1';
+        $result_per_page = 10;
+        $page_first_result = ($page-1)*$result_per_page;
+        $number_of_page = ceil($countRows/$result_per_page);
+        
+        $datas = $this->model->selectAll(" LIMIT ".$page_first_result.",".$result_per_page);
 
-        return $this->render_template('users/users', ['datas' => $datas]);
+        $pagination = [
+            'current_page' => $page,
+            'number_of_page' => $number_of_page,
+            'page_first_result' => $page_first_result,
+            'result_per_page' => $result_per_page,
+            'countRows' => $countRows
+        ];
+
+        return $this->render_template('users/users', ['datas' => $datas, 'pagination' => $pagination]);
     }
 
     public function create(Request $request)

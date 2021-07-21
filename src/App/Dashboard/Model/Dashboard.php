@@ -15,9 +15,27 @@ class Dashboard extends GlobalFunc
         $this->conn = $globalFunc->conn;
     }
 
-    public function getProdukTerjual()
+    public function getAllItem()
     {
-        $sqlProduk = "SELECT * FROM item";
+        $sql = "SELECT * FROM item";
+
+        try{
+
+            $query = $this->conn->prepare($sql);
+            $query->execute();
+
+            $data = $query->fetchAll();
+
+            return $data;
+        } catch (PDOException $e){
+            echo $e;
+            die();
+        }
+    }
+
+    public function getProdukTerjual($where = "")
+    {
+        $sqlProduk = "SELECT * FROM item ". " ".$where;
         $sqlGroupItem = "SELECT * FROM groupitem";
 
         try{

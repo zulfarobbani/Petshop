@@ -81,21 +81,24 @@
 
             <div class="row mt-2 mb-2">
                 <div class="col-1">
-                    <select class="form-select float-start" aria-label="Default select example">
-                        <option selected>No</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select>
+                    <form method="POST" action="">
+                        <select name="data_per_page" class="form-select float-start" aria-label="Default select example">
+                            <option value="" selected>No</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </form>
                 </div>
-                <div class="col-7 float-start">
+                <div class="col-6 float-start">
                     entries per page
                 </div>
                 <div class="col-4">
@@ -151,7 +154,7 @@
                     <ul class="pagination float-end">
                         <li class="page-item <?= $pagination['current_page'] - 1 == 0 ? 'disabled' : '' ?>"><a class="page-link" href="?page=<?= intval($pagination['current_page']) - 1 ?>"><i class="fas fa-angle-left"></i></a></li>
                         <?php for ($page = 1; $page <= $pagination['number_of_page']; $page++) { ?>
-                            <li class="page-item <?= $pagination['current_page'] == $page ? 'active' : '' ?>"><a class="page-link" href="?page=<?= $page ?>"><?= $page ?></a></li>
+                            <li class="page-item <?= $pagination['current_page'] == $page ? 'active' : '' ?>"><a class="page-link" href="?data_per_page=<?= $pagination['result_per_page']  ?>&page=<?= $page ?>"><?= $page ?></a></li>
                         <?php } ?>
                         <li class="page-item <?= $pagination['current_page'] + 1 > $pagination['number_of_page'] ? 'disabled' : '' ?>"><a class="page-link" href="?page=<?= intval($pagination['current_page']) + 1 ?>"><i class="fas fa-angle-right"></i></a></li>
                     </ul>

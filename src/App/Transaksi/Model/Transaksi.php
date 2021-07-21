@@ -9,12 +9,30 @@ use PDOException;
 class Transaksi extends GlobalFunc
 {
     private $table = 'transaksi';
+    private $primaryKey = 'idTransaksi';
+
     public $conn;
 
     public function __construct()
     {
         $globalFunc = new GlobalFunc();
         $this->conn = $globalFunc->conn;
+    }
+
+    public function countRows()
+    {
+        $sql = "SELECT COUNT(".$this->primaryKey.") as count FROM " . $this->table;
+
+        try {
+            $query = $this->conn->prepare($sql);
+            $query->execute();
+            $data = $query->fetch();
+
+            return $data;
+        } catch (PDOException $e) {
+            echo $e;
+            die();
+        }
     }
 
     public function selectAll($where = "")

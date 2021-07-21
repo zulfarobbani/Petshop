@@ -37,7 +37,12 @@ class TransaksiController extends GlobalFunc
             return new RedirectResponse('/login');
         }
         
-        $datas = $this->model->selectAll();
+        if ($request->attributes->get('jenis') != 'grosir' && $request->attributes->get('jenis') != 'eceran') {
+            return new RedirectResponse('/transaksi/grosir');
+        }
+        $jenis = $request->attributes->get('jenis') == 'grosir' ? '1' : '2';
+
+        $datas = $this->model->selectAll("WHERE jenisTransaksi = '$jenis'");
 
         $produk = new Produk();
         $data_produk = $produk->selectAll();
@@ -52,7 +57,7 @@ class TransaksiController extends GlobalFunc
             $datas[$key]['totalHargaTransaksi'] = $total_harga;
         }
 
-        return $this->render_template('transaksi/transaksi', ['datas' => $datas, 'produk' => $data_produk]);
+        return $this->render_template('transaksi/transaksi', ['datas' => $datas, 'produk' => $data_produk, 'jenis_transaksi' => $jenis]);
     }
 
     public function create(Request $request)

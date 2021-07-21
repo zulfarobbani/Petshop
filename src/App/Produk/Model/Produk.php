@@ -10,12 +10,29 @@ use PDOException;
 class Produk extends GlobalFunc
 {
     private $table = 'item';
+    private $primaryKey = 'idItem';
     public $conn;
 
     public function __construct()
     {
         $globalFunc = new GlobalFunc();
         $this->conn = $globalFunc->conn;
+    }
+
+    public function countRows()
+    {
+        $sql = "SELECT COUNT(".$this->primaryKey.") as count FROM " . $this->table;
+
+        try {
+            $query = $this->conn->prepare($sql);
+            $query->execute();
+            $data = $query->fetch();
+
+            return $data;
+        } catch (PDOException $e) {
+            echo $e;
+            die();
+        }
     }
 
     public function selectAll($where = "")
@@ -45,9 +62,10 @@ class Produk extends GlobalFunc
         $hargaperpcsItem = $datas->get('hargaperpcsItem');
         $tanggalmasukProduk = $datas->get('tanggalmasukProduk');
         $tanggalexpiryProduk = $datas->get('tanggalexpiryProduk');
+        $deskripsiItem = $datas->get('deskripsiItem');
         $dateCreate = date('Y-m-d');
 
-        $sql = "INSERT INTO " . $this->table . " VALUES ('$idItem','$namaItem', '$supplierItem', '$satuanItem', '$kuantiti', '$harga', '$hargaperpcsItem', '$kuantiti', '$tanggalmasukProduk', '$tanggalexpiryProduk', '$dateCreate')";
+        $sql = "INSERT INTO " . $this->table . " VALUES ('$idItem','$namaItem', '$supplierItem', '$satuanItem', '$kuantiti', '$harga', '$hargaperpcsItem', '$kuantiti', '$tanggalmasukProduk', '$tanggalexpiryProduk', '$dateCreate', '$deskripsiItem')";
 
         try {
             $data = $this->conn->prepare($sql);
@@ -68,12 +86,6 @@ class Produk extends GlobalFunc
             $query->execute();
             $data = $query->fetch();
 
-            // $transaksi = new GroupItem();
-            // $transaksi_item = $transaksi->selectAll("WHERE groupItem.idItem = '$id'");
-            
-            // // kurangi stock terpakai dengan stock awal
-            // $data['sisaStock'] => $data['']
-
             return $data;
         } catch (PDOException $e) {
             echo $e;
@@ -90,8 +102,9 @@ class Produk extends GlobalFunc
         $hargaperpcsItem = $datas->get('hargaperpcsItem');
         $tanggalmasukProduk = $datas->get('tanggalmasukProduk');
         $tanggalexpiryProduk = $datas->get('tanggalexpiryProduk');
+        $deskripsiItem = $datas->get('deskripsiItem');
 
-        $sql = "UPDATE " . $this->table . " SET namaItem = '$namaItem', supplierItem = '$supplierItem', satuanItem = '$satuanItem', kuantitiItem = '$kuantiti', hargaItem = '$harga', hargaperpcsItem = '$hargaperpcsItem', tanggalmasukProduk = '$tanggalmasukProduk', tanggalexpiryProduk = '$tanggalexpiryProduk' WHERE idItem = '$id'";
+        $sql = "UPDATE " . $this->table . " SET namaItem = '$namaItem', supplierItem = '$supplierItem', satuanItem = '$satuanItem', kuantitiItem = '$kuantiti', hargaItem = '$harga', hargaperpcsItem = '$hargaperpcsItem', tanggalmasukProduk = '$tanggalmasukProduk', tanggalexpiryProduk = '$tanggalexpiryProduk', deskripsiItem = '$deskripsiItem' WHERE idItem = '$id'";
 
         try {
             $data = $this->conn->prepare($sql);

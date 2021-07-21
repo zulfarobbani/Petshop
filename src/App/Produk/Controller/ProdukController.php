@@ -63,9 +63,23 @@ class ProdukController extends GlobalFunc
             }
         }
 
-        $datas = $this->model->selectAll($where);
+        // pagination
+        $countRows = $this->model->countRows()['count'];
+        $page = $request->query->get('page') ? $request->query->get('page') : '1';
+        $result_per_page = 10;
+        $page_first_result = ($page-1)*$result_per_page;
+        $number_of_page = ceil($countRows/$result_per_page);
 
-        return $this->render_template('produk/produk', ['datas' => $datas, 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo, 'filterWaktuexpiryFrom' => $filterWaktuexpiryFrom, 'filterWaktuexpiryTo' => $filterWaktuexpiryTo]);
+        $datas = $this->model->selectAll($where." LIMIT ".$page_first_result.",".$result_per_page);
+        $pagination = [
+            'current_page' => $page,
+            'number_of_page' => $number_of_page,
+            'page_first_result' => $page_first_result,
+            'result_per_page' => $result_per_page,
+            'countRows' => $countRows
+        ];
+
+        return $this->render_template('produk/produk', ['datas' => $datas, 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo, 'filterWaktuexpiryFrom' => $filterWaktuexpiryFrom, 'filterWaktuexpiryTo' => $filterWaktuexpiryTo, 'pagination' => $pagination]);
     }
 
     public function create(Request $request)

@@ -7,7 +7,7 @@
 								<div class="header-row">
 									<div class="header-logo">
 										<a href="index.html">
-											<img alt="Porto" width="100" height="48" data-sticky-width="82" data-sticky-height="40" src="assets/img/logo-dark.png">
+											<img alt="Porto" width="100" height="48" data-sticky-width="82" data-sticky-height="40" src="/assets/img/logo-dark.png">
 										</a>
 									</div>
 								</div>
@@ -28,17 +28,21 @@
 															Product
 														</a>
 													</li>
-													<li class="dropdown">
-														<a class="dropdown-item dropdown-toggle text-white" href="/transaksi">
+													<li class="nav-item dropdown">
+														<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 															Transaction
 														</a>
+														<ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+															<li><a class="dropdown-item" href="/transaksi/grosir">Grosir</a></li>
+															<li><a class="dropdown-item" href="/transaksi/eceran">Eceran</a></li>
+														</ul>
 													</li>
 													<li class="dropdown">
 														<a class="dropdown-item dropdown-toggle text-white" href="/users">
 															Users
 														</a>
 													</li>
-													
+
 												</ul>
 											</nav>
 										</div>
@@ -48,14 +52,14 @@
 									</div>
 									<div class="header-nav-features header-nav-features-no-border header-nav-features-lg-show-border order-1 order-lg-2">
 										<div class="nav-item dropdown">
-							              <a class="nav-link" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons-outlined text-white fs-2">account_circle</span>
-							              </a>
-							              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							                <a class="dropdown-item" href="/profile">Profile</a>
-											<a class="dropdown-item" href="/akun">Edit Akun</a>
-							                <a class="dropdown-item" href="/logout">Logout</a>
-							              </div>
-							            </div>
+											<a class="nav-link" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons-outlined text-white fs-2">account_circle</span>
+											</a>
+											<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+												<a class="dropdown-item" href="/profile">Profile</a>
+												<a class="dropdown-item" href="/akun">Edit Akun</a>
+												<a class="dropdown-item" href="/logout">Logout</a>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

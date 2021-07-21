@@ -150,7 +150,7 @@ $routes->add('akunUpdate', new Route('/akun/{id_user}/update', [
 // ]));
 
 //Transaksi
-$routes->add('transaksi', new Route('/transaksi', [
+$routes->add('transaksi', new Route('/transaksi/{jenis}', [
     '_controller' => 'App\Transaksi\Controller\TransaksiController::index'
 ]));
 $routes->add('transaksiCreate', new Route('/transaksi/create', [

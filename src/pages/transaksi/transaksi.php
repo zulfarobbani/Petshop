@@ -50,6 +50,7 @@
             <div class="row">
                 <div class="col-6">
                     <h4>Transaction</h4>
+                    <h6><?= $jenis_transaksi == '1' ? 'Grosir' : 'Eceran' ?></h6>
                 </div>
                 <div class="col-6 text-end">
                     <button type="button" class="btn btn-sm text-white rounded-pill h-75 px-4" data-bs-toggle="modal" data-bs-target="#ModalTambahTransaksi" id="btnIjo">
@@ -147,6 +148,8 @@
                 </div>
                 <form action="/transaksi/store" method="post">
                     <div class="modal-body">
+                        <h6>Transaksi <b><?= $jenis_transaksi == '1' ? 'Grosir' : 'Eceran' ?></b></h6>
+                        <hr>
                         <div class="row">
                             <div class="col-4">
                                 <div class="mb-1">
@@ -161,7 +164,7 @@
                                     <label for="">Tanggal Transaksi</label>
                                     <input type="date" class="form-control tanggalTransaksi" name="tanggalTransaksi" placeholder="01/07/2021">
                                 </div>
-                                <div class="mb-1">
+                                <!-- <div class="mb-1">
                                     <label for="">Status Transaksi</label>
                                     <select class="form-select statusTransaksi" name="statusTransaksi" aria-label="Default select example">
                                         <option>Status</option>
@@ -169,7 +172,7 @@
                                         <option value="2">Complete</option>
                                         <option value="3">Return Barang</option>
                                     </select>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="col">
                                 <button type="button" class="btn rounded-pill px-3 btn-sm text-white mb-3 tambahListProduk" id="btnIjo"><i class="fas fa-plus-square"> Tambah Produk</i></button>
@@ -210,7 +213,6 @@
                                             <div class="col-2">
                                                 <input type="number" name="hargaItem[]" placeholder="Harga" min='1' class="harga form-control">
                                             </div>
-
                                             <div class="col-2">
                                                 <input type="number" name="kuantitiItem[]" min='1' placeholder="Qty" class="kuantiti form-control">
                                             </div>
@@ -254,7 +256,7 @@
                                     <label for="">Tanggal Transaksi</label>
                                     <input type="date" class="form-control tanggalTransaksi" name="tanggalTransaksi" placeholder="01/07/2021">
                                 </div>
-                                <div class="mb-1">
+                                <!-- <div class="mb-1">
                                     <label for="">Status Transaksi</label>
                                     <select class="form-select statusTransaksi" name="statusTransaksi" aria-label="Default select example">
                                         <option>Status</option>
@@ -262,7 +264,7 @@
                                         <option value="2">Complete</option>
                                         <option value="3">Return Barang</option>
                                     </select>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="col">
                                 <button type="button" class="btn rounded-pill px-3 btn-sm text-white mb-3 tambahListProduk" id="btnIjo"><i class="fas fa-plus-square"> Tambah Produk</i></button>
@@ -376,7 +378,7 @@
                                     <label for="">Tanggal Transaksi</label>
                                     <input type="date" class="form-control tanggalTransaksi" name="tanggalTransaksi" placeholder="01/07/2021" disabled>
                                 </div>
-                                <div class="mb-1">
+                                <!-- <div class="mb-1">
                                     <label for="">Status Transaksi</label>
                                     <select class="form-select statusTransaksi" aria-label="Default select example" disabled>
                                         <option>Status</option>
@@ -384,7 +386,7 @@
                                         <option value="2">Complete</option>
                                         <option value="3">Return Barang</option>
                                     </select>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="col">
                                 <div class="row">
@@ -502,7 +504,7 @@
                                             <label for="">Tanggal Transaksi</label>
                                             <input type="date" class="form-control tanggalTransaksi" name="tanggalTransaksi" placeholder="01/07/2021" disabled>
                                         </div>
-                                        <div class="mb-1">
+                                        <!-- <div class="mb-1">
                                             <label for="">Status Transaksi</label>
                                             <select class="form-select statusTransaksi" aria-label="Default select example" disabled>
                                                 <option>Status</option>
@@ -510,7 +512,7 @@
                                                 <option value="2">Complete</option>
                                                 <option value="3">Return Barang</option>
                                             </select>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="col">
                                         <div class="row">

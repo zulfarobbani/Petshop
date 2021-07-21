@@ -79,7 +79,7 @@ class Transaksi extends GlobalFunc
         $idGroupitem = $datas['idGroupitem'];
         $idClient = $datas['idClient'];
         $dateCreate = $datas['dateCreate'];
-        $statusTransaksi = $datas['statusTransaksi'];
+        $statusTransaksi = 2;
 
         $sql = "INSERT INTO " . $this->table . " VALUES('$idTransaksi', '$nomorTransaksi', '$kasirTransaksi', '$pelangganTransaksi', '$tanggalTransaksi', '$idGroupitem', '$idClient', '$statusTransaksi', '$dateCreate')";
 

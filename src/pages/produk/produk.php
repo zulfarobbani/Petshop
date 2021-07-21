@@ -111,12 +111,12 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <!-- <th scope="col">Supplier</th>
-                            <th scope="col">Stock</th> -->
+                            <th scope="col">Supplier</th>
+                            <!-- <th scope="col">Stock</th> -->
                             <th scope="col">Kuantiti</th>
                             <th scope="col">Satuan</th>
-                            <th scope="col">Waktu Masuk</th>
-                            <th scope="col">Waktu Expiry</th>
+                            <!-- <th scope="col">Waktu Masuk</th>
+                            <th scope="col">Waktu Expiry</th> -->
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
@@ -124,12 +124,12 @@
                         <?php foreach ($datas as $key => $data) { ?>
                             <tr>
                                 <td><?= $data['namaItem'] ?></td>
-                                <!-- <td><?= $data['supplierItem'] ?></td>
-                                <td><?= $data['stockItem'] ?></td> -->
+                                <td><?= $data['supplierItem'] ?></td>
+                                <!-- <td><?= $data['stockItem'] ?></td> -->
                                 <td><?= $data['kuantitiItem'] ?></td>
                                 <td><?= $data['satuanItem'] ?></td>
-                                <td><?= $data['tanggalmasukProduk'] == '0000-00-00' ? '' : date('d M Y', strtotime($data['tanggalmasukProduk'])) ?></td>
-                                <td><?= $data['tanggalexpiryProduk'] == '0000-00-00' ? '' : date('d M Y', strtotime($data['tanggalexpiryProduk'])) ?></td>
+                                <!-- <td><?= $data['tanggalmasukProduk'] == '0000-00-00' ? '' : date('d M Y', strtotime($data['tanggalmasukProduk'])) ?></td>
+                                <td><?= $data['tanggalexpiryProduk'] == '0000-00-00' ? '' : date('d M Y', strtotime($data['tanggalexpiryProduk'])) ?></td> -->
                                 <td class="d-flex">
                                     <button type="button" class="btn px-2 py-1 me-1 text-white btnEdit" id="btnBiru" data-bs-toggle="modal" data-bs-target="#modalubahproduct" data-bs-idItem="<?= $data['idItem'] ?>"><i class="fa fa-edit"></i></button>
 
@@ -143,20 +143,20 @@
                 </table>
             </div>
 
-            <!-- <div class="row">
+            <div class="row">
                 <div class="col-6">
-                    <h6 class="text-muted">Showing 1 to 10 of 26 entries</h6>
+                    <h6 class="text-muted">Showing <?= $pagination['page_first_result'] + 1 ?> to <?= count($datas) ?> of <?= $pagination['countRows'] ?> entries</h6>
                 </div>
                 <div class="col-6">
                     <ul class="pagination float-end">
-                        <li class="page-item"><a class="page-link" href="#"><i class="fas fa-angle-left"></i></a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="fas fa-angle-right"></i></a></li>
+                        <li class="page-item <?= $pagination['current_page'] - 1 == 0 ? 'disabled' : '' ?>"><a class="page-link" href="?page=<?= intval($pagination['current_page']) - 1 ?>"><i class="fas fa-angle-left"></i></a></li>
+                        <?php for ($page = 1; $page <= $pagination['number_of_page']; $page++) { ?>
+                            <li class="page-item <?= $pagination['current_page'] == $page ? 'active' : '' ?>"><a class="page-link" href="?page=<?= $page ?>"><?= $page ?></a></li>
+                        <?php } ?>
+                        <li class="page-item <?= $pagination['current_page'] + 1 > $pagination['number_of_page'] ? 'disabled' : '' ?>"><a class="page-link" href="?page=<?= intval($pagination['current_page']) + 1 ?>"><i class="fas fa-angle-right"></i></a></li>
                     </ul>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 
@@ -184,10 +184,10 @@
                                     <label for="">Supplier</label>
                                     <input type="text" class="form-control supplierItem" name="supplierItem" placeholder="Supplier A">
                                 </div>
-                                <div class="mb-1">
+                                <!-- <div class="mb-1">
                                     <label for="">Kuantiti Produk</label>
                                     <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100">
-                                </div>
+                                </div> -->
                                 <div class="mb-1">
                                     <label for="">Satuan Produk</label>
                                     <input type="text" class="form-control satuanItem" name="satuanItem" placeholder="Pcs">
@@ -244,11 +244,11 @@
                                     <label for="">Supplier</label>
                                     <input type="text" class="form-control supplierItem" name="supplierItem" placeholder="Supplier A">
                                 </div>
-                                <div class="mb-1">
+                                <!-- <div class="mb-1">
                                     <label for="">Kuantiti Produk</label>
                                     <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100">
                                     <b>Stock Produk : <span class="stockItem"></span></b>
-                                </div>
+                                </div> -->
                                 <div class="mb-1">
                                     <label for="">Satuan Produk</label>
                                     <input type="text" class="form-control satuanItem" name="satuanItem" placeholder="Pcs">
@@ -303,10 +303,10 @@
                                 <label for="">Supplier</label>
                                 <input type="text" class="form-control supplierItem" name="supplierItem" placeholder="Supplier A" disabled>
                             </div>
-                            <div class="mb-1">
+                            <!-- <div class="mb-1">
                                 <label for="">Kuantiti Produk</label>
                                 <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100" disabled>
-                            </div>
+                            </div> -->
                             <div class="mb-1">
                                 <label for="">Satuan Produk</label>
                                 <input type="text" class="form-control satuanItem" name="satuanItem" placeholder="Pcs" disabled>
@@ -360,14 +360,14 @@
                                 <label for="">Supplier</label>
                                 <input type="text" class="form-control supplierItem" name="supplierItem" placeholder="Supplier A" disabled>
                             </div>
-                            <div class="mb-1">
+                            <!-- <div class="mb-1">
                                 <label for="">Stock Produk</label>
                                 <input type="text" class="form-control stockItem" placeholder="100" disabled>
                             </div>
                             <div class="mb-1">
                                 <label for="">Kuantiti Produk</label>
                                 <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100" disabled>
-                            </div>
+                            </div> -->
                             <div class="mb-1">
                                 <label for="">Satuan Produk</label>
                                 <input type="text" class="form-control satuanItem" name="satuanItem" placeholder="Pcs" disabled>

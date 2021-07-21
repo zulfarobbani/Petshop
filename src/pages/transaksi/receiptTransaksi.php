@@ -41,7 +41,7 @@
                 <tr>
                     <td>Kasir</td>
                     <td> : </td>
-                    <td><span id="receiptKasTran"><?= $detail['kasirTransaksi']?></span></td>
+                    <td><span id="receiptKasTran"><?= $detail['namaUser']?></span></td>
                 </tr>
                 <tr>
                     <td>Pelanggan</td>
@@ -53,24 +53,30 @@
                     <td> : </td>
                     <td><span id="receiptTglTran"></span><?= date('d F Y', strtotime($detail['tanggalTransaksi']))?></td>
                 </tr>
+                <tr>
+                    <td>Jenis Transaksi</td>
+                    <td> : </td>
+                    <td><span id="receiptTglTran"></span><?= $detail['jenisTransaksi'] == '1' ? 'Grosir' : 'Eceran'?></td>
+                </tr>
             </table>
         </div> <hr style="border : 1px dashed black">
         <div id="receiptProduk" style="margin : 20px; font-size : 20px">
             <?php foreach($groupItem as $value) {?>
-                <b style="font-size : 25px"><?= $value['idItem']?></b>
-                <div><span>1. 000. 000</span> x <span><?= $value['kuantitiItem']?></span> <span style="float: right"><?= number_format($value['kuantitiItem'] * 1000000, '0', ' ', '. ')?></span></div>
-            <?php $totalHarga += $value['kuantitiItem'] * 1000000; }?>
+                <b style="font-size : 25px"><?= $value['idItem']?></b><br>
+                <b style="font-size : 25px"><?= $value['namaItem']?></b>
+                <div><span>Rp. <?= number_format($value['hargaItem'], 2, ',', '.') ?></span> x <span><?= $value['jumlahBeli']?></span> <span><?= $value['satuanItem']?></span> <span style="float: right">Rp. <?= number_format($value['hargaItem'] * $value['jumlahBeli'], 2, ',', '.')?></span></div>
+            <?php $totalHarga += $value['hargaItem'] * $value['jumlahBeli']; }?>
         </div><hr style="border : 1px dashed black">
 
         <div id="harga" style="margin : 20px; font-size : 20px">
             <div id="subTotal">
-                <span>Sub-Total</span><span style="float: right"><?= number_format($totalHarga, '0', ' ', '. ')?></span>
+                <span>Sub-Total</span><span style="float: right">Rp. <?= number_format($totalHarga, 2, ',', '.')?></span>
             </div>
             <div id="grandTotal">
-                <span>Grand Total</span><span style="float: right">Rp. <?= number_format($totalHarga, '0', ' ', '. ')?></span>
+                <span>Grand Total</span><span style="float: right">Rp. <?= number_format($totalHarga, 2, ',', '.')?></span>
             </div>
             <div id="Cash">
-                <span>Cash</span><span style="float: right">Rp. <?= number_format($totalHarga, '0', ' ', '. ')?></span>
+                <span>Cash</span><span style="float: right">Rp. <?= number_format($totalHarga, 2, ',', '.')?></span>
             </div>
         </div>
 

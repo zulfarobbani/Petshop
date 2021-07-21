@@ -59,6 +59,25 @@
                 </div>
             </div>
 
+            <div class="row mt-2 mb-3">
+                <div class="col-6">
+                    <form action="/transaksi/<?= $jenis_transaksi_text ?>" method="get">
+                        <label for=""><b>Tanggal Transaksi</b></label><br>
+                        <div class="row justify-content-center">
+                            <div class="col-6">
+                                Dari <input type="date" class="form-control" name="filterWaktumasukFrom" value="<?= $filterWaktumasukFrom ?>">
+                                <br>
+                                <button type="reset" class="btn btn-danger btn-sm">Reset</button>
+                                <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                            </div>
+                            <div class="col-6">
+                                Sampai<input type="date" class="form-control" name="filterWaktumasukTo" value="<?= $filterWaktumasukTo ?>">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!-- <div class="row mt-2 mb-2">
                 <div class="col-1">
                     <select class="form-select float-start" aria-label="Default select example">
@@ -180,16 +199,16 @@
                                     <div class="col-3">
                                         <h6>Produk</h6>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-3 d-none">
                                         <h6>Jenis Harga</h6>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-3">
                                         <h6>Satuan</h6>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-3">
                                         <h6>Harga</h6>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-3">
                                         <h6>Kuantiti</h6>
                                     </div>
                                 </div>
@@ -204,13 +223,13 @@
                                                     <?php } ?>
                                                 </select>
                                             </div>
-                                            <div class="col-2">
-                                                <input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control">
+                                            <div class="col-2 d-none">
+                                                <input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="<?= $jenis_transaksi ?>">
                                             </div>
-                                            <div class="col-2">
+                                            <div class="col-3">
                                                 <input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control">
                                             </div>
-                                            <div class="col-2">
+                                            <div class="col-3">
                                                 <input type="number" name="hargaItem[]" placeholder="Harga" min='1' class="harga form-control">
                                             </div>
                                             <div class="col-2">
@@ -266,8 +285,26 @@
                                     </select>
                                 </div> -->
                             </div>
+                            <input type="hidden" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="<?= $jenis_transaksi ?>">
                             <div class="col">
                                 <button type="button" class="btn rounded-pill px-3 btn-sm text-white mb-3 tambahListProduk" id="btnIjo"><i class="fas fa-plus-square"> Tambah Produk</i></button>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <h6>Produk</h6>
+                                    </div>
+                                    <div class="col-3 d-none">
+                                        <h6>Jenis Harga</h6>
+                                    </div>
+                                    <div class="col-3">
+                                        <h6>Satuan</h6>
+                                    </div>
+                                    <div class="col-3">
+                                        <h6>Harga</h6>
+                                    </div>
+                                    <div class="col-3">
+                                        <h6>Kuantiti</h6>
+                                    </div>
+                                </div>
                                 <div class="transaksiProduk">
                                     <div class="listProduk" id="listproduk_1">
                                         <div class="row">
@@ -279,13 +316,13 @@
                                                     <?php } ?>
                                                 </select>
                                             </div>
-                                            <div class="col-2">
+                                            <!-- <div class="col-2">
                                                 <input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control">
-                                            </div>
-                                            <div class="col-2">
+                                            </div> -->
+                                            <div class="col-3">
                                                 <input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control">
                                             </div>
-                                            <div class="col-2">
+                                            <div class="col-3">
                                                 <input type="number" name="hargaItem[]" placeholder="Harga" min='1' class="harga form-control">
                                             </div>
                                             <div class="col-2">
@@ -393,9 +430,15 @@
                                     <div class="col-4">
                                         <h6>Produk</h6>
                                     </div>
-                                    <!-- <div class="col">
+                                    <div class="col-3">
+                                        <h6>Satuan</h6>
+                                    </div>
+                                    <div class="col-3">
+                                        <h6>Harga</h6>
+                                    </div>
+                                    <div class="col-2">
                                         <h6>Kuantiti</h6>
-                                    </div> -->
+                                    </div>
                                 </div>
                                 <div class="transaksiProduk">
                                     <div class="listProduk" id="listproduk_1">
@@ -463,9 +506,9 @@
                             <div class="col-4">
                                 <h6>Produk</h6>
                             </div>
-                            <!-- <div class="col">
-                                <h6>Kuantiti</h6>
-                            </div> -->
+                            <div class="col">
+                                <h6>Kuantiti yang diretur</h6>
+                            </div>
                         </div>
                         <div class="transaksiProduk">
                             <div class="listProduk" id="listproduk_1">
@@ -485,6 +528,7 @@
 
                             </div>
                         </div>
+                        <br>
                         <button class="btn btn-primary btn-sm mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                             Lihat Detail Transaksi
                         </button>
@@ -516,12 +560,18 @@
                                     </div>
                                     <div class="col">
                                         <div class="row">
-                                            <div class="col-7">
+                                            <div class="col-4">
                                                 <h6>Produk</h6>
                                             </div>
-                                            <!-- <div class="col">
+                                            <div class="col-3">
+                                                <h6>Satuan</h6>
+                                            </div>
+                                            <div class="col-3">
+                                                <h6>Harga</h6>
+                                            </div>
+                                            <div class="col-2">
                                                 <h6>Kuantiti</h6>
-                                            </div> -->
+                                            </div>
                                         </div>
                                         <div class="transaksiProdukDetail">
                                             <div class="listProduk" id="listproduk_1">

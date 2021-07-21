@@ -159,13 +159,29 @@
                   <input type="text" class="form-control" placeholder="Nomor Handphone" name="nohpUser">
                 </div>
                 <div class="mb-1">
-                  <label for="">Jenis Pegawai</label>
+                  <label for="">Jenis User</label>
                   <select class="form-select" aria-label="Default select example" name="hirarkiUser">
-                    <option value="">Jenis Pegawai</option>
-                    <option value="1">Kasir</option>
-                    <option value="2">Pegawai</option>
+                    <option value="">-- Pilih Jenis User --</option>
+                    <?php foreach ($hirarki as $key => $data) { ?>
+                      <option value="<?= $data['idHirarki'] ?>"><?= $data['namaHirarki'] ?></option>
+                    <?php } ?>
                   </select>
                 </div>
+              </div>
+            </div>
+            <div class="row">
+              <h5>Pengaturan hak akses</h5>
+              <div class="col-4">
+                <input type="checkbox" class="hakAkses" name="hakAkses[]" value="dashboard"> Dashboard
+              </div>
+              <div class="col-4">
+                <input type="checkbox" class="hakAkses" name="hakAkses[]" value="product"> Product
+              </div>
+              <div class="col-4">
+                <input type="checkbox" class="hakAkses" name="hakAkses[]" value="transaction"> Transaction
+              </div>
+              <div class="col-4">
+                <input type="checkbox" class="hakAkses" name="hakAkses[]" value="users"> Users
               </div>
             </div>
           </div>
@@ -208,13 +224,29 @@
                   <input type="text" class="form-control nohpUser" placeholder="Nomor Handphone" name="nohpUser">
                 </div>
                 <div class="mb-1">
-                  <label for="">Jenis Pegawai</label>
+                  <label for="">Jenis User</label>
                   <select class="form-select hirarkiUser" aria-label="Default select example" name="hirarkiUser">
-                    <option value=""> -- Jenis Pegawai -- </option>
-                    <option value="1">Kasir</option>
-                    <option value="2">Pegawai</option>
+                    <option value="">-- Pilih Jenis User --</option>
+                    <?php foreach ($hirarki as $key => $data) { ?>
+                      <option value="<?= $data['idHirarki'] ?>"><?= $data['namaHirarki'] ?></option>
+                    <?php } ?>
                   </select>
                 </div>
+              </div>
+            </div>
+            <div class="row">
+              <h5>Pengaturan hak akses</h5>
+              <div class="col-4">
+                <input type="checkbox" class="hakAkses dashboard" name="hakAkses[]" value="dashboard"> Dashboard
+              </div>
+              <div class="col-4">
+                <input type="checkbox" class="hakAkses product" name="hakAkses[]" value="product"> Product
+              </div>
+              <div class="col-4">
+                <input type="checkbox" class="hakAkses transaction" name="hakAkses[]" value="transaction"> Transaction
+              </div>
+              <div class="col-4">
+                <input type="checkbox" class="hakAkses users" name="hakAkses[]" value="users"> Users
               </div>
             </div>
           </div>
@@ -255,11 +287,12 @@
                 <input type="text" class="form-control nohpUser" placeholder="Nomor Handphone" name="nohpUser" disabled>
               </div>
               <div class="mb-1">
-                <label for="">Jenis Pegawai</label>
-                <select class="form-select hirarkiUser" aria-label="Default select example" name="hirarkiUser" disabled>
-                  <option value=""> -- Jenis Pegawai -- </option>
-                  <option value="1">Kasir</option>
-                  <option value="2">Pegawai</option>
+                <label for="">Jenis User</label>
+                <select class="form-select hirarkiUser" aria-label="Default select example" name="hirarkiUser">
+                  <option value="">-- Pilih Jenis User --</option>
+                  <?php foreach ($hirarki as $key => $data) { ?>
+                    <option value="<?= $data['idHirarki'] ?>"><?= $data['namaHirarki'] ?></option>
+                  <?php } ?>
                 </select>
               </div>
             </div>
@@ -302,11 +335,12 @@
                 <input type="text" class="form-control nohpUser" placeholder="Nomor Handphone" name="nohpUser" disabled>
               </div>
               <div class="mb-1">
-                <label for="">Jenis Pegawai</label>
-                <select class="form-select hirarkiUser" aria-label="Default select example" name="hirarkiUser" disabled>
-                  <option value=""> -- Jenis Pegawai -- </option>
-                  <option value="1">Kasir</option>
-                  <option value="2">Pegawai</option>
+                <label for="">Jenis User</label>
+                <select class="form-select hirarkiUser" aria-label="Default select example" name="hirarkiUser">
+                  <option value="">-- Pilih Jenis User --</option>
+                  <?php foreach ($hirarki as $key => $data) { ?>
+                    <option value="<?= $data['idHirarki'] ?>"><?= $data['namaHirarki'] ?></option>
+                  <?php } ?>
                 </select>
               </div>
             </div>

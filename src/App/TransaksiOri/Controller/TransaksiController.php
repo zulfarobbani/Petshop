@@ -69,11 +69,11 @@ class TransaksiController extends GlobalFunc
 
     public function store(Request $request)
     {
+        $this->dd($request->request);
         if ($this->emailUser == null){
             return new RedirectResponse('/login');
         }
 
-        // $this->dd($request->request);
         $idTransaksi = uniqid('tran');
 
         $nomorTransaksi = $request->request->get('nomorTransaksi');
@@ -82,6 +82,7 @@ class TransaksiController extends GlobalFunc
         $tanggalTransaksi = $request->request->get('tanggalTransaksi');
         $idClient = $request->request->get('idClient');
         $statusTransaksi = $request->request->get('statusTransaksi');
+        $jenisTransaksi = $request->request->get('jenisTransaksi');
         $dateCreate = date('Y-m-d');
 
         $transaksi_arr = array(
@@ -93,7 +94,9 @@ class TransaksiController extends GlobalFunc
             "idGroupitem" => null,
             "idClient" => $idClient,
             "statusTransaksi" => $statusTransaksi,
-            "dateCreate" => $dateCreate
+            "dateCreate" => $dateCreate,
+            "jenisTransaksi" => $jenisTransaksi,
+            "kasirTransaksi" => $this->idUser
         );
 
         $idItem = $request->request->get('idItem');

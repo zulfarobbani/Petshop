@@ -73,7 +73,7 @@
       <div class="col-md-4" id="omset"></div>
       <div class="col-md-4" id="kuantiti_pembelian"></div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-md-6">
         <div class="card shadow">
           <div class="card-body">
@@ -104,7 +104,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="card mt-5">
       <div class="card-body">

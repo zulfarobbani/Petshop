@@ -15,6 +15,21 @@ $(document).on("click", ".btnEdit", function () {
     modal
       .find(".formEdit")
       .prop("action", "/users/" + data.detail.idUser + "/update");
+
+      data.permission.forEach(element => {
+        if (element.menu == 'dashboard') {
+          modal.find(".dashboard").prop('checked', true);
+        }
+        if (element.menu == 'product') {
+          modal.find(".product").prop('checked', true);
+        }
+        if (element.menu == 'transaction') {
+          modal.find(".transaction").prop('checked', true);
+        }
+        if (element.menu == 'users') {
+          modal.find(".users").prop('checked', true);
+        }
+      });
   });
 });
 

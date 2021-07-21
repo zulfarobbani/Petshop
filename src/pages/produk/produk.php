@@ -79,7 +79,7 @@
                 </div>
             </div>
 
-            <!-- <div class="row mt-2 mb-2">
+            <div class="row mt-2 mb-2">
                 <div class="col-1">
                     <select class="form-select float-start" aria-label="Default select example">
                         <option selected>No</option>
@@ -103,7 +103,7 @@
                         <input class="form-control w-50 float-end" type="search" placeholder="Search" aria-label="Search">
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <div class="table-responsive">
 

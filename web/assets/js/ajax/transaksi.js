@@ -28,8 +28,10 @@ $(document).ready(function () {
           "</option>";
       }
 
+      var jenishargaTransaksi = container.find('.jenisharga').val();
+
       tampilanHtml +=
-        '</select></div><div class="col-2"> <input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control"><b>Stock: <span class="stockItem"></span></b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+        '</select></div><div class="col-2 d-none"> <input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="'+jenishargaTransaksi+'"></div><div class="col-3"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control"></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
         numberNextId +
         '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
 
@@ -122,20 +124,32 @@ $(document).ready(function () {
           var totalHargaitem =
             parseInt(element1.hargaItem) * element1.jumlahBeli;
           tampilanHtml +=
-            '</select></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
-            element1.jenishargaItem +
-            '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
-            element1.satuanItemgr +
-            '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+            '</select></div><div class="col-3"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+            element1.satuanItem +
+            '"></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
             element1.hargaItemgr +
-            '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
-            element1.stockItem +
-            '" placeholder="Qty" class="kuantiti form-control" value="' +
+            '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
             element1.jumlahBeli +
             '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
             numberNextId +
             '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
-          // tampilanHtml +=
+          
+            // tampilanHtml +=
+            // '</select></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
+            // element1.jenishargaItem +
+            // '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+            // element1.satuanItemgr +
+            // '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+            // element1.hargaItemgr +
+            // '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
+            // element1.stockItem +
+            // '" placeholder="Qty" class="kuantiti form-control" value="' +
+            // element1.jumlahBeli +
+            // '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+            // numberNextId +
+            // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+          
+            // tampilanHtml +=
           // '</select><b>Harga Produk : <span class="hargaItem">Rp.'+parseInt(element1.hargaItem).toLocaleString()+'</span></b><br><b>Total Harga: <span class="totalHargaitem">Rp.'+totalHargaitem.toLocaleString()+'</span></b></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" max="' +
           // element1.stockItem +
           // '" placeholder="Qty" class="kuantiti form-control" value="' +
@@ -262,39 +276,53 @@ $(document).ready(function () {
             "</option>";
         }
 
+        // tampilanHtml +=
+        //   '</select></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+        //   element1.satuanItemgr +
+        //   '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+        //   element1.hargaItemgr +
+        //   '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
+        //   element1.stockItem +
+        //   '" placeholder="Qty" class="kuantiti form-control" value="' +
+        //   element1.jumlahBeli +
+        //   '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+        //   numberNextId +
+        //   '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+
         tampilanHtml +=
-          '</select><b>Harga Produk : <span class="hargaItem">Rp.' +
-          parseInt(element1.hargaItem).toLocaleString() +
-          '</span></b></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
-          element1.jenishargaItem +
-          '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
-          element1.satuanItemgr +
-          '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
-          element1.hargaItemgr +
-          '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
-          element1.stockItem +
-          '" placeholder="Qty" class="kuantiti form-control" value="' +
-          element1.jumlahBeli +
-          '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
-          numberNextId +
-          '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+          '</select></div><div class="col"><input type="number" name="' +
+          element1.idItem +
+          '" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
+          element1.pengurangItem +
+          '"></div></div></div></div>';
         
           tampilanHtmlDetail +=
-          '</select><b>Harga Produk : <span class="hargaItem">Rp.' +
-          parseInt(element1.hargaItem).toLocaleString() +
-          '</span></b></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
-          element1.jenishargaItem +
-          '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+          '</select></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
           element1.satuanItemgr +
-          '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+          '" disabled></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
           element1.hargaItemgr +
-          '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
+          '" disabled></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
           element1.stockItem +
           '" placeholder="Qty" class="kuantiti form-control" value="' +
           element1.jumlahBeli +
-          '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
-          numberNextId +
-          '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+          '" disabled></div></div></div></div>';
+
+          // tampilanHtmlDetail +=
+          // '</select><b>Harga Produk : <span class="hargaItem">Rp.' +
+          // parseInt(element1.hargaItem).toLocaleString() +
+          // '</span></b></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
+          // element1.jenishargaItem +
+          // '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+          // element1.satuanItemgr +
+          // '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+          // element1.hargaItemgr +
+          // '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
+          // element1.stockItem +
+          // '" placeholder="Qty" class="kuantiti form-control" value="' +
+          // element1.jumlahBeli +
+          // '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+          // numberNextId +
+          // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
       }
 
       modal.find(".transaksiProduk").html(tampilanHtml);
@@ -340,7 +368,7 @@ $(document).ready(function () {
         tampilanHtml +=
           '<div class="listProduk" id="' +
           nextId +
-          '"><div class="row"><div class="col-7"><select name="idItem[]" class="produk form-control" disabled><option value="-">Nama Produk</option>';
+          '"><div class="row"><div class="col-4"><select name="idItem[]" class="produk form-control" disabled><option value="-">Nama Produk</option>';
 
         for (let index = 0; index < data.produk.length; index++) {
           const element = data.produk[index];
@@ -355,23 +383,26 @@ $(document).ready(function () {
         }
 
         tampilanHtml +=
-          '</select><b>Harga Produk : <span class="hargaItem">Rp.' +
-          parseInt(element1.hargaItem).toLocaleString() +
-          '</span></b></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
-          element1.jenishargaItem +
-          '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+          '</select></div><div class="col-3"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
           element1.satuanItemgr +
-          '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+          '" disabled></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
           element1.hargaItemgr +
-          '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
-          element1.stockItem +
-          '" placeholder="Qty" class="kuantiti form-control" value="' +
+          '" disabled></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
           element1.jumlahBeli +
-          '"><b>Stock: ' +
-          element1.stockItem +
-          '</b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
-          numberNextId +
-          '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+          '" disabled></div></div></div></div>';
+
+          // tampilanHtml +=
+          // '</select><b>Harga Produk : <span class="hargaItem">Rp.' +
+          // parseInt(element1.hargaItem).toLocaleString() +
+          // '</span></b></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+          // element1.satuanItemgr +
+          // '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+          // element1.hargaItemgr +
+          // '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
+          // element1.jumlahBeli +
+          // '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+          // numberNextId +
+          // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
       }
 
       modal.find(".transaksiProduk").html(tampilanHtml);

@@ -36,7 +36,7 @@ class Transaksi extends GlobalFunc
 
     public function selectOne($idTransaksi)
     {
-        $sql = "SELECT * FROM " . $this->table . " WHERE idTransaksi = '$idTransaksi'";
+        $sql = "SELECT * FROM " . $this->table . " LEFT JOIN users ON users.idUser = ".$this->table.".kasirTransaksi WHERE idTransaksi = '$idTransaksi'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -78,10 +78,11 @@ class Transaksi extends GlobalFunc
         $tanggalTransaksi = $datas['tanggalTransaksi'];
         $idGroupitem = $datas['idGroupitem'];
         $idClient = $datas['idClient'];
-        $dateCreate = $datas['dateCreate'];
+        $jenisTransaksi = $datas['jenisTransaksi'];
+        $dateCreate = date('Y-m-d');
         $statusTransaksi = 2;
 
-        $sql = "INSERT INTO " . $this->table . " VALUES('$idTransaksi', '$nomorTransaksi', '$kasirTransaksi', '$pelangganTransaksi', '$tanggalTransaksi', '$idGroupitem', '$idClient', '$statusTransaksi', '$dateCreate')";
+        $sql = "INSERT INTO " . $this->table . " VALUES('$idTransaksi', '$nomorTransaksi', '$kasirTransaksi', '$pelangganTransaksi', '$tanggalTransaksi', '$idGroupitem', '$idClient', '$statusTransaksi', '$dateCreate', '$jenisTransaksi')";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -94,10 +95,10 @@ class Transaksi extends GlobalFunc
         }
     }
 
-    public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $kuantitiItem, $jenishargaItem, $satuanItem, $hargaItem)
+    public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $kuantitiItem, $satuanItem, $hargaItem)
     {
         $dateCreate = date('Y-m-d');
-        $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idTransaksi', '$idItem', '', '$kuantitiItem', '$dateCreate', '$jenishargaItem', '$satuanItem', '$hargaItem')";
+        $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idTransaksi', '$idItem', '', '$kuantitiItem', '$dateCreate', '$satuanItem', '$hargaItem')";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -164,8 +165,8 @@ class Transaksi extends GlobalFunc
                 $data_produk = $produk->selectOne($key);
 
                 // update stock product
-                $sisaStock = $data_produk['stockItem'] + intval($value);
-                $produk->updateStock($key, $sisaStock);
+                // $sisaStock = $data_produk['stockItem'] + intval($value);
+                // $produk->updateStock($key, $sisaStock);
 
             } catch (PDOException $e) {
                 echo $e;

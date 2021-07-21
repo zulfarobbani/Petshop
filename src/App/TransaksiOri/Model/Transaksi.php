@@ -79,10 +79,11 @@ class Transaksi extends GlobalFunc
         $idGroupitem = $datas['idGroupitem'];
         $idClient = $datas['idClient'];
         $dateCreate = $datas['dateCreate'];
-        $kasirTransaksi = 'user98123jsh';
+        $kasirTransaksi = $datas['kasirTransaksi'];
         $statusTransaksi = $datas['statusTransaksi'];
+        $jenisTransaksi = $datas['jenisTransaksi'];
 
-        $sql = "INSERT INTO " . $this->table . " VALUES('$idTransaksi', '$nomorTransaksi', '$kasirTransaksi', '$pelangganTransaksi', '$tanggalTransaksi', '$idGroupitem', '$idClient', '$statusTransaksi', '$dateCreate')";
+        $sql = "INSERT INTO " . $this->table . " VALUES('$idTransaksi', '$nomorTransaksi', '$kasirTransaksi', '$pelangganTransaksi', '$tanggalTransaksi', '$idGroupitem', '$idClient', '$statusTransaksi', '$dateCreate', '$jenisTransaksi')";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -95,14 +96,15 @@ class Transaksi extends GlobalFunc
         }
     }
 
-    public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $kuantitiItem, $jenishargaItem, $satuanItem, $hargaItem)
+    public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $kuantitiItem, $satuanItem, $hargaItem)
     {
         $dateCreate = date('Y-m-d');
-        $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idTransaksi', '$idItem', '', '$kuantitiItem', '$dateCreate', '$jenishargaItem', '$satuanItem', '$hargaItem')";
+        $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idTransaksi', '$idItem', '', '$kuantitiItem', '$dateCreate', '$satuanItem', '$hargaItem')";
 
         try {
             $query = $this->conn->prepare($sql);
             $create = $query->execute();
+            $this->dd($create);
 
             return $create;
         } catch (PDOException $e) {

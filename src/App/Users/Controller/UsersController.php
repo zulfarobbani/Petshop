@@ -37,8 +37,9 @@ class UsersController extends GlobalFunc
         }
 
         $datas = $this->model->selectAll();
+        $hirarki = $this->model->selectAllRole();
 
-        return $this->render_template('users/users', ['datas' => $datas]);
+        return $this->render_template('users/users', ['datas' => $datas, 'hirarki' => $hirarki]);
     }
 
     public function create(Request $request)
@@ -55,8 +56,10 @@ class UsersController extends GlobalFunc
         if ($this->emailUser == null){
             return new RedirectResponse('/login');
         }
-
+        // $this->dd($request->request);
         $idUser = uniqid('user');
+
+        $storePermission = $this->model->createPermission($idUser, $request->request);
 
         $namaUser = $request->request->get('namaUser');
         $nohpUser = $request->request->get('nohpUser');
@@ -199,8 +202,9 @@ class UsersController extends GlobalFunc
 
         $id_user = $request->attributes->get('id_user');
         $detail = $this->model->selectOne($id_user);
+        $permssion = $this->model->getRolePermission($id_user);
 
-        return new JsonResponse(['detail' => $detail]);
+        return new JsonResponse(['detail' => $detail, 'permission' => $permssion]);
     }
 
     public function reset_password(Request $request)

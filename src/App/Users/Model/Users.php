@@ -19,7 +19,7 @@ class Users extends GlobalFunc
 
     public function selectAll()
     {
-        $sql = "SELECT * FROM ".$this->table;
+        $sql = "SELECT * FROM " . $this->table;
 
         try {
             $query = $this->conn->prepare($sql);
@@ -35,7 +35,7 @@ class Users extends GlobalFunc
 
     public function selectOne($id_user)
     {
-        $sql = "SELECT * FROM ".$this->table." LEFT JOIN media ON media.idRelation = ".$this->table.".".$this->primaryKey." WHERE ".$this->primaryKey." = '$id_user'";
+        $sql = "SELECT * FROM " . $this->table . " LEFT JOIN media ON media.idRelation = " . $this->table . "." . $this->primaryKey . " WHERE " . $this->primaryKey . " = '$id_user'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -55,11 +55,11 @@ class Users extends GlobalFunc
         $namaUser = $datas['namaUser'];
         $passwordUser = $datas['passwordUser'];
         $hirarkiUser = $datas['hirarkiUser'];
-        $dateCreate = $datas['dateCreate'];
+        $dateCreate = date('Y-m-d');
         $emailUser = $datas['emailUser'];
         $nohpUser = $datas['nohpUser'];
 
-        $sql = "INSERT INTO ". $this->table ." VALUES('$idUsers', '$emailUser', '$namaUser', '$nohpUser', '$passwordUser', '$hirarkiUser', '$dateCreate')";
+        $sql = "INSERT INTO " . $this->table . " VALUES('$idUsers', '$emailUser', '$namaUser', '$nohpUser', '$passwordUser', '$hirarkiUser', '$dateCreate')";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -79,7 +79,7 @@ class Users extends GlobalFunc
         $emailUser = $datas['emailUser'];
         $nohpUser = $datas['nohpUser'];
 
-        $sql = "UPDATE ".$this->table. " SET namaUser = '$namaUser', hirarkiUser = '$hirarkiUser', emailUser = '$emailUser', nohpUser = '$nohpUser' WHERE ".$this->primaryKey." = '$id_user'";
+        $sql = "UPDATE " . $this->table . " SET namaUser = '$namaUser', hirarkiUser = '$hirarkiUser', emailUser = '$emailUser', nohpUser = '$nohpUser' WHERE " . $this->primaryKey . " = '$id_user'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -95,7 +95,7 @@ class Users extends GlobalFunc
 
     public function delete($id_user)
     {
-        $sql = "DELETE FROM ". $this->table. " WHERE idUser = '$id_user'";
+        $sql = "DELETE FROM " . $this->table . " WHERE idUser = '$id_user'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -112,9 +112,9 @@ class Users extends GlobalFunc
     public function chronologyMessage($action, $user, $object)
     {
         $message = [
-            'store' => $user." telah menambah user \"".$object['user']."\"",
-            'update' => $user." telah mengubah user \"".$object['user']."\"",
-            'delete' => $user." telah menghapus user \"".$object['user']."\"",
+            'store' => $user . " telah menambah user \"" . $object['user'] . "\"",
+            'update' => $user . " telah mengubah user \"" . $object['user'] . "\"",
+            'delete' => $user . " telah menghapus user \"" . $object['user'] . "\"",
             // 'retur' => $user." telah melakukan retur user \"".$object['user']."\" dengan kuantitas ".$object['retur']." ".$object['satuan'],
         ];
 
@@ -124,7 +124,7 @@ class Users extends GlobalFunc
     public function resetPassword($id_user)
     {
         $passwordUser = password_hash('123', PASSWORD_DEFAULT);
-        $sql = "UPDATE ".$this->table. " SET passwordUser = '$passwordUser' WHERE ".$this->primaryKey." = '$id_user'";
+        $sql = "UPDATE " . $this->table . " SET passwordUser = '$passwordUser' WHERE " . $this->primaryKey . " = '$id_user'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -140,7 +140,7 @@ class Users extends GlobalFunc
     public function updatePassword($id_user, $passwordBaru)
     {
         $passwordUser = password_hash($passwordBaru, PASSWORD_DEFAULT);
-        $sql = "UPDATE ".$this->table. " SET passwordUser = '$passwordUser' WHERE ".$this->primaryKey." = '$id_user'";
+        $sql = "UPDATE " . $this->table . " SET passwordUser = '$passwordUser' WHERE " . $this->primaryKey . " = '$id_user'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -151,5 +151,59 @@ class Users extends GlobalFunc
             echo $e;
             die();
         }
+    }
+
+    public function selectAllRole()
+    {
+        $sql = "SELECT * FROM hirarki";
+
+        try {
+            $query = $this->conn->prepare($sql);
+            $query->execute();
+            $data = $query->fetchAll();
+
+            return $data;
+        } catch (PDOException $e) {
+            echo $e;
+            die();
+        }
+    }
+
+    public function getRolePermission($id)
+    {
+        $sql = "SELECT * FROM permission LEFT JOIN users ON users.idUser = permission.idUser WHERE users.idUser = '$id'";
+
+        try {
+            $query = $this->conn->prepare($sql);
+            $query->execute();
+            $data = $query->fetchAll();
+
+            return $data;
+        } catch (PDOException $e) {
+            echo $e;
+            die();
+        }
+    }
+
+    public function createPermission($id, $datas)
+    {
+        $dateCreate = date('Y-m-d');
+        $hakAkeses = $datas->get('hakAkses');
+
+        foreach ($hakAkeses as $key => $value) {
+            $idPermission = uniqid('pms');
+            $sql = "INSERT INTO permission VALUES('$idPermission', '$id', '$value', '$dateCreate')";
+            // $this->dd($sql);
+
+            try {
+                $query = $this->conn->prepare($sql);
+                $status = $query->execute();
+            } catch (PDOException $e) {
+                echo $e;
+                die();
+            }
+        }
+
+        return $idPermission;
     }
 }

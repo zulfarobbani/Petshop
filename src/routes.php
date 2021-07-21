@@ -150,9 +150,6 @@ $routes->add('akunUpdate', new Route('/akun/{id_user}/update', [
 // ]));
 
 //Transaksi
-$routes->add('transaksi', new Route('/transaksi/{jenis}', [
-    '_controller' => 'App\Transaksi\Controller\TransaksiController::index'
-]));
 $routes->add('transaksiCreate', new Route('/transaksi/create', [
     '_controller' => 'App\Transaksi\Controller\TransaksiController::create'
 ]));
@@ -182,6 +179,9 @@ $routes->add('transaksiGet', new Route('/transaksi/{idTransaksi}/get', [
 ]));
 $routes->add('transaksiReportPdf', new Route('/transaksi/report-pdf', [
     '_controller' => 'App\Transaksi\Controller\TransaksiController::report_pdf'
+]));
+$routes->add('transaksi', new Route('/transaksi/{jenis}', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::index'
 ]));
 
 return $routes;

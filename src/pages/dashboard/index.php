@@ -69,6 +69,20 @@
   <?php include(__DIR__ . '/../helper/header.php') ?>
   <div class="isiHalaman">
     <div class="row">
+      <div class="col-md-4">
+        <form method="POST" action="">
+          <select class="form-control" name="idProduk" id="" aria-label="Default select example">
+            <option value="">Select Produk</option>
+
+            <?php foreach($data_produk as $produk){ ?>
+              <option value="<?= $produk['idItem']?>"><?= $produk['namaItem']?></option>
+            <?php }?>
+          </select>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-md-4" id="penjualan_produk"></div>
       <div class="col-md-4" id="omset"></div>
       <div class="col-md-4" id="kuantiti_pembelian"></div>

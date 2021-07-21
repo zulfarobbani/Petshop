@@ -48,7 +48,18 @@ class DashboardController extends GlobalFunc
         $dataExpireStock = $this->model->getExpiryStock();
 
         //Data For Grafik Penjualan Berdasarkan Produk
-        $dataPenjualanProduk = $this->model->getProdukTerjual();
+        $data_produk = $this->model->getAllItem();
+
+        $idItem = $request->request->get('idProduk');
+        $whereProduk = "";
+
+        if ($idItem != null || $idItem != ""){
+            $whereProduk .= " WHERE idItem = '".$idItem."'";
+        } else {
+            $whereProduk .= " LIMIT 0,10";
+        }
+
+        $dataPenjualanProduk = $this->model->getProdukTerjual($whereProduk);
         
         //Data For Grafik Penjualan Berdasarkan Satuan
         $satuanItem = $this->model->getSatuan();
@@ -87,7 +98,7 @@ class DashboardController extends GlobalFunc
         // //Data For Riwayat Aktifitas'
         // $riwayatAktifitas = $this->model->riwayatAktifitas();
         
-        return $this->render_template('dashboard/index', ['dataPenjualanProduk' => $dataPenjualanProduk, 'dataPenjualanSatuan' => $dataPenjualanSatuan, 'dataExpireStock' => $dataExpireStock, 'dataTransaksi' => $dataTransaksi, 'getTotalPenjualanPerbulan' => $getTotalPenjualanPerbulan]);
+        return $this->render_template('dashboard/index', ['data_produk' => $data_produk ,'dataPenjualanProduk' => $dataPenjualanProduk, 'dataPenjualanSatuan' => $dataPenjualanSatuan, 'dataExpireStock' => $dataExpireStock, 'dataTransaksi' => $dataTransaksi, 'getTotalPenjualanPerbulan' => $getTotalPenjualanPerbulan]);
     }
 
 }

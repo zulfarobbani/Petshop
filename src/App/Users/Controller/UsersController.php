@@ -39,10 +39,24 @@ class UsersController extends GlobalFunc
         // pagination
         $countRows = $this->model->countRows()['count'];
         $page = $request->query->get('page') ? $request->query->get('page') : '1';
-        $result_per_page = 10;
+        
+        if ($request->query->get('data_per_page') != null){
+            $result_per_page = $request->query->get('data_per_page');
+
+            if ($request->request->get('data_per_page') != null || $request->request->get('data_per_page') != ""){
+                $result_per_page = $request->request->get('data_per_page');
+            }
+        } else {
+            if ($request->request->get('data_per_page') != null || $request->request->get('data_per_page') != ""){
+                $result_per_page = $request->request->get('data_per_page');
+            } else {
+                $result_per_page = 10;
+            }
+        }
+
         $page_first_result = ($page-1)*$result_per_page;
         $number_of_page = ceil($countRows/$result_per_page);
-        
+
         $datas = $this->model->selectAll(" LIMIT ".$page_first_result.",".$result_per_page);
 
         $pagination = [

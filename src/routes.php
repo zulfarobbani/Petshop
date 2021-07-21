@@ -76,6 +76,9 @@ $routes->add('produkget', new Route('/produk/{id}/get', [
 $routes->add('produkactivity', new Route('/produk/{id}/activity', [
     '_controller' => 'App\Produk\Controller\ProdukController::activity',
 ]));
+$routes->add('produkDataPerPage', new Route('/produk/create', [
+    '_controller' => 'App\Produk\Controller\ProdukController::create',
+]));
 
 //User Management
 $routes->add('users', new Route('/users', [

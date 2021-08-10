@@ -74,7 +74,7 @@ class Dashboard extends GlobalFunc
 
     public function getSatuan()
     {
-        $sqlGetSatuan = "SELECT satuanItem FROM item GROUP BY satuanItem";
+        $sqlGetSatuan = "SELECT satuanHargaitem FROM hargaitem GROUP BY satuanHargaitem";
 
         try{
 
@@ -92,7 +92,7 @@ class Dashboard extends GlobalFunc
 
     public function getJumlahProdukPerSatuan($satuanItem)
     {
-        $sql = "SELECT SUM(groupitem.kuantitiItem) AS jumlahSatuanItem, item.satuanItem FROM groupitem LEFT JOIN item ON groupitem.idItem = item.idItem WHERE item.satuanItem = '$satuanItem'";
+        $sql = "SELECT SUM(groupitem.kuantitiItem) AS jumlahSatuanItem, groupitem.satuanItem FROM groupitem LEFT JOIN item ON groupitem.idItem = item.idItem WHERE groupitem.satuanItem = '$satuanItem'";
 
         try{
 

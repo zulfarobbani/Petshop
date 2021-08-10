@@ -79,32 +79,30 @@
                 </div>
             </div>
 
+            <!-- <span>Jumlah data perhalaman</span> -->
             <div class="row mt-2 mb-2">
-                <div class="col-1">
-                    <form method="POST" action="">
-                        <select name="data_per_page" class="form-select float-start" aria-label="Default select example">
-                            <option value="" selected>No</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                        <button type="submit" class="btn btn-success">Submit</button>
+                <!-- <div class="col-2">
+                    <form method="GET" action="">
+                        <div class="d-flex">
+                            <select name="data_per_page" class="form-control float-start" aria-label="Default select example" style="width: 50px;">
+                                <option value="" selected>No</option>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
                     </form>
-                </div>
-                <div class="col-6 float-start">
-                    entries per page
-                </div>
-                <div class="col-4">
-                    <div class="text-end">
-                        <input class="form-control w-50 float-end" type="search" placeholder="Search" aria-label="Search">
-                    </div>
+                </div> -->
+                <div class="col-12">
+                    <form method="GET" action="">
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success float-end">Submit</button>
+                            <input class="form-control w-50 float-end" type="search" name="search" placeholder="Search" aria-label="Search">
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -115,9 +113,9 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Supplier</th>
-                            <!-- <th scope="col">Stock</th> -->
-                            <th scope="col">Kuantiti</th>
-                            <th scope="col">Satuan</th>
+                            <th scope="col">Harga Asal (Krg/Dus/Set)</th>
+                            <th scope="col">Harga Asal (Pcs/Kg)</th>
+                            <!-- <th scope="col">Kuantiti</th> -->
                             <!-- <th scope="col">Waktu Masuk</th>
                             <th scope="col">Waktu Expiry</th> -->
                             <th scope="col">Aksi</th>
@@ -128,9 +126,9 @@
                             <tr>
                                 <td><?= $data['namaItem'] ?></td>
                                 <td><?= $data['supplierItem'] ?></td>
-                                <!-- <td><?= $data['stockItem'] ?></td> -->
-                                <td><?= $data['kuantitiItem'] ?></td>
-                                <td><?= $data['satuanItem'] ?></td>
+                                <td><?= $data['hargaItem'] != null ? "Rp.".number_format($data['hargaItem'], 2, ',', '.') : '-' ?></td>
+                                <td><?= $data['hargaperpcsItem'] != null ? "Rp.".number_format($data['hargaperpcsItem'], 2, ',', '.') : '-' ?></td>
+                                <!-- <td><?= $data['kuantitiItem'] ?></td> -->
                                 <!-- <td><?= $data['tanggalmasukProduk'] == '0000-00-00' ? '' : date('d M Y', strtotime($data['tanggalmasukProduk'])) ?></td>
                                 <td><?= $data['tanggalexpiryProduk'] == '0000-00-00' ? '' : date('d M Y', strtotime($data['tanggalexpiryProduk'])) ?></td> -->
                                 <td class="d-flex">
@@ -151,32 +149,72 @@
                     <h6 class="text-muted">Showing <?= $pagination['page_first_result'] + 1 ?> to <?= count($datas) ?> of <?= $pagination['countRows'] ?> entries</h6>
                 </div>
                 <div class="col-6">
-                    <ul class="pagination float-end">
-                        <li class="page-item <?= $pagination['current_page'] - 1 == 0 ? 'disabled' : '' ?>"><a class="page-link" href="?page=<?= intval($pagination['current_page']) - 1 ?>"><i class="fas fa-angle-left"></i></a></li>
-                        <?php for ($page = 1; $page <= $pagination['number_of_page']; $page++) { ?>
-                            <li class="page-item <?= $pagination['current_page'] == $page ? 'active' : '' ?>"><a class="page-link" href="?data_per_page=<?= $pagination['result_per_page']  ?>&page=<?= $page ?>"><?= $page ?></a></li>
-                        <?php } ?>
-                        <li class="page-item <?= $pagination['current_page'] + 1 > $pagination['number_of_page'] ? 'disabled' : '' ?>"><a class="page-link" href="?page=<?= intval($pagination['current_page']) + 1 ?>"><i class="fas fa-angle-right"></i></a></li>
-                    </ul>
+                    <?php
+                    $links = "<ul class=\"pagination float-end\">
+            <li class=\"page-item " . ($pagination['current_page'] - 1 == 0 ? 'disabled' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . (intval($pagination['current_page']) - 1) . "\"><i class=\"fas fa-angle-left\"></i></a></li>";
+                    if ($pagination['number_of_page'] >= 1 && $pagination['current_page'] <= $pagination['number_of_page']) {
+                        $i = max(2, $pagination['current_page'] - 5);
+                        $links .= "<li class=\"page-item " . ($pagination['current_page'] == ($i - 1) ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=1\">1</a></li>";
+                        if ($i > 2)
+                            $links .= "<li class=\"page-item\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . ($i - 1) . "\"> ... </a></li>";
+                        for (; $i < min($pagination['current_page'] + 6, $pagination['number_of_page']); $i++) {
+                            $links .= "<li class=\"page-item " . ($pagination['current_page'] == $i ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $i . "\">" . $i . "</a></li>";
+                        }
+                        if ($i != $pagination['number_of_page'])
+                            $links .= "<li class=\"page-item\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $i . "\"> ... </a></li>";
+                        $links .= "<li class=\"page-item " . ($pagination['current_page'] == $pagination['number_of_page'] ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $pagination['number_of_page'] . "\">" . $pagination['number_of_page'] . "</a></li>";
+                    }
+                    $links .= "<li class=\"page-item " . ($pagination['current_page'] + 1 > $pagination['number_of_page'] ? 'disabled' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . (intval($pagination['current_page']) + 1) . "\"><i class=\"fas fa-angle-right\"></i></a></li>
+            </ul>";
+                    echo $links;
+                    ?>
                 </div>
             </div>
+
         </div>
     </div>
 
-
     <!-- Modal Tambah Product -->
     <div class="modal fade" id="modaltambahproduct" tabindex="-1" aria-labelledby="modaltambah" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modaltambah"><b>Tambah Product</b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="/produk/store" method="post" enctype="multipart/form-data">
-                    <div class="modal-body">
+                <div class="modal-body">
+                    <form action="/produk/store" method="post" enctype="multipart/form-data" class="formStore">
                         <div class="row">
                             <div class="col-6">
                                 <input type="file" class="form-control" id="inputGroupFile03" name="fotoItem" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                                <button type="button" class="btn mt-4 rounded-pill px-3 btn-sm text-white mb-3 tambahListHarga" id="btnIjo"><i class="fas fa-plus-square"> Tambah Harga</i></button>
+                                <div class="row mt-1">
+                                    <div class="col-3">Satuan</div>
+                                    <div class="col-4">Jenis Harga</div>
+                                    <div class="col-4">Harga</div>
+                                </div>
+                                <div class="masterHarga">
+                                    <div class="listHarga" id="listHarga_1">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <input type="text" name="satuanHarga[]" class="form-control satuanHarga">
+                                            </div>
+                                            <div class="col-4">
+                                                <select name="jenisHarga[]" class="form-control jenisHarga">
+                                                    <option value="">-- Pilih Jenis Harga --</option>
+                                                    <option value="1">Harga Grosir</option>
+                                                    <option value="2">Harga Eceran</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-4">
+                                                <input type="text" name="hargaHarga[]" class="form-control hargaHarga">
+                                            </div>
+                                            <!-- <div class="col">
+                                                <button type="button" class="hapusListHarga btn btn-sm btn-danger" value=""><i class="fas fa-minus-circle"></i></button>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-6">
                                 <div class="mb-1">
@@ -192,15 +230,11 @@
                                     <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100">
                                 </div> -->
                                 <div class="mb-1">
-                                    <label for="">Satuan Produk</label>
-                                    <input type="text" class="form-control satuanItem" name="satuanItem" placeholder="Pcs">
-                                </div>
-                                <div class="mb-1">
-                                    <label for="">Harga Produk</label>
+                                    <label for="">Harga Asal <b>(Krg/Dus/Set)</b></label>
                                     <input type="text" class="form-control hargaItem" name="hargaItem" placeholder="1.000.000">
                                 </div>
                                 <div class="mb-1">
-                                    <label for="">Harga Per pcs</label>
+                                    <label for="">Harga Asal <b>(Pcs/Kg)</b></label>
                                     <input type="text" class="form-control hargaperpcsItem" name="hargaperpcsItem" placeholder="1.000.000">
                                 </div>
                                 <div class="mb-1">
@@ -213,19 +247,19 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn rounded-pill px-3 btn-sm text-white" id="btnMerah" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn rounded-pill px-3 btn-sm text-white" id="btnIjo">Simpan</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn rounded-pill px-3 btn-sm text-white" id="btnMerah" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn rounded-pill px-3 btn-sm text-white btnSubmitStore" id="btnIjo">Simpan</button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Ubah Product -->
     <div class="modal fade" id="modalubahproduct" tabindex="-1" aria-labelledby="modalubah" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalubah"><b>Ubah Product</b></h5>
@@ -235,8 +269,42 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-6">
-                                <img src="" alt="" class="fotoItem img-fluid img-thumbnail">
-                                <input type="file" class="form-control" id="inputGroupFile03" name="fotoItem" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <img src="" alt="" class="fotoItem img-fluid img-thumbnail">
+                                    </div>
+                                    <div class="col">
+                                        <input type="file" class="form-control" id="inputGroupFile03" name="fotoItem" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                                    </div>
+                                </div>
+                                <button type="button" class="btn mt-4 rounded-pill px-3 btn-sm text-white mb-3 tambahListHarga" id="btnIjo"><i class="fas fa-plus-square"> Tambah Harga</i></button>
+                                <div class="row mt-1">
+                                    <div class="col-3">Satuan</div>
+                                    <div class="col-4">Jenis Harga</div>
+                                    <div class="col-4">Harga</div>
+                                </div>
+                                <div class="masterHarga">
+                                    <div class="listHarga" id="listHarga_1">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <input type="text" name="satuanHarga[]" class="form-control satuanHarga">
+                                            </div>
+                                            <div class="col-4">
+                                                <select name="jenisHarga[]" class="form-control jenisHarga">
+                                                    <option value="">-- Pilih Jenis Harga --</option>
+                                                    <option value="1">Harga Grosir</option>
+                                                    <option value="2">Harga Eceran</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-4">
+                                                <input type="text" name="hargaHarga[]" class="form-control hargaHarga">
+                                            </div>
+                                            <!-- <div class="col">
+                                                <button type="button" class="hapusListHarga btn btn-sm btn-danger" value=""><i class="fas fa-minus-circle"></i></button>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-6">
                                 <div class="mb-1">
@@ -253,15 +321,11 @@
                                     <b>Stock Produk : <span class="stockItem"></span></b>
                                 </div> -->
                                 <div class="mb-1">
-                                    <label for="">Satuan Produk</label>
-                                    <input type="text" class="form-control satuanItem" name="satuanItem" placeholder="Pcs">
-                                </div>
-                                <div class="mb-1">
-                                    <label for="">Harga Produk</label>
+                                    <label for="">Harga Asal <b>(Krg/Dus/Set)</b></label>
                                     <input type="text" class="form-control hargaItem" name="hargaItem" placeholder="1.000.000">
                                 </div>
                                 <div class="mb-1">
-                                    <label for="">Harga Per pcs</label>
+                                    <label for="">Harga Asal <b>(Pcs/Kg)</b></label>
                                     <input type="text" class="form-control hargaperpcsItem" name="hargaperpcsItem" placeholder="1.000.000">
                                 </div>
                                 <div class="mb-1">
@@ -286,7 +350,7 @@
 
     <!-- Modal Hapus Product-->
     <div class="modal fade" id="modalhapusproduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel"><b>Hapus Product</b></h5>
@@ -295,7 +359,38 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-6">
-                            <img src="" alt="" class="fotoItem img-fluid img-thumbnail">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img src="" alt="" class="fotoItem img-fluid img-thumbnail">
+                                </div>
+                            </div>
+                            <div class="row mt-1">
+                                <div class="col-3">Satuan</div>
+                                <div class="col-4">Jenis Harga</div>
+                                <div class="col-4">Harga</div>
+                            </div>
+                            <div class="masterHarga">
+                                <div class="listHarga" id="listHarga_1">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <input type="text" name="satuanHarga[]" class="form-control satuanHarga">
+                                        </div>
+                                        <div class="col-4">
+                                            <select name="jenisHarga[]" class="form-control jenisHarga">
+                                                <option value="">-- Pilih Jenis Harga --</option>
+                                                <option value="1">Harga Grosir</option>
+                                                <option value="2">Harga Eceran</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="text" name="hargaHarga[]" class="form-control hargaHarga">
+                                        </div>
+                                        <!-- <div class="col">
+                                                <button type="button" class="hapusListHarga btn btn-sm btn-danger" value=""><i class="fas fa-minus-circle"></i></button>
+                                            </div> -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-6">
                             <div class="mb-1">
@@ -307,20 +402,21 @@
                                 <input type="text" class="form-control supplierItem" name="supplierItem" placeholder="Supplier A" disabled>
                             </div>
                             <!-- <div class="mb-1">
-                                <label for="">Kuantiti Produk</label>
-                                <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100" disabled>
-                            </div> -->
+                                    <label for="">Kuantiti Produk</label>
+                                    <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100">
+                                    <b>Stock Produk : <span class="stockItem"></span></b>
+                                </div> -->
                             <div class="mb-1">
                                 <label for="">Satuan Produk</label>
                                 <input type="text" class="form-control satuanItem" name="satuanItem" placeholder="Pcs" disabled>
                             </div>
                             <div class="mb-1">
-                                <label for="">Harga Produk</label>
+                                <label for="">Harga Asal <b>(Krg/Dus/Set)</b></label>
                                 <input type="text" class="form-control hargaItem" name="hargaItem" placeholder="1.000.000" disabled>
                             </div>
                             <div class="mb-1">
-                                <label for="">Harga Per pcs</label>
-                                <input type="text" class="form-control hargaperpcsItem" name="hargaperpcsItem" placeholder="1.000.000">
+                                <label for="">Harga Asal <b>(Pcs/Kg)</b></label>
+                                <input type="text" class="form-control hargaperpcsItem" name="hargaperpcsItem" placeholder="1.000.000" disabled>
                             </div>
                             <div class="mb-1">
                                 <label for="">Tanggal Masuk Produk</label>
@@ -343,7 +439,7 @@
 
     <!-- Modal Rincian Produk-->
     <div class="modal fade" id="modalrincianproduct" tabindex="-1" aria-labelledby="rincianproduct" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="rincianproduct"><b>Rincian Product</b></h5>
@@ -352,7 +448,38 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-6">
-                            <img src="" alt="" class="fotoItem img-fluid img-thumbnail">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img src="" alt="" class="fotoItem img-fluid img-thumbnail">
+                                </div>
+                            </div>
+                            <div class="row mt-1">
+                                <div class="col-3">Satuan</div>
+                                <div class="col-4">Jenis Harga</div>
+                                <div class="col-4">Harga</div>
+                            </div>
+                            <div class="masterHarga">
+                                <div class="listHarga" id="listHarga_1">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <input type="text" name="satuanHarga[]" class="form-control satuanHarga">
+                                        </div>
+                                        <div class="col-4">
+                                            <select name="jenisHarga[]" class="form-control jenisHarga">
+                                                <option value="">-- Pilih Jenis Harga --</option>
+                                                <option value="1">Harga Grosir</option>
+                                                <option value="2">Harga Eceran</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="text" name="hargaHarga[]" class="form-control hargaHarga">
+                                        </div>
+                                        <!-- <div class="col">
+                                                <button type="button" class="hapusListHarga btn btn-sm btn-danger" value=""><i class="fas fa-minus-circle"></i></button>
+                                            </div> -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-6">
                             <div class="mb-1">
@@ -364,24 +491,21 @@
                                 <input type="text" class="form-control supplierItem" name="supplierItem" placeholder="Supplier A" disabled>
                             </div>
                             <!-- <div class="mb-1">
-                                <label for="">Stock Produk</label>
-                                <input type="text" class="form-control stockItem" placeholder="100" disabled>
-                            </div>
-                            <div class="mb-1">
-                                <label for="">Kuantiti Produk</label>
-                                <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100" disabled>
-                            </div> -->
+                                    <label for="">Kuantiti Produk</label>
+                                    <input type="text" class="form-control kuantitiItem" name="kuantitiItem" placeholder="100">
+                                    <b>Stock Produk : <span class="stockItem"></span></b>
+                                </div> -->
                             <div class="mb-1">
                                 <label for="">Satuan Produk</label>
                                 <input type="text" class="form-control satuanItem" name="satuanItem" placeholder="Pcs" disabled>
                             </div>
                             <div class="mb-1">
-                                <label for="">Harga Produk</label>
+                                <label for="">Harga Asal <b>(Krg/Dus/Set)</b></label>
                                 <input type="text" class="form-control hargaItem" name="hargaItem" placeholder="1.000.000" disabled>
                             </div>
                             <div class="mb-1">
-                                <label for="">Harga Per pcs</label>
-                                <input type="text" class="form-control hargaperpcsItem" name="hargaperpcsItem" placeholder="1.000.000">
+                                <label for="">Harga Asal <b>(Pcs/Kg)</b></label>
+                                <input type="text" class="form-control hargaperpcsItem" name="hargaperpcsItem" placeholder="1.000.000" disabled>
                             </div>
                             <div class="mb-1">
                                 <label for="">Tanggal Masuk Produk</label>

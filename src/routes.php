@@ -79,6 +79,15 @@ $routes->add('produkactivity', new Route('/produk/{id}/activity', [
 $routes->add('produkDataPerPage', new Route('/produk/create', [
     '_controller' => 'App\Produk\Controller\ProdukController::create',
 ]));
+$routes->add('hargaItem', new Route('/hargaItem/{id}/get', [
+    '_controller' => 'App\Produk\Controller\ProdukController::get_harga_item',
+]));
+$routes->add('hargaItemJenis', new Route('/hargaItem/{id}/get/{jenis}', [
+    '_controller' => 'App\Produk\Controller\ProdukController::get_harga_item_jenis',
+]));
+$routes->add('hargaItemJenisHarga', new Route('/hargaItem/{id}/get/{jenis}/{satuan}', [
+    '_controller' => 'App\Produk\Controller\ProdukController::get_harga_item_jenis_satuan',
+]));
 
 //User Management
 $routes->add('users', new Route('/users', [
@@ -185,6 +194,13 @@ $routes->add('transaksiReportPdf', new Route('/transaksi/report-pdf', [
 ]));
 $routes->add('transaksi', new Route('/transaksi/{jenis}', [
     '_controller' => 'App\Transaksi\Controller\TransaksiController::index'
+]));
+
+$routes->add('import', new Route('/import', [
+    '_controller' => 'App\Import\Controller\ImportController::index'
+]));
+$routes->add('importProses', new Route('/import-prosess', [
+    '_controller' => 'App\Import\Controller\ImportController::prosess'
 ]));
 
 return $routes;

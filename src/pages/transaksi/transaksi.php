@@ -40,6 +40,10 @@
 
     <link rel="stylesheet" type="text/css" href="/assets/style/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+
+    <link rel="stylesheet" href="/assets/vendors/choices.js/choices.min.css" />
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 
 <body>
@@ -60,50 +64,52 @@
             </div>
 
             <div class="row mt-2 mb-3">
-                <div class="col-6">
+                <div class="col-12">
                     <form action="/transaksi/<?= $jenis_transaksi_text ?>" method="get">
                         <label for=""><b>Tanggal Transaksi</b></label><br>
                         <div class="row justify-content-center">
-                            <div class="col-6">
+                            <div class="col-5">
                                 Dari <input type="date" class="form-control" name="filterWaktumasukFrom" value="<?= $filterWaktumasukFrom ?>">
                                 <br>
-                                <button type="reset" class="btn btn-danger btn-sm">Reset</button>
-                                <button type="submit" class="btn btn-success btn-sm">Submit</button>
                             </div>
-                            <div class="col-6">
+                            <div class="col-5">
                                 Sampai<input type="date" class="form-control" name="filterWaktumasukTo" value="<?= $filterWaktumasukTo ?>">
+                            </div>
+                            <div class="col">
+                                <div class="mt-4">
+                                    <!-- <button type="reset" class="btn btn-danger btn-sm">Reset</button> -->
+                                    <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <!-- <div class="row mt-2 mb-2">
-                <div class="col-1">
-                    <form method="POST" action="">
-                        <select name="data_per_page" class="form-select float-start" aria-label="Default select example">
-                            <option value=" " selected>No</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                        <button type="submit" class="btn btn-success">Submit</button>
+            <!-- <span>Jumlah data perhalaman</span> -->
+            <div class="row mt-2 mb-2">
+                <!-- <div class="col-2">
+                    <form method="GET" action="">
+                        <div class="d-flex">
+                            <select name="data_per_page" class="form-control float-start" aria-label="Default select example" style="width: 50px;">
+                                <option value="" selected>No</option>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
                     </form>
-                </div>
-                <div class="col-7 float-start">
-                    entries per page
-                </div>
-                <div class="col-4">
-                    <div class="text-end">
-                        <input class="form-control w-50 float-end" type="search" placeholder="Search" aria-label="Search">
-                    </div>
+                </div> -->
+                <div class="col-12">
+                    <form method="GET" action="">
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success float-end">Submit</button>
+                            <input class="form-control w-50 float-end" type="search" name="search" placeholder="Search" aria-label="Search">
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -124,9 +130,9 @@
                             <tr>
                                 <td><?= $data['nomorTransaksi'] ?></td>
                                 <td><?= $data['pelangganTransaksi'] ?></td>
-                                <td><?= $data['kasirTransaksi'] ?></td>
+                                <td><?= $data['namaUser'] ?></td>
                                 <td>Rp.<?= number_format($data['totalHargaTransaksi'], 2, ',', '.') ?></td>
-                                <td><?= date('d M Y', strtotime($data['dateCreate'])) ?></td>
+                                <td><?= date('d M Y', strtotime($data['dateTransaksi'])) ?></td>
                                 <td>
                                     <button type="button" class="btn px-2 py-1 text-white btnEdit" id="btnBiru" data-bs-toggle="modal" data-bs-target="#modalubahproduct" data-bs-idTransaksi="<?= $data['idTransaksi'] ?>"><i class="fa fa-edit"></i></button>
 
@@ -168,8 +174,8 @@
                     <h5 class="modal-title" id="ModalTambah"><b>Tambah Transaksi</b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="/transaksi/store" method="post">
-                    <div class="modal-body">
+                <form action="/transaksi/store" method="post" style="height: 80%;">
+                    <div class="modal-body" style="height: 100%;">
                         <h6>Transaksi <b><?= $jenis_transaksi == '1' ? 'Grosir' : 'Eceran' ?></b></h6>
                         <hr>
                         <div class="row">
@@ -219,24 +225,25 @@
                                     <div class="listProduk" id="listproduk_1">
                                         <div class="row">
                                             <div class="col-3">
-                                                <select name="idItem[]" class="produk form-control">
-                                                    <option value="">Nama Produk</option>
+                                                <select class="choices form-select produk" name="idItem[]">
+                                                    <option value="">Produk</option>
                                                     <?php foreach ($produk as $key => $value) { ?>
-                                                        <option value="<?= $value['idItem'] ?>"><?= $value['namaItem'] ?></option>
+                                                        <option value="<?= $value['idItem'] ?>"><?= $value['namaItem'] ?> - <?= $value['supplierItem'] ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
-                                            <div class="col-2 d-none">
-                                                <input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="<?= $jenis_transaksi ?>">
-                                            </div>
+                                            <input type="hidden" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="<?= $jenis_transaksi ?>">
+                                            <input type="hidden" name="idHargaitem[]" class="idHarga">
                                             <div class="col-3">
-                                                <input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control">
+                                                <select class="satuan form-select" name="satuanItem[]">
+                                                    <option value="">Satuan</option>
+                                                </select>
                                             </div>
                                             <div class="col-3">
                                                 <input type="number" name="hargaItem[]" placeholder="Harga" min='1' class="harga form-control">
                                             </div>
                                             <div class="col-2">
-                                                <input type="number" name="kuantitiItem[]" min='1' placeholder="Qty" class="kuantiti form-control">
+                                                <input type="number" name="kuantitiItem[]" min='1' placeholder="Qty" class="kuantiti form-control" required>
                                             </div>
                                         </div>
 
@@ -262,8 +269,8 @@
                     <h5 class="modal-title" id="modalubah"><b>Ubah Transaksi</b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" method="post" enctype="multipart/form-data" class="formEdit">
-                    <div class="modal-body">
+                <form action="" method="post" enctype="multipart/form-data" class="formEdit" style="height: 80%;">
+                    <div class="modal-body" style="height: 100%;">
                         <div class="row">
                             <div class="col-4">
                                 <div class="mb-1">
@@ -308,33 +315,9 @@
                                         <h6>Kuantiti</h6>
                                     </div>
                                 </div>
+                                <input type="hidden" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="<?= $jenis_transaksi ?>">
                                 <div class="transaksiProduk">
-                                    <div class="listProduk" id="listproduk_1">
-                                        <div class="row">
-                                            <div class="col-3">
-                                                <select name="idItem[]" class="produk form-control">
-                                                    <option value="">Nama Produk</option>
-                                                    <?php foreach ($produk as $key => $value) { ?>
-                                                        <option value="<?= $value['idItem'] ?>"><?= $value['namaItem'] ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                            <!-- <div class="col-2">
-                                                <input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control">
-                                            </div> -->
-                                            <div class="col-3">
-                                                <input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control">
-                                            </div>
-                                            <div class="col-3">
-                                                <input type="number" name="hargaItem[]" placeholder="Harga" min='1' class="harga form-control">
-                                            </div>
-                                            <div class="col-2">
-                                                <input type="number" name="kuantitiItem[]" min='1' placeholder="Qty" class="kuantiti form-control">
-                                            </div>
-                                        </div>
 
-                                        <!-- <input type="text" placeholder="pengurangItem" name="pengurangItem[]"> -->
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -503,14 +486,17 @@
                     <h5 class="modal-title" id="modalubah"><b>Retur Product</b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="" method="post" class="formRetur">
-                    <div class="modal-body">
+                <div class="modal-body">
+                    <form action="" method="post" class="formRetur">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-7">
                                 <h6>Produk</h6>
                             </div>
                             <div class="col">
                                 <h6>Kuantiti yang diretur</h6>
+                            </div>
+                            <div class="col">
+                                <h6>Satuan</h6>
                             </div>
                         </div>
                         <div class="transaksiProduk">
@@ -607,12 +593,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn rounded-pill px-3 btn-sm text-white" id="btnMerah" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn rounded-pill px-3 btn-sm text-white" id="btnIjo">Simpan</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn rounded-pill px-3 btn-sm text-white" id="btnMerah" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn rounded-pill px-3 btn-sm text-white btnSubmitRetur" id="btnIjo">Simpan</button>
+                </div>
             </div>
         </div>
     </div>
@@ -648,7 +634,11 @@
 3. icon sama warna nya kurang sesuai
 4. di crud produk masih belum sesuai (isi modal nya)-->
     <!-- Vendor -->
-    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    <!-- <script src="/assets/vendor/jquery/jquery.min.js"></script> -->
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <script src="/assets/vendor/jquery.appear/jquery.appear.min.js"></script>
     <script src="/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
     <script src="/assets/vendor/jquery.cookie/jquery.cookie.min.js"></script>
@@ -678,6 +668,8 @@
 
     <!-- custom js transaksi -->
     <script src="/assets/js/ajax/transaksi.js"></script>
+
+    <script src="/assets/vendors/choices.js/choices.min.js"></script>
 </body>
 
 </html>

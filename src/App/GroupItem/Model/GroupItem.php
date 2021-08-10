@@ -18,7 +18,7 @@ class GroupItem extends GlobalFunc
     
     public function selectAll($where = "")
     {
-        $sql = "SELECT *, COUNT(".$this->table.".kuantitiItem) as total_kuantiti, ".$this->table.".hargaItem as hargaItemGroup, ".$this->table.".kuantitiItem as groupkuantitiItem FROM " . $this->table . " LEFT JOIN item ON ".$this->table.".idItem = item.idItem " . $where;
+        $sql = "SELECT *, ".$this->table.".hargaItem as hargaItemGroup, ".$this->table.".satuanItem as satuanItemGroup, ".$this->table.".kuantitiItem as groupkuantitiItem FROM " . $this->table . " LEFT JOIN item ON ".$this->table.".idItem = item.idItem LEFT JOIN hargaitem ON hargaitem.idHargaitem = ".$this->table.".idHargaitem " . $where;
         
         try {
             $query = $this->conn->prepare($sql);

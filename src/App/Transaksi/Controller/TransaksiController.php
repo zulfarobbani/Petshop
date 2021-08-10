@@ -5,6 +5,7 @@ namespace App\Transaksi\Controller;
 use App\Produk\Model\Produk;
 use App\Chronology\Model\Chronology;
 use App\GroupItem\Model\GroupItem;
+use App\HargaItem\Model\HargaItem;
 use App\Transaksi\Model\Transaksi;
 use Core\GlobalFunc;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,10 +34,10 @@ class TransaksiController extends GlobalFunc
 
     public function index(Request $request)
     {
-        if ($this->emailUser == null){
+        if ($this->emailUser == null) {
             return new RedirectResponse('/login');
         }
-        
+
         if ($request->attributes->get('jenis') != 'grosir' && $request->attributes->get('jenis') != 'eceran') {
             return new RedirectResponse('/transaksi/grosir');
         }
@@ -45,38 +46,43 @@ class TransaksiController extends GlobalFunc
         // filter waktu masuk
         $filterWaktumasukFrom = $request->query->get('filterWaktumasukFrom');
         $filterWaktumasukTo = $request->query->get('filterWaktumasukTo');
+        $search = $request->query->get('search');
 
         $where = "";
+        if ($search) {
+            $where .= " AND pelangganTransaksi LIKE '%$search%'";
+        }
+
         if ($filterWaktumasukFrom) {
-            $where.= " AND ";
-            $where.= "dateCreate >= '$filterWaktumasukFrom'";
+            $where .= " AND ";
+            $where .= "transaksi.dateCreate >= '$filterWaktumasukFrom'";
             if ($filterWaktumasukTo) {
-                $where.= " AND dateCreate <= '$filterWaktumasukFrom'";
+                $where .= " AND transaksi.dateCreate <= '$filterWaktumasukTo'";
             }
         }
-        
+
         // pagination
         $countRows = $this->model->countRows()['count'];
         $page = $request->query->get('page') ? $request->query->get('page') : '1';
 
-        if ($request->query->get('data_per_page') != null){
+        if ($request->query->get('data_per_page') != null) {
             $result_per_page = $request->query->get('data_per_page');
 
-            if ($request->request->get('data_per_page') != null || $request->request->get('data_per_page') != ""){
+            if ($request->request->get('data_per_page') != null || $request->request->get('data_per_page') != "") {
                 $result_per_page = $request->request->get('data_per_page');
             }
         } else {
-            if ($request->request->get('data_per_page') != null || $request->request->get('data_per_page') != ""){
+            if ($request->request->get('data_per_page') != null || $request->request->get('data_per_page') != "") {
                 $result_per_page = $request->request->get('data_per_page');
             } else {
                 $result_per_page = 10;
             }
         }
-        
-        $page_first_result = ($page-1)*$result_per_page;
-        $number_of_page = ceil($countRows/$result_per_page);
-        
-        $datas = $this->model->selectAll("WHERE jenisTransaksi = '$jenis' LIMIT ".$page_first_result.",".$result_per_page);
+
+        $page_first_result = ($page - 1) * $result_per_page;
+        $number_of_page = ceil($countRows / $result_per_page);
+
+        $datas = $this->model->selectAll("WHERE jenisTransaksi = '$jenis'" . $where . " ORDER BY transaksi.dateCreate DESC LIMIT " . $page_first_result . "," . $result_per_page);
 
         $pagination = [
             'current_page' => $page,
@@ -91,10 +97,15 @@ class TransaksiController extends GlobalFunc
 
         $groupItem = new GroupItem();
         foreach ($datas as $key => $value) {
-            $detail_produk = $groupItem->selectAll("WHERE idTransaksi = '".$value['idTransaksi']."'");
+            $detail_produk = $groupItem->selectAll("WHERE idTransaksi = '" . $value['idTransaksi'] . "'");
             $total_harga = 0;
             foreach ($detail_produk as $key1 => $value1) {
-                $total_harga += intval($value1['hargaItemGroup']);
+                if (intval($value1['pengurangItem']) > 0) {
+                    $kuantitiItem = intval($value1['groupkuantitiItem'])-intval($value1['pengurangItem']);
+                } else {
+                    $kuantitiItem = intval($value1['groupkuantitiItem']);
+                }
+                $total_harga += intval($value1['hargaItemGroup']) * $kuantitiItem;
             }
             $datas[$key]['totalHargaTransaksi'] = $total_harga;
         }
@@ -105,7 +116,7 @@ class TransaksiController extends GlobalFunc
 
     public function create(Request $request)
     {
-        if ($this->emailUser == null){
+        if ($this->emailUser == null) {
             return new RedirectResponse('/login');
         }
 
@@ -117,7 +128,7 @@ class TransaksiController extends GlobalFunc
 
     public function store(Request $request)
     {
-        if ($this->emailUser == null){
+        if ($this->emailUser == null) {
             return new RedirectResponse('/login');
         }
 
@@ -125,7 +136,7 @@ class TransaksiController extends GlobalFunc
         $idTransaksi = uniqid('tran');
         $jenis = $request->request->get('jenishargaItem')[0];
 
-        $nomorTransaksi = $request->request->get('nomorTransaksi'); 
+        $nomorTransaksi = $request->request->get('nomorTransaksi');
         $pelangganTransaksi = $request->request->get('pelangganTransaksi');
         $kasirTransaksi = $this->namaUser;
         $tanggalTransaksi = $request->request->get('tanggalTransaksi');
@@ -152,13 +163,14 @@ class TransaksiController extends GlobalFunc
         $jenishargaItem = $request->request->get('jenishargaItem');
         $satuanItem = $request->request->get('satuanItem');
         $hargaItem = $request->request->get('hargaItem');
-        
+        $idHargaItem = $request->request->get('idHargaitem');
+
         $pengurangItem = $request->request->get('pengurangItem');
 
-        for($index = 0; $index < count($idItem); $index++) {
+        for ($index = 0; $index < count($idItem); $index++) {
             $idGroupitem = uniqid('gi');
-            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index], $satuanItem[$index], $hargaItem[$index]);
-            
+            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index], $satuanItem[$index], $hargaItem[$index], $idHargaItem[$index]);
+
             // get item
             $produk = new Produk();
             $data_produk = $produk->selectOne($idItem[$index]);
@@ -177,12 +189,14 @@ class TransaksiController extends GlobalFunc
         ]);
         $createChronology = $chronology->create($message, $create);
 
-        return new RedirectResponse('/transaksi/'.$jenis);
+        $redirect = $jenis == 1 ? "grosir" : "eceran";
+
+        return new RedirectResponse('/transaksi/' . $redirect);
     }
 
     public function edit(Request $request)
     {
-        if ($this->emailUser == null){
+        if ($this->emailUser == null) {
             return new RedirectResponse('/login');
         }
 
@@ -199,7 +213,7 @@ class TransaksiController extends GlobalFunc
 
     public function update(Request $request)
     {
-        if ($this->emailUser == null){
+        if ($this->emailUser == null) {
             return new RedirectResponse('/login');
         }
 
@@ -216,12 +230,13 @@ class TransaksiController extends GlobalFunc
         $pengurangItem = $request->request->get('pengurangItem');
         $satuanItem = $request->request->get('satuanItem');
         $hargaItem = $request->request->get('hargaItem');
+        $idHargaItem = $request->request->get('idHargaitem');
 
         $this->model->deleteGroupItem($detail['idTransaksi']);
 
-        for($index = 0; $index < count($idItem); $index++){
+        for ($index = 0; $index < count($idItem); $index++) {
             $idGroupitem = uniqid('gi');
-            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index], $satuanItem[$index], $hargaItem[$index]);
+            $this->model->createGroupItem($idGroupitem, $idTransaksi, $idItem[$index], $kuantitiItem[$index], $satuanItem[$index], $hargaItem[$index], $idHargaItem[$index]);
 
             // get item
             $produk = new Produk();
@@ -240,12 +255,12 @@ class TransaksiController extends GlobalFunc
         $createChronology = $chronology->create($message, $idTransaksi);
 
         $urlRedirect = $request->request->get('jenishargaItem')[0] == '1' ? 'grosir' : 'eceran';
-        return new RedirectResponse('/transaksi/'.$urlRedirect);
+        return new RedirectResponse('/transaksi/' . $urlRedirect);
     }
 
     public function detail(Request $request)
     {
-        if ($this->emailUser == null){
+        if ($this->emailUser == null) {
             return new RedirectResponse('/login');
         }
 
@@ -276,7 +291,7 @@ class TransaksiController extends GlobalFunc
 
     public function print_receipt(Request $request)
     {
-        if ($this->emailUser == null){
+        if ($this->emailUser == null) {
             return new RedirectResponse('/login');
         }
 
@@ -284,7 +299,12 @@ class TransaksiController extends GlobalFunc
 
         $detail = $this->model->selectOne($idTransaksi);
         $groupItem = $this->model->selectGroupItem($detail['idTransaksi']);
-        
+
+        // $this->dd($groupItem);
+        foreach ($groupItem as $key => $value) {
+            $groupItem[$key]['jumlahBeli'] = intval($value['jumlahBeli']) - intval($value['pengurangItem']);
+        }
+
         $totalHarga = 0;
 
         return $this->render_template('transaksi/receiptTransaksi', ['detail' => $detail, 'groupItem' => $groupItem, 'totalHarga' => $totalHarga]);
@@ -292,7 +312,7 @@ class TransaksiController extends GlobalFunc
 
     public function retur(Request $request)
     {
-        if ($this->emailUser == null){
+        if ($this->emailUser == null) {
             return new RedirectResponse('/login');
         }
 
@@ -309,26 +329,34 @@ class TransaksiController extends GlobalFunc
 
     public function retur_store(Request $request)
     {
-        if ($this->emailUser == null){
+        if ($this->emailUser == null) {
             return new RedirectResponse('/login');
         }
 
         $idTransaksi = $request->attributes->get('idTransaksi');
+        $selectOne = $this->model->selectOne($idTransaksi);
         $this->model->returProduk($idTransaksi, $request->request);
 
-        return new RedirectResponse('/transaksi');
+        $redirect = $selectOne['jenisTransaksi'] == '1' ? 'grosir' : 'eceran';
+
+        return new RedirectResponse('/transaksi/'.$redirect);
     }
 
     public function get(Request $request)
     {
-        if ($this->emailUser == null){
+        if ($this->emailUser == null) {
             return new RedirectResponse('/login');
         }
-        
+
         $idTransaksi = $request->attributes->get('idTransaksi');
 
         $detail = $this->model->selectOne($idTransaksi);
         $groupItem = $this->model->selectGroupItem($detail['idTransaksi']);
+
+        $hargaItem = new HargaItem();
+        foreach ($groupItem as $key => $value) {
+            $groupItem[$key]['satuan'] = $hargaItem->selectAll("WHERE idItem = '" . $value['idItem'] . "' AND jenisHargaitem = '" . $detail['jenisTransaksi'] . "'");
+        }
 
         $produk = new Produk();
         $data_produk = $produk->selectAll();
@@ -338,24 +366,55 @@ class TransaksiController extends GlobalFunc
 
     public function report_pdf(Request $request)
     {
-        $fromDate = '2021-07-16';
-        $toDate = date('Y-m-d');
+        // filter waktu masuk
+        $filterWaktumasukFrom = $request->query->get('filterWaktumasukFrom');
+        $filterWaktumasukTo = $request->query->get('filterWaktumasukTo');
 
-        $datas = $this->model->selectAll("WHERE tanggalTransaksi BETWEEN '".$fromDate."' AND '".$toDate."'");
+        $where = "";
+        if ($filterWaktumasukFrom) {
+            $where = "WHERE ";
+            $where .= "transaksi.dateCreate >= '$filterWaktumasukFrom'";
+            if ($filterWaktumasukTo) {
+                $where .= " AND transaksi.dateCreate <= '$filterWaktumasukTo'";
+            }
+        }
+
+        // $datas = $this->model->selectAll("WHERE tanggalTransaksi BETWEEN '".$fromDate."' AND '".$toDate."'");
+        $datas = $this->model->selectAll($where);
 
         $produk = new Produk();
         $data_produk = $produk->selectAll();
-
         $groupItem = new GroupItem();
-        foreach ($datas as $key => $value) {
-            $detail_produk = $groupItem->selectAll("WHERE idTransaksi = '".$value['idTransaksi']."'");
-            $total_harga = 0;
-            foreach ($detail_produk as $key1 => $value1) {
-                $total_harga += intval($value1['hargaItem']);
-            }
-            $datas[$key]['totalHargaTransaksi'] = $total_harga;
-        }
 
-        return $this->render_template('transaksi/riwayatTransaksi', ['datas' => $datas, 'produk' => $data_produk, 'fromDate' => $fromDate, 'toDate' => $toDate]);
+        $labaKotor = 0;
+        $labaBersih = 0;
+        $selisih_laba = 0;
+        foreach ($datas as $key => $value) {
+            $detail_produk = $groupItem->selectAll("WHERE idTransaksi = '" . $value['idTransaksi'] . "'");
+            $total_harga = 0;
+            $jumlahPengurangan = 0;
+            foreach ($detail_produk as $key1 => $value1) {
+                if (intval($value1['pengurangItem']) > 0) {
+                    $kuantitiItem = intval($value1['groupkuantitiItem'])-intval($value1['pengurangItem']);
+                } else {
+                    $kuantitiItem = intval($value1['groupkuantitiItem']);
+                }
+                $total_harga += intval($value1['hargaItemGroup']) * $kuantitiItem;
+                $detail_produk[$key1]['totalHarga'] = intval($value1['hargaItemGroup']) * $kuantitiItem;
+                if ($value1['satuanItemGroup'] == 'Krg' || $value1['satuanItemGroup'] == 'Dus' || $value1['satuanItemGroup'] == 'Set') {
+                    $jumlahPengurangan += intval($value1['hargaItem']) * $kuantitiItem;
+                } else if ($value1['satuanItemGroup'] == 'Pcs' || $value1['satuanItemGroup'] == 'Kg') {
+                    $jumlahPengurangan += intval($value1['hargaperpcsItem']) * $kuantitiItem;
+                }
+                $dataTransaksi[$key]['totalHargaTransaksi'] = $total_harga;
+            }
+            $labaKotor += $total_harga;
+            $selisih_laba += $jumlahPengurangan;
+            $datas[$key]['totalHargaTransaksi'] = $total_harga;
+            $datas[$key]['detail'] = $detail_produk;
+        }
+        $labaBersih = $labaKotor - $selisih_laba;
+
+        return $this->render_template('transaksi/riwayatTransaksi', ['datas' => $datas, 'produk' => $data_produk, 'fromDate' => $filterWaktumasukFrom, 'toDate' => $filterWaktumasukTo, 'labaKotor' => $labaKotor, 'labaBersih' => $labaBersih]);
     }
 }

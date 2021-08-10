@@ -57,7 +57,11 @@ class UsersController extends GlobalFunc
         $page_first_result = ($page-1)*$result_per_page;
         $number_of_page = ceil($countRows/$result_per_page);
 
-        $datas = $this->model->selectAll(" LIMIT ".$page_first_result.",".$result_per_page);
+        $search = $request->query->get('search');
+        $where = "";
+        $where = $search != '' ? " WHERE namaUser LIKE '%$search%'" : "";
+
+        $datas = $this->model->selectAll($where." LIMIT ".$page_first_result.",".$result_per_page);
 
         $pagination = [
             'current_page' => $page,
@@ -84,7 +88,6 @@ class UsersController extends GlobalFunc
         if ($this->emailUser == null){
             return new RedirectResponse('/login');
         }
-        // $this->dd($request->request);
         $idUser = uniqid('user');
 
         $storePermission = $this->model->createPermission($idUser, $request->request);
@@ -253,10 +256,10 @@ class UsersController extends GlobalFunc
             return new RedirectResponse('/login');
         }
         
-        $id_user = 'user60eefe5a7a23d';
+    $id_user = 'user60eefe5a7a23d';
         $user = $this->model->selectOne($id_user);
 
-        return $this->render_template('users/profile', ['user' => $user]);
+        return $this->render_template('users/profile', ['detail' => $user]);
     }
 
     public function akun(Request $request)
@@ -269,7 +272,7 @@ class UsersController extends GlobalFunc
         $user = $this->model->selectOne($id_user);
         $errors = $this->session->getFlashBag()->get('errors', []);
 
-        return $this->render_template('users/akun', ['user' => $user, 'errors' => $errors]);
+        return $this->render_template('users/akun', ['detail' => $user, 'errors' => $errors]);
     }
 
     public function akun_update(Request $request)

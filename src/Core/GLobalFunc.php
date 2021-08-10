@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use App\Users\Model\Users;
 use Config\Database;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +32,12 @@ class GlobalFunc
         if (!is_null($request)) {
             extract($request->attributes->all(), EXTR_SKIP);
         }
+
+        $user = new Users();
+        $idUser = $this->session->get('idUser');
+        $permission = $user->getRolePermission($idUser);
+        $data['permission'] = $permission;
+
         extract($data, EXTR_SKIP);
 
         // ** fungsi panggil asset **

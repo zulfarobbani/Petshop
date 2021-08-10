@@ -37,7 +37,8 @@ class Transaksi extends GlobalFunc
 
     public function selectAll($where = "")
     {
-        $sql = "SELECT * FROM " . $this->table . " " . $where;
+        $sql = "SELECT *, ".$this->table.".dateCreate as dateTransaksi FROM " . $this->table . " LEFT JOIN users ON users.idUser = ".$this->table.".kasirTransaksi " . $where;
+        // $this->dd($sql);
 
         try {
             $query = $this->conn->prepare($sql);
@@ -71,7 +72,7 @@ class Transaksi extends GlobalFunc
 
     public function selectGroupItem($idTransaksi)
     {
-        $sql = "SELECT *, groupItem.satuanItem as satuanItemgr, groupItem.hargaItem as hargaItemgr, groupItem.kuantitiItem as jumlahBeli FROM groupItem LEFT JOIN item ON item.idItem = groupItem.idItem WHERE idTransaksi = '$idTransaksi'";
+        $sql = "SELECT *, groupItem.satuanItem as satuanItemgr, groupItem.hargaItem as hargaItemgr, groupItem.kuantitiItem as jumlahBeli FROM groupItem LEFT JOIN item ON item.idItem = groupItem.idItem LEFT JOIN hargaItem ON hargaItem.idHargaitem = groupItem.idHargaitem WHERE idTransaksi = '$idTransaksi'";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -97,7 +98,7 @@ class Transaksi extends GlobalFunc
         $idGroupitem = $datas['idGroupitem'];
         $idClient = $datas['idClient'];
         $jenisTransaksi = $datas['jenisTransaksi'];
-        $dateCreate = date('Y-m-d');
+        $dateCreate = date('Y-m-d H:i:s');
         $statusTransaksi = 2;
 
         $sql = "INSERT INTO " . $this->table . " VALUES('$idTransaksi', '$nomorTransaksi', '$kasirTransaksi', '$pelangganTransaksi', '$tanggalTransaksi', '$idGroupitem', '$idClient', '$statusTransaksi', '$dateCreate', '$jenisTransaksi')";
@@ -113,10 +114,10 @@ class Transaksi extends GlobalFunc
         }
     }
 
-    public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $kuantitiItem, $satuanItem, $hargaItem)
+    public function createGroupItem($idGroupitem, $idTransaksi, $idItem, $kuantitiItem, $satuanItem, $hargaItem, $idHargaitem)
     {
         $dateCreate = date('Y-m-d');
-        $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idTransaksi', '$idItem', '', '$kuantitiItem', '$dateCreate', '$satuanItem', '$hargaItem')";
+        $sql = "INSERT INTO groupitem VALUES('$idGroupitem', '$idTransaksi', '$idItem', '', '$kuantitiItem', '$dateCreate', '$satuanItem', '$hargaItem', '$idHargaitem')";
 
         try {
             $query = $this->conn->prepare($sql);
@@ -131,6 +132,8 @@ class Transaksi extends GlobalFunc
 
     public function update($idTransaksi, $datas, $kasirTransaksi)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         $nomorTransaksi = $datas->get('nomorTransaksi');
         $pelangganTransaksi = $datas->get('pelangganTransaksi');
         $tanggalTransaksi = $datas->get('tanggalTransaksi');
@@ -172,7 +175,7 @@ class Transaksi extends GlobalFunc
     public function returProduk($idTransaksi, $idItem)
     {
         foreach ($idItem as $key => $value) {
-            $sql = "UPDATE groupItem SET pengurangItem = '" . $value . "' WHERE idTransaksi = '$idTransaksi' AND idItem = '$key'";
+            $sql = "UPDATE groupItem SET pengurangItem = '" . $value . "' WHERE idTransaksi = '$idTransaksi' AND idGroupitem = '$key'";
 
             try {
                 $query = $this->conn->prepare($sql);

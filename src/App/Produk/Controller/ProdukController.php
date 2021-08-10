@@ -3,6 +3,7 @@
 namespace App\Produk\Controller;
 
 use App\Chronology\Model\Chronology;
+use App\HargaItem\Model\HargaItem;
 use App\Media\Model\Media;
 use App\Produk\Model\Produk;
 use Core\GlobalFunc;
@@ -42,26 +43,35 @@ class ProdukController extends GlobalFunc
         $filterWaktumasukFrom = $request->query->get('filterWaktumasukFrom');
         $filterWaktumasukTo = $request->query->get('filterWaktumasukTo');
 
+        // if ($filterWaktumasukFrom) {
+        //     $where.= "WHERE ";
+        //     $where.= "tanggalmasukProduk >= '$filterWaktumasukFrom'";
+        //     if ($filterWaktumasukTo) {
+        //         $where.= " AND tanggalmasukProduk <= '$filterWaktumasukTo'";
+        //     }
+        // }
+
         if ($filterWaktumasukFrom) {
             $where.= "WHERE ";
-            $where.= "tanggalmasukProduk >= '$filterWaktumasukFrom'";
             if ($filterWaktumasukTo) {
-                $where.= " AND tanggalmasukProduk <= '$filterWaktumasukFrom'";
+                $where.= "tanggalmasukProduk BETWEEN '$filterWaktumasukFrom' AND '$filterWaktumasukTo'";
+            } else {
+                $where.= "tanggalmasukProduk = '$filterWaktumasukFrom'";
             }
         }
 
         // filter waktu expiry
-        $filterWaktuexpiryFrom = $request->query->get('filterWaktuexpiryFrom');
-        $filterWaktuexpiryTo = $request->query->get('filterWaktuexpiryTo');
+        // $filterWaktuexpiryFrom = $request->query->get('filterWaktuexpiryFrom');
+        // $filterWaktuexpiryTo = $request->query->get('filterWaktuexpiryTo');
 
-        if ($filterWaktuexpiryFrom) {
-            $where.= $filterWaktumasukFrom ?  " AND " : "WHERE ";
-            if ($filterWaktuexpiryTo) {
-                $where.= " tanggalexpiryProduk BETWEEN '$filterWaktuexpiryFrom' AND '$filterWaktuexpiryTo'";
-            } else {
-                $where.= "tanggalexpiryProduk = '$filterWaktuexpiryFrom'";
-            }
-        }
+        // if ($filterWaktuexpiryFrom) {
+        //     $where.= $filterWaktumasukFrom ?  " AND " : "WHERE ";
+        //     if ($filterWaktuexpiryTo) {
+        //         $where.= " tanggalexpiryProduk BETWEEN '$filterWaktuexpiryFrom' AND '$filterWaktuexpiryTo'";
+        //     } else {
+        //         $where.= "tanggalexpiryProduk = '$filterWaktuexpiryFrom'";
+        //     }
+        // }
 
         // pagination
         $countRows = $this->model->countRows()['count'];
@@ -81,10 +91,14 @@ class ProdukController extends GlobalFunc
             }
         }
 
+        $search = $request->query->get('search');
+        $where = $search != '' ? "WHERE namaItem LIKE '%$search%'" : "";
+
         $page_first_result = ($page-1)*$result_per_page;
         $number_of_page = ceil($countRows/$result_per_page);
 
-        $datas = $this->model->selectAll($where." LIMIT ".$page_first_result.",".$result_per_page);
+        $where = $where." LIMIT ".$page_first_result.",".$result_per_page;
+        $datas = $this->model->selectAll($where);
         $pagination = [
             'current_page' => $page,
             'number_of_page' => $number_of_page,
@@ -93,7 +107,7 @@ class ProdukController extends GlobalFunc
             'countRows' => $countRows
         ];
 
-        return $this->render_template('produk/produk', ['datas' => $datas, 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo, 'filterWaktuexpiryFrom' => $filterWaktuexpiryFrom, 'filterWaktuexpiryTo' => $filterWaktuexpiryTo, 'pagination' => $pagination]);
+        return $this->render_template('produk/produk', ['datas' => $datas, 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo, 'pagination' => $pagination]);
     }
 
     public function create(Request $request)
@@ -109,8 +123,11 @@ class ProdukController extends GlobalFunc
         if ($this->emailUser == null){
             return new RedirectResponse('/login');
         }
-        
+
         $produk = $this->model->create($request->request);
+
+        $hargaItem = new HargaItem();
+        $hargaItem->create($produk, $request->request);
 
         // store foto produk
         $media = new Media();
@@ -146,6 +163,10 @@ class ProdukController extends GlobalFunc
 
         $id = $request->attributes->get('id');
         $item = $this->model->update($id, $request->request);
+
+        $hargaItem = new HargaItem();
+        $hargaItem->deleteByItem($item);
+        $hargaItem->create($item, $request->request);
 
         if ($_FILES['fotoItem']['name'] != '') {
             $media = new Media();
@@ -238,6 +259,54 @@ class ProdukController extends GlobalFunc
 
         return new JsonResponse([
             'data' => $data_aktivitas
+        ]);
+    }
+
+    public function get_harga_item(Request $request)
+    {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+        $id = $request->attributes->get('id');
+
+        $model = new HargaItem();
+        $datas = $model->selectAll("WHERE idItem = '$id'");
+
+        return new JsonResponse([
+            'datas' => $datas
+        ]);
+    }
+
+    public function get_harga_item_jenis(Request $request)
+    {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+        $id = $request->attributes->get('id');
+        $jenis = $request->attributes->get('jenis');
+
+        $model = new HargaItem();
+        $datas = $model->selectAll("WHERE idItem = '$id' AND jenisHargaitem = '$jenis'");
+
+        return new JsonResponse([
+            'datas' => $datas
+        ]);
+    }
+
+    public function get_harga_item_jenis_satuan(Request $request)
+    {
+        if ($this->emailUser == null){
+            return new RedirectResponse('/login');
+        }
+        $id = $request->attributes->get('id');
+        $jenis = $request->attributes->get('jenis');
+        $satuan = $request->attributes->get('satuan');
+
+        $model = new HargaItem();
+        $datas = $model->selectAll("WHERE idItem = '$id' AND jenisHargaitem = '$jenis' AND satuanHargaitem = '$satuan'");
+
+        return new JsonResponse([
+            'datas' => $datas
         ]);
     }
 }

@@ -40,13 +40,13 @@
   <?php include(__DIR__ . '/../helper/header.php') ?>
   <div class="container">
     <div class="card mt-4">
-      <form action="/akun/<?= $user['idUser'] ?>/update" method="post">
+      <form action="/akun/<?= $detail['idUser'] ?>/update" method="post">
         <div class="row m-3">
           <div class="col-md-5 text-center">
-            <img src="/assets/media/<?= $user['pathMedia'] ?>" class="img-fluid img-thumbnail">
-            <h5 class="mt-3"><?= $user['namaUser'] ?></h5>
-            <span><?= $user['emailUser'] ?></span><br>
-            <span><?= $user['nohpUser'] ?></span>
+            <img src="/assets/media/<?= $detail['pathMedia'] ?>" class="img-fluid img-thumbnail">
+            <h5 class="mt-3"><?= $detail['namaUser'] ?></h5>
+            <span><?= $detail['emailUser'] ?></span><br>
+            <span><?= $detail['nohpUser'] ?></span>
           </div>
           <div class="col-md-7">
             <h4>Edit Akun</h4>

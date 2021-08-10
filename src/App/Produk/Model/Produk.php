@@ -56,16 +56,14 @@ class Produk extends GlobalFunc
         $idItem = uniqid('itm');
         $namaItem = $datas->get('namaItem');
         $supplierItem = $datas->get('supplierItem');
-        $satuanItem = $datas->get('satuanItem');
         $kuantiti = $datas->get('kuantitiItem');
         $harga = $datas->get('hargaItem');
         $hargaperpcsItem = $datas->get('hargaperpcsItem');
         $tanggalmasukProduk = $datas->get('tanggalmasukProduk');
         $tanggalexpiryProduk = $datas->get('tanggalexpiryProduk');
-        $deskripsiItem = $datas->get('deskripsiItem');
         $dateCreate = date('Y-m-d');
 
-        $sql = "INSERT INTO " . $this->table . " VALUES ('$idItem','$namaItem', '$supplierItem', '$satuanItem', '$kuantiti', '$harga', '$hargaperpcsItem', '$kuantiti', '$tanggalmasukProduk', '$tanggalexpiryProduk', '$dateCreate', '$deskripsiItem')";
+        $sql = "INSERT INTO " . $this->table . " VALUES ('$idItem','$namaItem', '$supplierItem', '$kuantiti', '$harga', '$hargaperpcsItem', '$kuantiti', '$tanggalmasukProduk', '$tanggalexpiryProduk', '$dateCreate')";
 
         try {
             $data = $this->conn->prepare($sql);
@@ -77,6 +75,32 @@ class Produk extends GlobalFunc
             die();
         }
     }
+
+    public function insert($datas)
+    {
+        $idItem = uniqid('itm');
+        $namaItem = $datas['namaItem'];
+        $supplierItem = $datas['supplierItem'];
+        $kuantiti = $datas['kuantitiItem'];
+        $harga = $datas['hargaItem'];
+        $hargaperpcsItem = $datas['hargaperpcsItem'];
+        $tanggalmasukProduk = $datas['tanggalmasukProduk'];
+        $tanggalexpiryProduk = $datas['tanggalexpiryProduk'];
+        $dateCreate = date('Y-m-d');
+
+        $sql = "INSERT INTO " . $this->table . " VALUES ('$idItem','$namaItem', '$supplierItem', '$kuantiti', '$harga', '$hargaperpcsItem', '$kuantiti', '$tanggalmasukProduk', '$tanggalexpiryProduk', '$dateCreate')";
+
+        try {
+            $data = $this->conn->prepare($sql);
+            $data->execute();
+
+            return $idItem;
+        } catch (PDOException $e) {
+            echo $e;
+            die();
+        }
+    }
+
     public function selectOne($id)
     {
         $sql = "SELECT * FROM " . $this->table . " LEFT JOIN media ON media.idRelation = ".$this->table.".idItem WHERE idItem = '$id'";
@@ -96,15 +120,13 @@ class Produk extends GlobalFunc
     {
         $namaItem = $datas->get('namaItem');
         $supplierItem = $datas->get('supplierItem');
-        $satuanItem = $datas->get('satuanItem');
         $kuantiti = $datas->get('kuantitiItem');
         $harga = $datas->get('hargaItem');
         $hargaperpcsItem = $datas->get('hargaperpcsItem');
         $tanggalmasukProduk = $datas->get('tanggalmasukProduk');
         $tanggalexpiryProduk = $datas->get('tanggalexpiryProduk');
-        $deskripsiItem = $datas->get('deskripsiItem');
 
-        $sql = "UPDATE " . $this->table . " SET namaItem = '$namaItem', supplierItem = '$supplierItem', satuanItem = '$satuanItem', kuantitiItem = '$kuantiti', hargaItem = '$harga', hargaperpcsItem = '$hargaperpcsItem', tanggalmasukProduk = '$tanggalmasukProduk', tanggalexpiryProduk = '$tanggalexpiryProduk', deskripsiItem = '$deskripsiItem' WHERE idItem = '$id'";
+        $sql = "UPDATE " . $this->table . " SET namaItem = '$namaItem', supplierItem = '$supplierItem', kuantitiItem = '$kuantiti', hargaItem = '$harga', hargaperpcsItem = '$hargaperpcsItem', tanggalmasukProduk = '$tanggalmasukProduk', tanggalexpiryProduk = '$tanggalexpiryProduk' WHERE idItem = '$id'";
 
         try {
             $data = $this->conn->prepare($sql);

@@ -11,7 +11,7 @@ $(document).ready(function () {
     var tampilanHtml =
       '<div class="listProduk" id="' +
       nextId +
-      '"><div class="row"><div class="col-3"><select name="idItem[]" class="produk form-control"><option value="-">Nama Produk</option>';
+      '"><div class="row"><div class="col-3"><select class="form-select produk" name="idItem[]"><option value="">Produk</option>';
 
     // ajax get all produk
     $.ajax({
@@ -24,18 +24,30 @@ $(document).ready(function () {
           '<option value="' +
           element.idItem +
           '">' +
-          element.namaItem +
+          element.namaItem + ' - ' + element.supplierItem +
           "</option>";
       }
 
-      var jenishargaTransaksi = container.find('.jenisharga').val();
+      var jenishargaTransaksi = container.find(".jenisharga").val();
 
       tampilanHtml +=
-        '</select></div><div class="col-2 d-none"> <input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="'+jenishargaTransaksi+'"></div><div class="col-3"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control"></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+        '</select></div><input type="hidden" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
+        jenishargaTransaksi +
+        '"><input type="hidden" name="idHargaitem[]" class="idHarga" value=""><div class="col-3"><select class="satuan form-select" name="satuanItem[]"><option value="">Satuan</option></select></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" required></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
         numberNextId +
         '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
 
       container.find(".transaksiProduk").append(tampilanHtml);
+
+      var lastIndex = container.find(".produk").length - 1;
+
+      var example = new Choices(container.find(".produk")[lastIndex]);
+      var choices = [];
+      for (let index = 0; index < datas.datas.length; index++) {
+        const element = datas.datas[index];
+        choices.push({ value: element.idItem, label: element.namaItem });
+      }
+      example.setChoices(choices, "Produk");
     });
   });
 
@@ -46,25 +58,51 @@ $(document).ready(function () {
     $(listProdukId).remove();
   });
 
-  // $(document).on("change", ".produk", function () {
-  //   var parent = $(this).parent().parent();
-  //   var kuantiti = 0;
-  //   var hargaItem = 0;
-  //   if ($(this).val() != "") {
-  //     $.ajax({
-  //       type: "get",
-  //       url: "/produk/" + $(this).val() + "/get",
-  //     }).done(function (data) {
-  //       kuantiti = parent.find(".kuantiti").val();
-  //       hargaItem = parseInt(data.data.hargaItem);
-  //       totalhargaItem = kuantiti * parseInt(data.data.hargaItem);
-  //       // parent.find(".kuantiti").prop("max", data.data.stockItem);
-  //       // parent.find(".stockItem").html(data.data.stockItem);
-  //       // parent.find(".hargaItem").html("Rp." + hargaItem.toLocaleString());
-  //       // parent.find(".totalHargaitem").html("Rp."+totalHargaitem.toLocaleString())
-  //     });
-  //   }
-  // });
+  $(document).on("change", ".produk", function () {
+    var parent = $(this).closest(".listProduk");
+    var jenis = parent.find(".jenisharga").val();
+    if ($(this).val() != "") {
+      $.ajax({
+        type: "get",
+        url: "/hargaItem/" + $(this).val() + "/get/" + jenis,
+      }).done(function (data) {
+        var satuan = "";
+        if (data.datas.length > 0) {
+          for (let index = 0; index < data.datas.length; index++) {
+            const element = data.datas[index];
+            satuan +=
+              '<option value="' +
+              element.satuanHargaitem +
+              '">' +
+              element.satuanHargaitem +
+              "</option>";
+          }
+          parent.find(".satuan").html(satuan);
+          parent.find(".harga").val(data.datas[0].harga);
+          parent.find(".idHarga").val(data.datas[0].idHargaitem);
+        } else {
+          parent.find(".satuan").html("");
+          parent.find(".harga").val("");
+          parent.find(".idHarga").val("");
+        }
+      });
+    }
+  });
+
+  $(document).on("change", ".satuan", function () {
+    var parent = $(this).closest(".listProduk");
+    var jenis = parent.find(".jenisharga").val();
+    var produk = parent.find(".produk").val();
+    if ($(this).val() != "") {
+      $.ajax({
+        type: "get",
+        url: "/hargaItem/" + produk + "/get/" + jenis + "/" + $(this).val(),
+      }).done(function (data) {
+        parent.find(".harga").val(data.datas[0].harga);
+        parent.find(".idHarga").val(data.datas[0].idHargaitem);
+      });
+    }
+  });
 
   $(document).on("click", ".btnEdit", function () {
     var id = $(this).attr("data-bs-idTransaksi");
@@ -77,6 +115,7 @@ $(document).ready(function () {
       modal.find(".pelangganTransaksi").val(data.detail.pelangganTransaksi);
       modal.find(".tanggalTransaksi").val(data.detail.tanggalTransaksi);
       modal.find(".statusTransaksi").val(data.detail.statusTransaksi);
+      modal.find(".tanggalTransaksi").val(data.detail.dateCreate);
       modal
         .find(".cetakReceipt")
         .prop(
@@ -87,69 +126,139 @@ $(document).ready(function () {
       modal
         .find(".formEdit")
         .prop("action", "/transaksi/" + data.detail.idTransaksi + "/update");
+      modal.find(".transaksiProduk").html("");
 
       if (data.groupItem.length > 0) {
-        var tampilanHtml = "";
         for (let index1 = 0; index1 < data.groupItem.length; index1++) {
+          var tampilanHtml = "";
           const element1 = data.groupItem[index1];
-
-          var lastElementId = modal
-            .find(".transaksiProduk > .listProduk:last")
-            .attr("id");
-          var lastId = lastElementId.split("_")[1];
-          var numberNextId = ++lastId;
-          var nextId = "listproduk_" + numberNextId;
 
           tampilanHtml +=
             '<div class="listProduk" id="' +
             nextId +
-            '"><div class="row"><div class="col-3"><select name="idItem[]" class="produk form-control"><option value="-">Nama Produk</option>';
-
+            '"><div class="row"><div class="col-3"><select class="form-select produk" name="idItem[]"><option value="">Produk</option>';
           for (let index = 0; index < data.produk.length; index++) {
-            const element = data.produk[index];
+            const element3 = data.produk[index];
             tampilanHtml +=
-              '<option value="' +
-              element.idItem +
-              '"' +
-              (element1.idItem == element.idItem ? "selected" : "") +
-              ">" +
-              element.namaItem +
+              "<option " +
+              (element3.idItem == element1.idItem ? "selected" : "") +
+              ' value="' +
+              element3.idItem +
+              '">' +
+              element3.namaItem +
               "</option>";
           }
+
+          // var lastElementId = modal
+          //   .find(".transaksiProduk > .listProduk:last")
+          //   .attr("id");
+          // var lastId = lastElementId.split("_")[1];
+          var lastId = 1;
+          var numberNextId = ++lastId;
+          var nextId = "listproduk_" + numberNextId;
+
+          var jenishargaTransaksi = modal.find(".jenisharga").val();
+          var satuan = "";
+          for (let j = 0; j < element1.satuan.length; j++) {
+            const element2 = element1.satuan[j];
+            satuan +=
+              "<option " +
+              (element2.idHargaitem == element1.idHargaitem ? "selected" : "") +
+              ' value="' +
+              element2.satuanHargaitem +
+              '">' +
+              element2.satuanHargaitem +
+              "</option>";
+          }
+
+          var btnHapus =
+            index1 > 0
+              ? '<div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+                numberNextId +
+                '"><i class="fas fa-minus-circle"></i></button></div>'
+              : "";
+
+          tampilanHtml +=
+            '</select></div><input type="hidden" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
+            jenishargaTransaksi +
+            '"><input type="hidden" name="idHargaitem[]" class="idHarga" value="' +
+            element1.idHargaitem +
+            '"><div class="col-3"><select class="satuan form-select" name="satuanItem[]">' +
+            satuan +
+            '</select></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+            element1.hargaItemgr +
+            '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
+            element1.jumlahBeli +
+            '"></div>' +
+            btnHapus +
+            "</div></div></div>";
+
+          modal.find(".transaksiProduk").append(tampilanHtml);
+
+          var lastIndex = modal.find(".produk").length - 1;
+
+          var example = new Choices(modal.find(".produk")[lastIndex]);
+          // var choices = [];
+          // for (let index = 0; index < data.produk.length; index++) {
+          //   const element3 = data.produk[index];
+          //   choices.push({
+          //     value: element3.idItem,
+          //     label: element3.namaItem,
+          //     selected: element3.idItem == element1.idItem ? true : false,
+          //   });
+          // }
+          // example.setChoices(choices, "Produk");
+
+          // tampilanHtml +=
+          //   '<div class="listProduk" id="' +
+          //   nextId +
+          //   '"><div class="row"><div class="col-3"><select name="idItem[]" class="produk form-control"><option value="-">Nama Produk</option>';
+
+          // for (let index = 0; index < data.produk.length; index++) {
+          //   const element = data.produk[index];
+          //   tampilanHtml +=
+          //     '<option value="' +
+          //     element.idItem +
+          //     '"' +
+          //     (element1.idItem == element.idItem ? "selected" : "") +
+          //     ">" +
+          //     element.namaItem +
+          //     "</option>";
+          // }
 
           // <b>Harga Produk : <span class="hargaItem">Rp.' +
           //   parseInt(element1.hargaItem).toLocaleString() +
           //   '</span></b>
 
-          var totalHargaitem =
-            parseInt(element1.hargaItem) * element1.jumlahBeli;
-          tampilanHtml +=
-            '</select></div><div class="col-3"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
-            element1.satuanItem +
-            '"></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
-            element1.hargaItemgr +
-            '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
-            element1.jumlahBeli +
-            '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
-            numberNextId +
-            '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
-          
-            // tampilanHtml +=
-            // '</select></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
-            // element1.jenishargaItem +
-            // '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
-            // element1.satuanItemgr +
-            // '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
-            // element1.hargaItemgr +
-            // '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
-            // element1.stockItem +
-            // '" placeholder="Qty" class="kuantiti form-control" value="' +
-            // element1.jumlahBeli +
-            // '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
-            // numberNextId +
-            // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
-          
-            // tampilanHtml +=
+          // var totalHargaitem =
+          //   parseInt(element1.hargaItem) * element1.jumlahBeli;
+          // tampilanHtml +=
+          //   '</select></div><div class="col-3"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+          //   element1.satuanItem +
+          //   '"></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+          //   element1.hargaItemgr +
+          //   '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
+          //   element1.jumlahBeli +
+          //   '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+          //   numberNextId +
+          //   '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+
+          // tampilanHtml +=
+          // '</select></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
+          // element1.jenishargaItem +
+          // '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+          // element1.satuanItemgr +
+          // '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+          // element1.hargaItemgr +
+          // '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
+          // element1.stockItem +
+          // '" placeholder="Qty" class="kuantiti form-control" value="' +
+          // element1.jumlahBeli +
+          // '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+          // numberNextId +
+          // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+
+          // tampilanHtml +=
           // '</select><b>Harga Produk : <span class="hargaItem">Rp.'+parseInt(element1.hargaItem).toLocaleString()+'</span></b><br><b>Total Harga: <span class="totalHargaitem">Rp.'+totalHargaitem.toLocaleString()+'</span></b></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" max="' +
           // element1.stockItem +
           // '" placeholder="Qty" class="kuantiti form-control" value="' +
@@ -161,7 +270,7 @@ $(document).ready(function () {
           // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
         }
 
-        modal.find(".transaksiProduk").html(tampilanHtml);
+        // modal.find(".transaksiProduk").html(tampilanHtml);
       } else {
         var tampilanHtml = "";
         var nextId = "listproduk_1";
@@ -169,22 +278,50 @@ $(document).ready(function () {
         tampilanHtml +=
           '<div class="listProduk" id="' +
           nextId +
-          '"><div class="row"><div class="col-7"><select name="idItem[]" class="produk form-control"><option value="-">Nama Produk</option>';
-
+          '"><div class="row"><div class="col-3"><select class="form-select produk" name="idItem[]"><option value="">Produk</option>';
         for (let index = 0; index < data.produk.length; index++) {
-          const element = data.produk[index];
+          const element3 = data.produk[index];
           tampilanHtml +=
             '<option value="' +
-            element.idItem +
+            element3.idItem +
             '">' +
-            element.namaItem +
+            element3.namaItem +
             "</option>";
         }
 
-        tampilanHtml +=
-          '</select></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" max="" placeholder="Qty" class="kuantiti form-control" value=""><b>Stock Produk : <span class="stockItem"></span></b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="1"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+        var jenishargaTransaksi = modal.find(".jenisharga").val();
+        var satuan = "";
 
-        modal.find(".transaksiProduk").html(tampilanHtml);
+        tampilanHtml +=
+          '</select></div><input type="hidden" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
+          jenishargaTransaksi +
+          '"><input type="hidden" name="idHargaitem[]" class="idHarga" value=""><div class="col-3"><select class="satuan form-select" name="satuanItem[]"></select></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value=""></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value=""></div></div></div></div>';
+
+        modal.find(".transaksiProduk").append(tampilanHtml);
+
+        var lastIndex = modal.find(".produk").length - 1;
+
+        var example = new Choices(modal.find(".produk")[lastIndex]);
+
+        // tampilanHtml +=
+        //   '<div class="listProduk" id="' +
+        //   nextId +
+        //   '"><div class="row"><div class="col-7"><select name="idItem[]" class="produk form-control"><option value="-">Produk</option>';
+
+        // for (let index = 0; index < data.produk.length; index++) {
+        //   const element = data.produk[index];
+        //   tampilanHtml +=
+        //     '<option value="' +
+        //     element.idItem +
+        //     '">' +
+        //     element.namaItem +
+        //     "</option>";
+        // }
+
+        // tampilanHtml +=
+        //   '</select></div><div class="col"><input type="number" name="kuantitiItem[]" min="1" max="" placeholder="Qty" class="kuantiti form-control" value=""><b>Stock Produk : <span class="stockItem"></span></b></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="1"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+
+        // modal.find(".transaksiProduk").html(tampilanHtml);
       }
 
       var modalAktivitas = $("#modalaktivitasproduct");
@@ -209,6 +346,10 @@ $(document).ready(function () {
     });
   });
 
+  $('.btnSubmitRetur').on('click', function() {
+    $("#modalreturproduct").find(".formRetur").submit();
+  })
+
   $(document).on("click", ".btnRetur", function () {
     var id = $(this).attr("data-bs-idTransaksi");
     var modal = $("#modalreturproduct");
@@ -220,6 +361,7 @@ $(document).ready(function () {
       modal.find(".pelangganTransaksi").val(data.detail.pelangganTransaksi);
       modal.find(".tanggalTransaksi").val(data.detail.tanggalTransaksi);
       modal.find(".statusTransaksi").val(data.detail.statusTransaksi);
+      modal.find(".tanggalTransaksi").val(data.detail.dateCreate);
       // modal
       //   .find(".cetakReceipt")
       //   .prop(
@@ -248,33 +390,25 @@ $(document).ready(function () {
         tampilanHtml +=
           '<div class="listProduk" id="' +
           nextId +
-          '"><div class="row"><div class="col-4"><select name="idItem[]" class="produk form-control" disabled><option value="-">Nama Produk</option>';
+          '"><div class="row"><div class="col-7"><input type="text" class="form-control" value="'+element1.namaItem+'" disabled><span><b>Kuantiti akhir pembelian : </b><input type="text" value="'+(element1.jumlahBeli - element1.pengurangItem)+'" disabled></span><br><span><b>Total akhir pembelian : <input type="text" value="'+(parseInt(element1.hargaItemgr)*(element1.jumlahBeli - element1.pengurangItem))+'" disabled></b></span>';
 
         tampilanHtmlDetail +=
           '<div class="listProduk" id="' +
           nextId +
-          '"><div class="row"><div class="col-4"><select name="idItem[]" class="produk form-control" disabled><option value="-">Nama Produk</option>';
+          '"><div class="row"><div class="col-4"><input type="text" class="form-control" value="'+element1.namaItem+'" disabled>';
 
-        for (let index = 0; index < data.produk.length; index++) {
-          const element = data.produk[index];
-          tampilanHtml +=
-            '<option value="' +
-            element.idItem +
-            '"' +
-            (element1.idItem == element.idItem ? "selected" : "") +
-            ">" +
-            element.namaItem +
-            "</option>";
+        // for (let index = 0; index < data.produk.length; index++) {
+        //   const element = data.produk[index];
 
-          tampilanHtmlDetail +=
-            '<option value="' +
-            element.idItem +
-            '"' +
-            (element1.idItem == element.idItem ? "selected" : "") +
-            '>' +
-            element.namaItem +
-            "</option>";
-        }
+        //   tampilanHtmlDetail +=
+        //     '<option value="' +
+        //     element.idItem +
+        //     '"' +
+        //     (element1.idItem == element.idItem ? "selected" : "") +
+        //     ">" +
+        //     element.namaItem +
+        //     "</option>";
+        // }
 
         // tampilanHtml +=
         //   '</select></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
@@ -290,14 +424,14 @@ $(document).ready(function () {
         //   '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
 
         tampilanHtml +=
-          '</select></div><div class="col"><input type="number" name="' +
-          element1.idItem +
-          '" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
+          '</div><div class="col"><input type="number" name="' +
+          element1.idGroupitem +
+          '" min="0" max="'+element1.jumlahBeli+'" placeholder="Qty" class="kuantiti form-control" value="' +
           element1.pengurangItem +
-          '"></div></div></div></div>';
-        
-          tampilanHtmlDetail +=
-          '</select></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+          '"></div><div class="col"><input type="text" class="form-control" value="'+element1.satuanItemgr+'" disabled></div></div></div></div>';
+
+        tampilanHtmlDetail +=
+          '</div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
           element1.satuanItemgr +
           '" disabled></div><div class="col-3"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
           element1.hargaItemgr +
@@ -307,22 +441,22 @@ $(document).ready(function () {
           element1.jumlahBeli +
           '" disabled></div></div></div></div>';
 
-          // tampilanHtmlDetail +=
-          // '</select><b>Harga Produk : <span class="hargaItem">Rp.' +
-          // parseInt(element1.hargaItem).toLocaleString() +
-          // '</span></b></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
-          // element1.jenishargaItem +
-          // '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
-          // element1.satuanItemgr +
-          // '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
-          // element1.hargaItemgr +
-          // '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
-          // element1.stockItem +
-          // '" placeholder="Qty" class="kuantiti form-control" value="' +
-          // element1.jumlahBeli +
-          // '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
-          // numberNextId +
-          // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+        // tampilanHtmlDetail +=
+        // '</select><b>Harga Produk : <span class="hargaItem">Rp.' +
+        // parseInt(element1.hargaItem).toLocaleString() +
+        // '</span></b></div><div class="col-2"><input type="text" name="jenishargaItem[]" placeholder="Jenis Harga" class="jenisharga form-control" value="' +
+        // element1.jenishargaItem +
+        // '"></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+        // element1.satuanItemgr +
+        // '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+        // element1.hargaItemgr +
+        // '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" max="' +
+        // element1.stockItem +
+        // '" placeholder="Qty" class="kuantiti form-control" value="' +
+        // element1.jumlahBeli +
+        // '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+        // numberNextId +
+        // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
       }
 
       modal.find(".transaksiProduk").html(tampilanHtml);
@@ -342,6 +476,7 @@ $(document).ready(function () {
       modal.find(".pelangganTransaksi").val(data.detail.pelangganTransaksi);
       modal.find(".tanggalTransaksi").val(data.detail.tanggalTransaksi);
       modal.find(".statusTransaksi").val(data.detail.statusTransaksi);
+      modal.find(".tanggalTransaksi").val(data.detail.dateCreate);
       modal
         .find(".cetakReceipt")
         .prop(
@@ -391,18 +526,18 @@ $(document).ready(function () {
           element1.jumlahBeli +
           '" disabled></div></div></div></div>';
 
-          // tampilanHtml +=
-          // '</select><b>Harga Produk : <span class="hargaItem">Rp.' +
-          // parseInt(element1.hargaItem).toLocaleString() +
-          // '</span></b></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
-          // element1.satuanItemgr +
-          // '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
-          // element1.hargaItemgr +
-          // '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
-          // element1.jumlahBeli +
-          // '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
-          // numberNextId +
-          // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
+        // tampilanHtml +=
+        // '</select><b>Harga Produk : <span class="hargaItem">Rp.' +
+        // parseInt(element1.hargaItem).toLocaleString() +
+        // '</span></b></div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
+        // element1.satuanItemgr +
+        // '"></div><div class="col-2"><input type="number" name="hargaItem[]" placeholder="Harga" min="1" class="harga form-control" value="' +
+        // element1.hargaItemgr +
+        // '"></div><div class="col-2"><input type="number" name="kuantitiItem[]" min="1" placeholder="Qty" class="kuantiti form-control" value="' +
+        // element1.jumlahBeli +
+        // '"></div><div class="col-1"><button type="button" class="hapusList btn btn-sm btn-danger" value="' +
+        // numberNextId +
+        // '"><i class="fas fa-minus-circle"></i></button></div></div></div></div>';
       }
 
       modal.find(".transaksiProduk").html(tampilanHtml);

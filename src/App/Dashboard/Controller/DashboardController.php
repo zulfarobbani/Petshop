@@ -44,6 +44,22 @@ class DashboardController extends GlobalFunc
         if ($this->emailUser == null){
             return new RedirectResponse('/login');
         }
+
+        // filter waktu masuk
+        $filterWaktumasukFrom = $request->query->get('filterWaktumasukFrom');
+        $filterWaktumasukTo = $request->query->get('filterWaktumasukTo');
+
+        $where = "";
+        if ($filterWaktumasukFrom) {
+            $where.= "WHERE ";
+            $where.= "transaksi.dateCreate >= '$filterWaktumasukFrom'";
+            if ($filterWaktumasukTo) {
+                $where.= " AND transaksi.dateCreate <= '$filterWaktumasukTo'";
+            }
+        }
+
+        // $this->dd($where);
+
         //Data Expire Dan Stock
         $dataExpireStock = $this->model->getExpiryStock();
 
@@ -68,10 +84,10 @@ class DashboardController extends GlobalFunc
 
         foreach($satuanItem as $satuan){
 
-            $jumlahProdukPerSatuan = $this->model->getJumlahProdukPerSatuan($satuan['satuanItem']);
+            $jumlahProdukPerSatuan = $this->model->getJumlahProdukPerSatuan($satuan['satuanHargaitem']);
 
             array_push($dataPenjualanSatuan, array(
-                "satuan" => $satuan['satuanItem'],
+                "satuan" => $satuan['satuanHargaitem'],
                 "jumlah" => $jumlahProdukPerSatuan['jumlahSatuanItem']
             ));
         }
@@ -84,21 +100,39 @@ class DashboardController extends GlobalFunc
         };
 
         //Data For Riwayat Transaksi
-        $dataTransaksi = $this->modelTransaksi->selectAll();
+        $dataTransaksi = $this->modelTransaksi->selectAll($where." ORDER BY dateTransaksi DESC");
         $data_produk = $this->modelProduk->selectAll();
+        $labaKotor = 0;
+        $labaBersih = 0;
+        $selisih_laba = 0;
         foreach ($dataTransaksi as $key => $value) {
             $detail_produk = $this->modelGroupItem->selectAll("WHERE idTransaksi = '".$value['idTransaksi']."'");
             $total_harga = 0;
+            $jumlahPengurangan = 0;
             foreach ($detail_produk as $key1 => $value1) {
-                $total_harga += intval($value1['hargaItem']);
+                if (intval($value1['pengurangItem']) > 0) {
+                    $kuantitiItem = intval($value1['groupkuantitiItem'])-intval($value1['pengurangItem']);
+                } else {
+                    $kuantitiItem = intval($value1['groupkuantitiItem']);
+                }
+                $total_harga += intval($value1['hargaItemGroup']) * $kuantitiItem;
+                if ($value1['satuanItemGroup'] == 'Krg' || $value1['satuanItemGroup'] == 'Dus' || $value1['satuanItemGroup'] == 'Set') {
+                    $jumlahPengurangan += intval($value1['hargaItem']) * $kuantitiItem;
+                } else if ($value1['satuanItemGroup'] == 'Pcs' || $value1['satuanItemGroup'] == 'Kg') {
+                    $jumlahPengurangan += intval($value1['hargaperpcsItem']) * $kuantitiItem;
+                }
             }
             $dataTransaksi[$key]['totalHargaTransaksi'] = $total_harga;
+            $labaKotor+= $total_harga;
+            $selisih_laba+= $jumlahPengurangan;
         }
+        $labaBersih = $labaKotor - $selisih_laba;
+        // $this->dd($labaBersih);
 
         // //Data For Riwayat Aktifitas'
         // $riwayatAktifitas = $this->model->riwayatAktifitas();
         
-        return $this->render_template('dashboard/index', ['data_produk' => $data_produk ,'dataPenjualanProduk' => $dataPenjualanProduk, 'dataPenjualanSatuan' => $dataPenjualanSatuan, 'dataExpireStock' => $dataExpireStock, 'dataTransaksi' => $dataTransaksi, 'getTotalPenjualanPerbulan' => $getTotalPenjualanPerbulan]);
+        return $this->render_template('dashboard/index', ['data_produk' => $data_produk ,'dataPenjualanProduk' => $dataPenjualanProduk, 'dataPenjualanSatuan' => $dataPenjualanSatuan, 'dataExpireStock' => $dataExpireStock, 'dataTransaksi' => $dataTransaksi, 'getTotalPenjualanPerbulan' => $getTotalPenjualanPerbulan, 'labaBersih' => $labaBersih, 'labaKotor' => $labaKotor, 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo]);
     }
 
 }

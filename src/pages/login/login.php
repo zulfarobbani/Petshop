@@ -47,9 +47,9 @@
                 <div class="col-md-6" id="col6">
                     <div class="d-flex justify-content-center mb-3">
                         <div class="flex-shrink">
-                            <img src="assets/img/logo.png" width="150px">
+                            <img src="/assets/img/logo_sambat_fauna_shop.png" width="150px">
                         </div>
-                        <div class="flex-grow fs-4 ms-3 mt-2">
+                        <div class="flex-grow fs-4 ms-3 mt-2" style="color: #491f10;">
                             <span>SAMBAT<br>FAUNA SHOP</span>
                         </div>
                     </div>

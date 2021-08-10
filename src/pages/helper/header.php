@@ -7,7 +7,7 @@
 								<div class="header-row">
 									<div class="header-logo">
 										<a href="index.html">
-											<img alt="Porto" width="100" height="48" data-sticky-width="82" data-sticky-height="40" src="/assets/img/logo-dark.png">
+											<img alt="Porto" width="100" height="70" data-sticky-width="82" data-sticky-height="40" src="/assets/img/logo_sambat_fauna_shop.svg">
 										</a>
 									</div>
 								</div>
@@ -18,31 +18,40 @@
 										<div class="header-nav-main header-nav-main-square header-nav-main-effect-2 header-nav-main-sub-effect-1">
 											<nav class="collapse">
 												<ul class="nav nav-pills" id="mainNav">
-													<li class="dropdown">
-														<a class="dropdown-item dropdown-toggle text-white" href="/dashboard">
-															Dashboard
-														</a>
-													</li>
-													<li class="dropdown dropdown-mega">
-														<a class="dropdown-item dropdown-toggle text-white" href="/produk">
-															Product
-														</a>
-													</li>
-													<li class="nav-item dropdown">
-														<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-															Transaction
-														</a>
-														<ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-															<li><a class="dropdown-item" href="/transaksi/grosir">Grosir</a></li>
-															<li><a class="dropdown-item" href="/transaksi/eceran">Eceran</a></li>
-														</ul>
-													</li>
-													<li class="dropdown">
-														<a class="dropdown-item dropdown-toggle text-white" href="/users">
-															Users
-														</a>
-													</li>
-
+													<?php foreach ($permission as $key => $value) { ?>
+														<?php if ($value['menu'] == 'dashboard') { ?>
+															<li class="dropdown">
+																<a class="dropdown-item dropdown-toggle text-white" href="/dashboard">
+																	Dashboard
+																</a>
+															</li>
+														<?php } ?>
+														<?php if ($value['menu'] == 'product') { ?>
+															<li class="dropdown dropdown-mega">
+																<a class="dropdown-item dropdown-toggle text-white" href="/produk">
+																	Product
+																</a>
+															</li>
+														<?php } ?>
+														<?php if ($value['menu'] == 'transaction') { ?>
+															<li class="nav-item dropdown">
+																<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+																	Transaction
+																</a>
+																<ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+																	<li><a class="dropdown-item" href="/transaksi/grosir">Grosir</a></li>
+																	<li><a class="dropdown-item" href="/transaksi/eceran">Eceran</a></li>
+																</ul>
+															</li>
+														<?php } ?>
+														<?php if ($value['menu'] == 'users') { ?>
+															<li class="dropdown">
+																<a class="dropdown-item dropdown-toggle text-white" href="/users">
+																	Users
+																</a>
+															</li>
+														<?php } ?>
+													<?php } ?>
 												</ul>
 											</nav>
 										</div>

@@ -9,12 +9,10 @@
   <link rel="stylesheet" href="/assets/vendors/simple-datatables/style.css">
 
   <!-- Web Fonts  -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light"
-    rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
 
   <!-- Vendor CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="/assets/vendor/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="/assets/vendor/animate/animate.min.css">
   <link rel="stylesheet" href="/assets/vendor/simple-line-icons/css/simple-line-icons.min.css">
@@ -42,6 +40,10 @@
 
   <link rel="stylesheet" type="text/css" href="/assets/style/style.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+
+  <link rel="stylesheet" href="/assets/vendors/choices.js/choices.min.css" />
+
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
   <style>
     body {
@@ -71,21 +73,23 @@
     <div class="row">
       <div class="col-md-4">
         <form method="POST" action="">
-          <select class="form-control" name="idProduk" id="" aria-label="Default select example">
-            <option value="">Select Produk</option>
-
-            <?php foreach($data_produk as $produk){ ?>
-              <option value="<?= $produk['idItem']?>"><?= $produk['namaItem']?></option>
-            <?php }?>
+          <select class="choices form-select produk" name="idProduk">
+            <option value="">Produk</option>
+            <?php foreach ($data_produk as $produk) { ?>
+              <option value="<?= $produk['idItem'] ?>"><?= $produk['namaItem'] ?></option>
+            <?php } ?>
           </select>
           <button type="submit" class="btn btn-success">Submit</button>
         </form>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4" id="penjualan_produk"></div>
-      <div class="col-md-4" id="omset"></div>
-      <div class="col-md-4" id="kuantiti_pembelian"></div>
+      <div class="col-md-6" id="penjualan_produk"></div>
+      <!-- <div class="col-md-4" id="omset"></div> -->
+      <div class="col-md-6" id="kuantiti_pembelian"></div>
+      <!-- <div class="col-md-4">
+        <h2 class="card text-center p-4">Laba Bersih <br>Rp. <?= number_format($labaBersih, 2, ',', '.') ?></h2>
+      </div> -->
     </div>
     <!-- <div class="row">
       <div class="col-md-6">
@@ -97,7 +101,7 @@
               </div>
               <div class="col-md-8 align-self-center">
                 <h1>Stock Expiry</h1>
-                <h1 style="font-size : 100px"><?= $dataExpireStock['expiry']?></h1>
+                <h1 style="font-size : 100px"><?= $dataExpireStock['expiry'] ?></h1>
               </div>
             </div>
           </div>
@@ -112,7 +116,7 @@
               </div>
               <div class="col-md-8 align-self-center">
                 <h1>Ketersediaan Stock</h1>
-                <h1 style="font-size : 100px"><?= $dataExpireStock['stock']?></h1>
+                <h1 style="font-size : 100px"><?= $dataExpireStock['stock'] ?></h1>
               </div>
             </div>
           </div>
@@ -124,25 +128,56 @@
       <div class="card-body">
         <div class="card-title">
           <div class="row">
-            <div class="col-md-6"><h3>Riwayat Transaksi</h3></div>
+            <div class="col-md-6">
+              <h3>Riwayat Transaksi</h3>
+            </div>
             <div class="col-md-6">
               <div class="text-end">
-                <a href="/transaksi/report-pdf" class="btn btn-primary">REPORT PDF</a>
+                <a href="/transaksi/report-pdf?filterWaktumasukFrom=<?= $filterWaktumasukFrom ?>&filterWaktumasukTo=<?= $filterWaktumasukTo ?>" class="btn btn-primary">REPORT PDF</a>
               </div>
             </div>
           </div>
         </div>
+        <div class="row mt-2 mb-3">
+          <div class="col-12">
+            <form action="/dashboard" method="get">
+              <label for=""><b>Tanggal Transaksi</b></label><br>
+              <div class="row justify-content-center">
+                <div class="col-5">
+                  Dari <input type="date" class="form-control filterWaktumasukFrom" name="filterWaktumasukFrom" value="<?= $filterWaktumasukFrom ?>">
+                  <br>
+                </div>
+                <div class="col-5">
+                  Sampai<input type="date" class="form-control filterWaktumasukTo" name="filterWaktumasukTo" value="<?= $filterWaktumasukTo ?>">
+                </div>
+                <div class="col">
+                  <div class="mt-4">
+                    <!-- <button type="reset" class="btn btn-danger btn-sm btnResetWaktu">Reset</button> -->
+                    <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
         <table class="table" id="tableTransaksi">
+          <thead>
+            <th>No Transaksi</th>
+            <th>Pelanggan</th>
+            <th>Kasir</th>
+            <th>Total Transaksi</th>
+            <th>Tanggal</th>
+          </thead>
           <tbody>
-            <?php foreach($dataTransaksi as $value) {?>
+            <?php foreach ($dataTransaksi as $value) { ?>
               <tr>
                 <td><?= $value['nomorTransaksi'] ?></td>
                 <td><?= $value['pelangganTransaksi'] ?></td>
-                <td><?= $value['kasirTransaksi'] ?></td>
-                <td>Rp.<?= number_format($value['totalHargaTransaksi'],2,',','.') ?></td>
-                <td><?= date('d M Y', strtotime($value['dateCreate'])) ?></td>
+                <td><?= $value['namaUser'] ?></td>
+                <td>Rp.<?= number_format($value['totalHargaTransaksi'], 2, ',', '.') ?></td>
+                <td><?= date('d M Y', strtotime($value['dateTransaksi'])) ?></td>
               </tr>
-            <?php }?>
+            <?php } ?>
           </tbody>
         </table>
       </div>
@@ -178,8 +213,7 @@
   <!-- Theme Initialization Files -->
   <script src="/assets/js/theme.init.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
   <script src="/assets/vendors/apexcharts/apexcharts.js"></script>
   <!-- <script src="/assets/js/dashboard/dashboard.js"></script> -->
@@ -194,9 +228,9 @@
     var optionsPenjualanProduk = {
       series: [{
         data: [
-          <?php foreach($dataPenjualanProduk as $value) {?>
-            <?= $value['produkTerjual']?>,
-          <?php }?>
+          <?php foreach ($dataPenjualanProduk as $value) { ?>
+            <?= $value['produkTerjual'] ?>,
+          <?php } ?>
         ]
       }],
       chart: {
@@ -204,7 +238,7 @@
         background: 'white',
         height: 250,
         events: {
-          click: function (chart, w, e) {
+          click: function(chart, w, e) {
             // console.log(chart, w, e)
           }
         }
@@ -228,9 +262,8 @@
       },
       xaxis: {
         categories: [
-          <?php foreach($dataPenjualanProduk as $produk) {?>
-            "<?= $produk['namaItem']?>",
-          <?php }?>
+          <?php foreach ($dataPenjualanProduk as $produk) { ?> "<?= $produk['namaItem'] ?>",
+          <?php } ?>
         ],
       }
     };
@@ -240,9 +273,9 @@
       series: [{
         name: 'series1',
         data: [
-          <?php for($i = 1; $i <= 12; $i++){?>
-            <?= $getTotalPenjualanPerbulan($i)?>,
-          <?php }?>
+          <?php for ($i = 1; $i <= 12; $i++) { ?>
+            <?= $getTotalPenjualanPerbulan($i) ?>,
+          <?php } ?>
         ]
       }],
       chart: {
@@ -258,7 +291,7 @@
         curve: "straight"
       },
       title: {
-        text: ["Rp 2. 000. 000", "Omset saat ini"],
+        text: ["Laba Bersih", "Rp. <?= number_format($labaBersih, 2, ',', '.') ?>"],
         align: "left"
       },
       grid: {
@@ -279,9 +312,9 @@
 
     var optionsKuantiti = {
       series: [
-        <?php for($i = 0; $i < count($dataPenjualanSatuan); $i++) {?>
-          <?= $dataPenjualanSatuan[$i]['jumlah'] == null ? 0 : $dataPenjualanSatuan[$i]['jumlah']?>,
-        <?php }?>
+        <?php for ($i = 0; $i < count($dataPenjualanSatuan); $i++) { ?>
+          <?= $dataPenjualanSatuan[$i]['jumlah'] == null ? 0 : $dataPenjualanSatuan[$i]['jumlah'] ?>,
+        <?php } ?>
       ],
       chart: {
         type: 'pie',
@@ -293,9 +326,8 @@
         align: 'left'
       },
       labels: [
-        <?php for($i = 0; $i < count($dataPenjualanSatuan); $i++) {?>
-          '<?= $dataPenjualanSatuan[$i]['satuan']?>',
-        <?php }?>
+        <?php for ($i = 0; $i < count($dataPenjualanSatuan); $i++) { ?> '<?= $dataPenjualanSatuan[$i]['satuan'] ?>',
+        <?php } ?>
       ],
       responsive: [{
         breakpoint: 480,
@@ -317,7 +349,14 @@
     chartPenjualanProduk.render();
     chartOmset.render();
     chartKuantiti.render();
+
+    // $('.btnResetWaktu').on('click', function() {
+    //   $('.filterWaktumasukFrom').val('')
+    //   $('.filterWaktumasukTo').val('')
+    // })
   </script>
+
+  <script src="/assets/vendors/choices.js/choices.min.js"></script>
 
 </body>
 

@@ -3,7 +3,6 @@
 namespace App\Login\Model;
 
 use Core\GlobalFunc;
-use PDO;
 use PDOException;
 use Symfony\Component\HttpFoundation\Request;
 

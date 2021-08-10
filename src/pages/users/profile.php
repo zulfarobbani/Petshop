@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+
   <!-- Basic -->
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,32 +37,31 @@
 </head>
 
 <body>
-
   <?php include(__DIR__ . '/../helper/header.php') ?>
   <div class="container">
     <div class="card mt-4">
-      <form action="/users/<?= $user['idUser'] ?>/update" method="post" enctype="multipart/form-data">
+      <form action="/users/<?= $detail['idUser'] ?>/update" method="post" enctype="multipart/form-data">
         <div class="row m-3">
           <div class="col-md-5 text-center">
-            <img src="/assets/media/<?= $user['pathMedia'] ?>" class="img-fluid img-thumbnail">
+            <img src="/assets/media/<?= $detail['pathMedia'] ?>" class="img-fluid img-thumbnail">
             <input type="file" name="fotoUser" class="form-control">
-            <h5 class="mt-3"><?= $user['namaUser'] ?></h5>
-            <span><?= $user['emailUser'] ?></span><br>
-            <span><?= $user['nohpUser'] ?></span>
+            <h5 class="mt-3"><?= $detail['namaUser'] ?></h5>
+            <span><?= $detail['emailUser'] ?></span><br>
+            <span><?= $detail['nohpUser'] ?></span>
           </div>
           <div class="col-md-7">
             <h4>Edit Profile</h4>
             <div class="mb-2">
               <label for="">Nama User</label>
-              <input type="text" class="form-control" placeholder="Nama Pegawai" name="namaUser" value="<?= $user['namaUser'] ?>">
+              <input type="text" class="form-control" placeholder="Nama Pegawai" name="namaUser" value="<?= $detail['namaUser'] ?>">
             </div>
             <div class="mb-2">
               <label for="">Email</label>
-              <input type="text" class="form-control" placeholder="pegawai@email.com" name="emailUser" value="<?= $user['emailUser'] ?>">
+              <input type="text" class="form-control" placeholder="pegawai@email.com" name="emailUser" value="<?= $detail['emailUser'] ?>">
             </div>
             <div class="mb-2">
               <label for="">No Handphone</label>
-              <input type="text" class="form-control" placeholder="08123456789" name="nohpUser" value="<?= $user['nohpUser'] ?>">
+              <input type="text" class="form-control" placeholder="08123456789" name="nohpUser" value="<?= $detail['nohpUser'] ?>">
             </div>
             <div>
               <button type="submit" class="btn rounded-pill px-4 text-white float-end" id="btnIjo">Simpan</button>

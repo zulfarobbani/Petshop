@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  
   $(".tambahListProduk").on("click", function () {
     var container = $(this).parent();
     var lastElementId = container
@@ -25,7 +24,9 @@ $(document).ready(function () {
           '<option value="' +
           element.idItem +
           '">' +
-          element.namaItem + ' - ' + element.supplierItem +
+          element.namaItem +
+          " - " +
+          element.supplierItem +
           "</option>";
       }
 
@@ -130,7 +131,11 @@ $(document).ready(function () {
       modal.find(".transaksiProduk").html("");
 
       if (data.groupItem.length > 0) {
+        var lastId = 1;
+
         for (let index1 = 0; index1 < data.groupItem.length; index1++) {
+          var numberNextId = ++lastId;
+          var nextId = "listproduk_" + numberNextId;
           var tampilanHtml = "";
           const element1 = data.groupItem[index1];
 
@@ -154,9 +159,6 @@ $(document).ready(function () {
           //   .find(".transaksiProduk > .listProduk:last")
           //   .attr("id");
           // var lastId = lastElementId.split("_")[1];
-          var lastId = 1;
-          var numberNextId = ++lastId;
-          var nextId = "listproduk_" + numberNextId;
 
           var jenishargaTransaksi = modal.find(".jenisharga").val();
           var satuan = "";
@@ -347,9 +349,9 @@ $(document).ready(function () {
     });
   });
 
-  $('.btnSubmitRetur').on('click', function() {
+  $(".btnSubmitRetur").on("click", function () {
     $("#modalreturproduct").find(".formRetur").submit();
-  })
+  });
 
   $(document).on("click", ".btnRetur", function () {
     var id = $(this).attr("data-bs-idTransaksi");
@@ -391,12 +393,21 @@ $(document).ready(function () {
         tampilanHtml +=
           '<div class="listProduk" id="' +
           nextId +
-          '"><div class="row"><div class="col-7"><input type="text" class="form-control" value="'+element1.namaItem+'" disabled><span><b>Kuantiti akhir pembelian : </b><input type="text" value="'+(element1.jumlahBeli - element1.pengurangItem)+'" disabled></span><br><span><b>Total akhir pembelian : <input type="text" value="'+(parseInt(element1.hargaItemgr)*(element1.jumlahBeli - element1.pengurangItem))+'" disabled></b></span>';
+          '"><div class="row"><div class="col-7"><input type="text" class="form-control" value="' +
+          element1.namaItem +
+          '" disabled><span><b>Kuantiti akhir pembelian : </b><input type="text" value="' +
+          (element1.jumlahBeli - element1.pengurangItem) +
+          '" disabled></span><br><span><b>Total akhir pembelian : <input type="text" value="' +
+          parseInt(element1.hargaItemgr) *
+            (element1.jumlahBeli - element1.pengurangItem) +
+          '" disabled></b></span>';
 
         tampilanHtmlDetail +=
           '<div class="listProduk" id="' +
           nextId +
-          '"><div class="row"><div class="col-4"><input type="text" class="form-control" value="'+element1.namaItem+'" disabled>';
+          '"><div class="row"><div class="col-4"><input type="text" class="form-control" value="' +
+          element1.namaItem +
+          '" disabled>';
 
         // for (let index = 0; index < data.produk.length; index++) {
         //   const element = data.produk[index];
@@ -427,9 +438,13 @@ $(document).ready(function () {
         tampilanHtml +=
           '</div><div class="col"><input type="number" name="' +
           element1.idGroupitem +
-          '" min="0" max="'+element1.jumlahBeli+'" placeholder="Qty" class="kuantiti form-control" value="' +
+          '" min="0" max="' +
+          element1.jumlahBeli +
+          '" placeholder="Qty" class="kuantiti form-control" value="' +
           element1.pengurangItem +
-          '"></div><div class="col"><input type="text" class="form-control" value="'+element1.satuanItemgr+'" disabled></div></div></div></div>';
+          '"></div><div class="col"><input type="text" class="form-control" value="' +
+          element1.satuanItemgr +
+          '" disabled></div></div></div></div>';
 
         tampilanHtmlDetail +=
           '</div><div class="col-2"><input type="text" name="satuanItem[]" placeholder="Satuan" class="satuan form-control" value="' +
@@ -544,4 +559,17 @@ $(document).ready(function () {
       modal.find(".transaksiProduk").html(tampilanHtml);
     });
   });
+
+  $(document).on("click", ".btnHapus", function () {
+    var id = $(this).attr("data-bs-idTransaksi");
+    var modal = $("#modalhapusproduct");
+    modal
+        .find(".hapusForm")
+        .prop("action", "/transaksi/" + id + "/delete");
+  });
+
+  $(document).on("click", ".btnActionHapus", function () {
+    $(this).parent().find(".hapusForm").submit();
+  });
+
 });

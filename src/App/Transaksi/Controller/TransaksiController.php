@@ -110,7 +110,7 @@ class TransaksiController extends GlobalFunc
             $datas[$key]['totalHargaTransaksi'] = $total_harga;
         }
 
-        return $this->render_template('transaksi/transaksi', ['datas' => $datas, 'produk' => $data_produk, 'jenis_transaksi' => $jenis, 'pagination' => $pagination, 'jenis_transaksi_text' => $request->attributes->get('jenis'), 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo, 'data_per_page' => $request->query->get('data_per_page')]);
+        return $this->render_template('transaksi/transaksi', ['datas' => $datas, 'produk' => $data_produk, 'jenis_transaksi' => $jenis, 'pagination' => $pagination, 'jenis_transaksi_text' => $request->attributes->get('jenis'), 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo, 'data_per_page' => $request->query->get('data_per_page'), 'search' => $search]);
     }
 
     public function create(Request $request)
@@ -272,21 +272,23 @@ class TransaksiController extends GlobalFunc
         return $this->render_template('transaksi/detail', ['detail' => $detail, 'groupItem' => $groupItem]);
     }
 
-    // public function delete(Request $request)
-    // {
-    //     $id_user = $request->attributes->get('id_user');
+    public function delete(Request $request)
+    {
+        $id = $request->attributes->get('id');
 
-    //     $delete = $this->model->delete($id_user);
+        $delete = $this->model->delete($id);
+        $groupItem = new GroupItem();
+        $groupItem->delete($id);
 
-    //     // create chronlogy
-    //     $chronology = new Chronology();
-    //     $message = $this->model->chronologyMessage('update', $this->idUser, [
-    //         'transaksi' => $detail['nomorTransaksi']
-    //     ]);
-    //     $createChronology = $chronology->create($message, $idTransaksi);
+        // // create chronlogy
+        // $chronology = new Chronology();
+        // $message = $this->model->chronologyMessage('update', $this->idUser, [
+        //     'transaksi' => $detail['nomorTransaksi']
+        // ]);
+        // $createChronology = $chronology->create($message, $idTransaksi);
 
-    //     return new RedirectResponse('/users');
-    // }
+        return new RedirectResponse('/transaksi/grosir');
+    }
 
     public function print_receipt(Request $request)
     {

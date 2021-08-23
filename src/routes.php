@@ -195,6 +195,9 @@ $routes->add('transaksiReportPdf', new Route('/transaksi/report-pdf', [
 $routes->add('transaksi', new Route('/transaksi/{jenis}', [
     '_controller' => 'App\Transaksi\Controller\TransaksiController::index'
 ]));
+$routes->add('transaksiDelete', new Route('/transaksi/{id}/delete', [
+    '_controller' => 'App\Transaksi\Controller\TransaksiController::delete'
+]));
 
 $routes->add('import', new Route('/import', [
     '_controller' => 'App\Import\Controller\ImportController::index'

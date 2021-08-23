@@ -210,4 +210,19 @@ class Transaksi extends GlobalFunc
 
         return $message[$action];
     }
+
+    public function delete($id)
+    {
+        $sql = "DELETE FROM transaksi WHERE idTransaksi = '$id'";
+
+        try {
+            $query = $this->conn->prepare($sql);
+            $delete = $query->execute();
+
+            return $delete;
+        } catch (PDOException $e) {
+            echo $e;
+            die();
+        }
+    }
 }

@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 19, 2021 at 11:55 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.9
+-- Generation Time: Aug 23, 2021 at 03:00 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `petshop`
+-- Database: `petshop1`
 --
 
 -- --------------------------------------------------------
@@ -476,7 +477,12 @@ INSERT INTO `chronology` (`idChronology`, `deskripsiChronology`, `idTables`, `da
 ('crn611df7fee2360', 'User 1 telah mengubah produk \"Meo Chicken 1.2 Kg\"', 'itm611df747525e0', '2021-08-19'),
 ('crn611df85dbd21e', 'User 1 telah menambah produk \"Kututox \"', 'itm611df85daac33', '2021-08-19'),
 ('crn611df9ca65a26', 'User 1 telah menambah produk \"Taisho -5\"', 'itm611df9ca57465', '2021-08-19'),
-('crn611e2282c54ef', 'user60eefe5a7a23d telah menambah transaksi dengan no_transaksi \"123\"', 'tran611e2282bad22', '2021-08-19');
+('crn611e2282c54ef', 'user60eefe5a7a23d telah menambah transaksi dengan no_transaksi \"123\"', 'tran611e2282bad22', '2021-08-19'),
+('crn61235a0175073', 'user60eefe5a7a23d telah mengubah transaksi dengan no_transaksi \"\"', 'tran61161911c6b44', '2021-08-23'),
+('crn61235a176a321', 'user60eefe5a7a23d telah mengubah transaksi dengan no_transaksi \"\"', 'tran61161911c6b44', '2021-08-23'),
+('crn61235a4c78cc5', 'user60eefe5a7a23d telah mengubah transaksi dengan no_transaksi \"\"', 'tran6119cb4bb8e3f', '2021-08-23');
+INSERT INTO `chronology` (`idChronology`, `deskripsiChronology`, `idTables`, `dateCreate`) VALUES
+('crn61235ba2afd48', 'user60eefe5a7a23d telah mengubah transaksi dengan no_transaksi \"\"', 'tran611b3175d327e', '2021-08-23');
 
 -- --------------------------------------------------------
 
@@ -883,10 +889,6 @@ INSERT INTO `groupitem` (`idGroupitem`, `idTransaksi`, `idItem`, `pengurangItem`
 ('gi6119c4256f154', 'tran6119c4256f11d', 'itm6111e9e309869', '', '3', '2021-08-16', 'Pcs', 10000, 'htm6111f6825b549'),
 ('gi6119c425724b7', 'tran6119c4256f11d', 'itm6108c748dd4c6', '', '2', '2021-08-16', 'Kg', 11000, 'htm6108c74975f21'),
 ('gi6119c425762ca', 'tran6119c4256f11d', 'itm610e106e1e6a1', '', '6', '2021-08-16', 'Kg', 7500, 'htm610e106e8e7d0'),
-('gi6119cbaa3c1ac', 'tran6119cb4bb8e3f', 'itm6108c74162341', '', '1', '2021-08-16', 'Krg', 405000, 'htm6108c74213422'),
-('gi6119cbaa42366', 'tran6119cb4bb8e3f', 'itm6112009d6e345', '', '3', '2021-08-16', 'Dus', 290000, 'htm61120afa64700'),
-('gi6119cbaa45f4f', 'tran6119cb4bb8e3f', 'itm610e1074af9f7', '', '2', '2021-08-16', 'Krg', 350000, 'htm61122a1b2e052'),
-('gi6119cbaa49c72', 'tran6119cb4bb8e3f', 'itm6119cb7ec94f7', '', '20', '2021-08-16', 'Pcs', 3000, 'htm6119cb7ecff30'),
 ('gi6119cd6516258', 'tran6119cd14c9a3a', 'itm6108d337c8343', '', '1', '2021-08-16', 'Krg', 410000, 'htm6108d33809d9e'),
 ('gi6119cd651c449', 'tran6119cd14c9a3a', 'itm61121f1765629', '', '1', '2021-08-16', 'Krg', 420000, 'htm61121f176adb3'),
 ('gi6119cd6520394', 'tran6119cd14c9a3a', 'itm6108c847edeb1', '', '1', '2021-08-16', 'Krg', 365000, 'htm6119cd372610f'),
@@ -956,12 +958,12 @@ INSERT INTO `groupitem` (`idGroupitem`, `idTransaksi`, `idItem`, `pengurangItem`
 ('gi611a2a670bcb4', 'tran611a2a6709718', 'itm6100ea559554f', '', '3', '2021-08-16', 'Pcs', 15000, 'htm61011f608152e'),
 ('gi611a2b4acb6ca', 'tran611a2b4acb696', 'itm6112009d6e345', '', '10', '2021-08-16', 'Pcs', 13000, 'htm61120afa63735'),
 ('gi611a2b4ad22b8', 'tran611a2b4acb696', 'itm611a2b2e18bfc', '', '1', '2021-08-16', 'Krg', 240000, 'htm611a2b2e1f37f'),
-('gi611b0f4f8634b', 'tran611b0f4f86311', 'itm6108d284782d1', '', '1', '2021-08-17', 'Krg', 180000, 'htm6108d284921f8');
-INSERT INTO `groupitem` (`idGroupitem`, `idTransaksi`, `idItem`, `pengurangItem`, `kuantitiItem`, `dateCreate`, `satuanItem`, `hargaItem`, `idHargaitem`) VALUES
+('gi611b0f4f8634b', 'tran611b0f4f86311', 'itm6108d284782d1', '', '1', '2021-08-17', 'Krg', 180000, 'htm6108d284921f8'),
 ('gi611b0f4f8d384', 'tran611b0f4f86311', 'itm6108c748dd4c6', '', '12', '2021-08-17', 'Kg', 9700, 'htm6108c749103ac'),
 ('gi611b1282498f3', 'tran611b1282498bd', 'itm61173da9480cd', '', '10', '2021-08-17', 'Pcs', 15500, 'htm61173da94afca'),
 ('gi611b1282509f7', 'tran611b1282498bd', 'itm6108c7b9ecce7', '', '10', '2021-08-17', 'Pcs', 15500, 'htm6108c7bac4744'),
-('gi611b1282546ad', 'tran611b1282498bd', 'itm61121f1765629', '', '6', '2021-08-17', 'Pcs', 23000, 'htm61121f176a87d'),
+('gi611b1282546ad', 'tran611b1282498bd', 'itm61121f1765629', '', '6', '2021-08-17', 'Pcs', 23000, 'htm61121f176a87d');
+INSERT INTO `groupitem` (`idGroupitem`, `idTransaksi`, `idItem`, `pengurangItem`, `kuantitiItem`, `dateCreate`, `satuanItem`, `hargaItem`, `idHargaitem`) VALUES
 ('gi611b1282584a1', 'tran611b1282498bd', 'itm6108d337c8343', '', '6', '2021-08-17', 'Pcs', 22000, 'htm6108d337e2c85'),
 ('gi611b12825bf65', 'tran611b1282498bd', 'itm6108d7733b659', '', '4', '2021-08-17', 'Pcs', 17500, 'htm6108d7734ae95'),
 ('gi611b12825fde0', 'tran611b1282498bd', 'itm6108c84579a58', '', '1', '2021-08-17', 'Pcs', 20000, 'htm6108c84585c56'),
@@ -972,17 +974,6 @@ INSERT INTO `groupitem` (`idGroupitem`, `idTransaksi`, `idItem`, `pengurangItem`
 ('gi611b29711941f', 'tran611b28cb3ac89', 'itm610e10714f253', '', '3', '2021-08-17', 'Kg', 15500, 'htm610e10715f86f'),
 ('gi611b29711a0ec', 'tran611b28cb3ac89', 'itm610e1071e01fd', '', '1', '2021-08-17', 'Krg', 400000, 'htm610e1072089b3'),
 ('gi611b29712093d', 'tran611b28cb3ac89', 'itm6111fdcdc2283', '', '1', '2021-08-17', 'Kg', 12000, 'htm6111fdcdc8e2e'),
-('gi611b3175d32b5', 'tran611b3175d327e', 'itm6108b062f1dce', '', '2', '2021-08-17', 'Krg', 365000, 'htm6108b06314fba'),
-('gi611b3175d3f9c', 'tran611b3175d327e', 'itm6108c74162341', '', '1', '2021-08-17', 'Krg', 405000, 'htm6108c74197283'),
-('gi611b3175d499c', 'tran611b3175d327e', 'itm6108b0635f243', '', '12', '2021-08-17', 'Pcs', 11000, 'htm6108b06368a8e'),
-('gi611b3175d52e7', 'tran611b3175d327e', 'itm6108c74649d53', '', '6', '2021-08-17', 'Pcs', 18500, 'htm6108c74660808'),
-('gi611b3175d5b8c', 'tran611b3175d327e', 'itm6108d33718d58', '', '1', '2021-08-17', 'Dus', 285000, 'htm6108d33751064'),
-('gi611b3175d6489', 'tran611b3175d327e', 'itm6108d33718d58', '', '12', '2021-08-17', 'Pcs', 12000, 'htm6108d33731b3b'),
-('gi611b3175d6d51', 'tran611b3175d327e', 'itm6108d337c8343', '', '6', '2021-08-17', 'Pcs', 21500, 'htm6108d337e2c85'),
-('gi611b3175d75e7', 'tran611b3175d327e', 'itm61121f1765629', '', '4', '2021-08-17', 'Pcs', 23000, 'htm61121f176a87d'),
-('gi611b3175d7f12', 'tran611b3175d327e', 'itm6108c8c4db2c8', '', '10', '2021-08-17', 'Pcs', 13000, 'htm6108c8c4f2f9b'),
-('gi611b3175d891e', 'tran611b3175d327e', 'itm6117422acba90', '', '3', '2021-08-17', 'Dus', 135000, 'htm6117422acc782'),
-('gi611b3175d927a', 'tran611b3175d327e', 'itm6108d338d0143', '', '1', '2021-08-17', 'Dus', 105000, 'htm6108d33918123'),
 ('gi611b414dc691b', 'tran611b29e8dbc3d', 'itm6108c748dd4c6', '', '1', '2021-08-17', 'Krg', 460000, 'htm6108c7491cac3'),
 ('gi611b414dcc945', 'tran611b29e8dbc3d', 'itm6110f545eaf2a', '', '1', '2021-08-17', 'Dus', 258000, 'htm6110f54601243'),
 ('gi611b414dd069a', 'tran611b29e8dbc3d', 'itm6111fe7386775', '', '1', '2021-08-17', 'Krg', 522500, 'htm6111fe738c024'),
@@ -1008,15 +999,6 @@ INSERT INTO `groupitem` (`idGroupitem`, `idTransaksi`, `idItem`, `pengurangItem`
 ('gi611b5f3bdf58a', 'tran611b5f3bd8927', 'itm6108c73f25196', '', '1', '2021-08-17', 'Krg', 415000, 'htm6108c73f77c29'),
 ('gi611b62151f260', 'tran611b62151f228', 'itm611238451824f', '', '1', '2021-08-17', 'Krg', 725000, 'htm611238451ec68'),
 ('gi611b621522735', 'tran611b62151f228', 'itm610e10764a5ac', '', '4', '2021-08-17', 'Kg', 22500, 'htm610e10765d7eb'),
-('gi611b69709c6c8', 'tran611b69709c692', 'itm6108b062f1dce', '', '1', '2021-08-17', 'Krg', 365000, 'htm6108b06314fba'),
-('gi611b69709fc9e', 'tran611b69709c692', 'itm6110f545eaf2a', '', '1', '2021-08-17', 'Dus', 258000, 'htm6110f54601243'),
-('gi611b6970a3935', 'tran611b69709c692', 'itm6108d286d0d16', '', '20', '2021-08-17', 'Pcs', 4000, 'htm6108d286da50f'),
-('gi611b6970a74be', 'tran611b69709c692', 'itm610e1074af9f7', '', '1', '2021-08-17', 'Krg', 350000, 'htm61122a1b2d1e1'),
-('gi611b77767d5eb', 'tran611b77767d598', 'itm6108c748dd4c6', '', '1', '2021-08-17', 'Krg', 460000, 'htm6108c7491cac3'),
-('gi611b7776856b7', 'tran611b77767d598', 'itm6108c7362505b', '', '1', '2021-08-17', 'Krg', 298000, 'htm6108c736651fb'),
-('gi611b77768cf69', 'tran611b77767d598', 'itm610e1071e01fd', '', '1', '2021-08-17', 'Krg', 400000, 'htm610e1072089b3'),
-('gi611b7776947e8', 'tran611b77767d598', 'itm610e1076bafed', '', '1', '2021-08-17', 'Krg', 400000, 'htm610e1076d7763'),
-('gi611b77769bf04', 'tran611b77767d598', 'itm6110f74df0726', '', '1', '2021-08-17', 'Dus', 115000, 'htm6110f74df3c18'),
 ('gi611b80eb2bdb3', 'tran611b8085d1fff', 'itm6108c74501fa2', '', '1', '2021-08-17', 'Pcs', 26000, 'htm6108c74566687'),
 ('gi611b80eb2cacc', 'tran611b8085d1fff', 'itm6108d22cc647e', '', '1', '2021-08-17', 'Pcs', 6000, 'htm6108d22d0e47b'),
 ('gi611b80eb2d2ba', 'tran611b8085d1fff', 'itm6108d743a7010', '', '2', '2021-08-17', 'Pcs', 13000, 'htm6108d743e890c'),
@@ -1075,7 +1057,21 @@ INSERT INTO `groupitem` (`idGroupitem`, `idTransaksi`, `idItem`, `pengurangItem`
 ('gi611dad30ec7d7', 'tran611dace1f1e4a', 'itm6108c74d2fbf2', '', '10', '2021-08-19', 'Pcs', 5800, 'htm6108c74d4731b'),
 ('gi611dad30ed581', 'tran611dace1f1e4a', 'itm6108b062f1dce', '', '4', '2021-08-19', 'Pcs', 19500, 'htm611c5fb087b35'),
 ('gi611dad30f418a', 'tran611dace1f1e4a', 'itm6108d2b3a6b7c', '', '4', '2021-08-19', 'Pcs', 19500, 'htm611c5fd955921'),
-('gi611e2282bad61', 'tran611e2282bad22', 'itm6108c749cc728', '', '1', '2021-08-19', 'Pcs', 11500, 'htm6108c749d8dde');
+('gi611e2282bad61', 'tran611e2282bad22', 'itm6108c749cc728', '', '1', '2021-08-19', 'Pcs', 11500, 'htm6108c749d8dde'),
+('gi61235a1746858', 'tran61161911c6b44', 'itm6108c749cc728', '', '1', '2021-08-23', 'Pcs', 13000, 'htm6108c74a2e3d9'),
+('gi61235a175386b', 'tran61161911c6b44', 'itm6108d83e5a87d', '', '2', '2021-08-23', 'Pcs', 30000, 'htm6108d83ebb32b'),
+('gi61235a175f765', 'tran61161911c6b44', 'itm6108c73d8b459', '', '1', '2021-08-23', 'Krg', 165000, 'htm6108c73dbf01c'),
+('gi61235a4c4101b', 'tran6119cb4bb8e3f', 'itm6112009d6e345', '', '3', '2021-08-23', 'Dus', 290000, 'htm61120afa64700'),
+('gi61235a4c4df4c', 'tran6119cb4bb8e3f', 'itm610e1074af9f7', '', '2', '2021-08-23', 'Krg', 350000, 'htm61122a1b2e052'),
+('gi61235a4c5a195', 'tran6119cb4bb8e3f', 'itm6119cb7ec94f7', '', '20', '2021-08-23', 'Pcs', 3000, 'htm6119cb7ecff30'),
+('gi61235a4c63be2', 'tran6119cb4bb8e3f', 'itm611df64102036', '', '1', '2021-08-23', 'Krg', 430000, 'htm611df64102b9a'),
+('gi61235ba2542f0', 'tran611b3175d327e', 'itm6108b0635f243', '', '12', '2021-08-23', 'Pcs', 11000, 'htm6108b06368a8e'),
+('gi61235ba2613d1', 'tran611b3175d327e', 'itm6108c74649d53', '', '6', '2021-08-23', 'Pcs', 18500, 'htm6108c74660808'),
+('gi61235ba2741fc', 'tran611b3175d327e', 'itm6108d33718d58', '', '12', '2021-08-23', 'Pcs', 12000, 'htm6108d33731b3b'),
+('gi61235ba27af66', 'tran611b3175d327e', 'itm6108d33718d58', '', '1', '2021-08-23', 'Dus', 285000, 'htm6108d33751064'),
+('gi61235ba2848cd', 'tran611b3175d327e', 'itm6108d337c8343', '', '6', '2021-08-23', 'Pcs', 21500, 'htm6108d337e2c85'),
+('gi61235ba28dec9', 'tran611b3175d327e', 'itm61121f1765629', '', '4', '2021-08-23', 'Pcs', 23000, 'htm61121f176a87d'),
+('gi61235ba29d2a7', 'tran611b3175d327e', 'itm6117422acba90', '', '3', '2021-08-23', 'Dus', 135000, 'htm6117422acc782');
 
 -- --------------------------------------------------------
 
@@ -92882,7 +92878,7 @@ INSERT INTO `transaksi` (`idTransaksi`, `nomorTransaksi`, `kasirTransaksi`, `pel
 ('tran611239246ddfe', '', 'user60eefe5a7a23d', 'Pak Iman Cijerah', '2021-08-10', '', '', '2', '2021-08-10 15:30:28', '1'),
 ('tran6112425b9bcf7', '', 'user60eefe5a7a23d', '', '2021-08-10', '', '', '2', '2021-08-10 16:09:47', '1'),
 ('tran611244e2130fb', '', 'user60eefe5a7a23d', 'Ratu', '2021-08-10', '', '', '2', '2021-08-10 16:20:34', '1'),
-('tran61161911c6b44', '', 'user60eefe5a7a23d', 'Johan Sukardi', '2021-08-13', '', '', '2', '2021-08-13 14:02:41', '2'),
+('tran61161911c6b44', '', 'user60eefe5a7a23d', 'Johan Sukardi', '2021-07-14', '', '', '2', '2021-08-13 14:02:41', '2'),
 ('tran61161f36a8925', '', 'user60eefe5a7a23d', '', '2021-08-13', '', '', '2', '2021-08-13 14:28:54', '2'),
 ('tran61172f90704d3', '', 'user60eefe5a7a23d', 'Pak Iman Cileunyi', '2021-08-14', '', '', '2', '2021-08-14 09:51:16', '1'),
 ('tran61172fa504571', '', 'user60eefe5a7a23d', 'Pak Iman Cileunyi', '2021-08-14', '', '', '2', '2021-08-14 09:51:17', '1'),
@@ -92930,7 +92926,7 @@ INSERT INTO `transaksi` (`idTransaksi`, `nomorTransaksi`, `kasirTransaksi`, `pel
 ('tran6118da9d3c64b', '', 'user60eefe5a7a23d', '', '2021-08-15', '', '', '2', '2021-08-15 16:13:01', '1'),
 ('tran6119bfb3da6a9', '', 'user60eefe5a7a23d', 'Pak Kumis', '2021-08-16', '', '', '2', '2021-08-16 08:30:27', '1'),
 ('tran6119c4256f11d', '', 'user60eefe5a7a23d', '', '2021-08-16', '', '', '2', '2021-08-16 08:49:25', '2'),
-('tran6119cb4bb8e3f', '', 'user60eefe5a7a23d', '', '2021-08-16', '', '', '2', '2021-08-16 09:19:55', '2'),
+('tran6119cb4bb8e3f', '', 'user60eefe5a7a23d', '', '2021-07-14', '', '', '2', '2021-08-16 09:19:55', '2'),
 ('tran6119cd14c9a3a', '', 'user60eefe5a7a23d', 'Pak Arun', '2021-08-16', '', '', '2', '2021-08-16 09:27:32', '1'),
 ('tran6119d2f080cdd', '', 'user60eefe5a7a23d', '', '2021-08-16', '', '', '2', '2021-08-16 09:52:32', '1'),
 ('tran6119dba95fb2e', '', 'user60eefe5a7a23d', 'Pak Rudi Cangkuang', '2021-08-16', '', '', '2', '2021-08-16 10:29:45', '1'),
@@ -92948,15 +92944,13 @@ INSERT INTO `transaksi` (`idTransaksi`, `nomorTransaksi`, `kasirTransaksi`, `pel
 ('tran611b20d5382e8', '', 'user60eefe5a7a23d', 'Pak Ayi', '2021-08-17', '', '', '2', '2021-08-17 09:37:09', '1'),
 ('tran611b28cb3ac89', '', 'user60eefe5a7a23d', 'Amor', '2021-08-17', '', '', '2', '2021-08-17 10:11:07', '1'),
 ('tran611b29e8dbc3d', '', 'user60eefe5a7a23d', 'Pak Iman Cileunyi', '2021-08-17', '', '', '2', '2021-08-17 10:15:52', '1'),
-('tran611b3175d327e', '', 'user60eefe5a7a23d', 'Mas Azis', '2021-08-17', '', '', '2', '2021-08-17 10:48:05', '1'),
+('tran611b3175d327e', '', 'user60eefe5a7a23d', 'Mas Azis', '2021-07-14', '', '', '2', '2021-08-17 10:48:05', '1'),
 ('tran611b4767dbb69', '', 'user60eefe5a7a23d', '', '2021-08-17', '', '', '2', '2021-08-17 12:21:43', '2'),
 ('tran611b4877532fb', '', 'user60eefe5a7a23d', '', '2021-08-17', '', '', '2', '2021-08-17 12:26:15', '1'),
 ('tran611b509068d2f', '', 'user60eefe5a7a23d', '', '2021-08-17', '', '', '2', '2021-08-17 13:00:48', '2'),
 ('tran611b52954b0f9', '', 'user60eefe5a7a23d', 'Mas Ibrahim', '2021-08-17', '', '', '2', '2021-08-17 13:09:25', '1'),
 ('tran611b5f3bd8927', '', 'user60eefe5a7a23d', '', '2021-08-17', '', '', '2', '2021-08-17 14:03:23', '1'),
 ('tran611b62151f228', '', 'user60eefe5a7a23d', '', '2021-08-17', '', '', '2', '2021-08-17 14:15:33', '1'),
-('tran611b69709c692', '', 'user60eefe5a7a23d', 'Bung Ferry', '2021-08-17', '', '', '2', '2021-08-17 14:46:56', '1'),
-('tran611b77767d598', '', 'user60eefe5a7a23d', 'Pak Iman Cijerah', '2021-08-17', '', '', '2', '2021-08-17 15:46:46', '1'),
 ('tran611b8085d1fff', '', 'user60eefe5a7a23d', '', '2021-08-17', '', '', '2', '2021-08-17 16:25:25', '2'),
 ('tran611c6aa65fa7f', '', 'user60eefe5a7a23d', '', '2021-08-18', '', '', '2', '2021-08-18 09:04:22', '1'),
 ('tran611c8994daa25', '', 'user60eefe5a7a23d', 'Pak Haji Asep', '2021-08-18', '', '', '2', '2021-08-18 11:16:21', '1'),

@@ -47,4 +47,20 @@ class GroupItem extends GlobalFunc
             die();
         }
     }
+
+    public function delete($id)
+    {
+        $sql = "DELETE FROM " . $this->table . " WHERE idTransaksi = '$id'";
+
+        try {
+            $query = $this->conn->prepare($sql);
+            $query->execute();
+            $data = $query->fetch();
+
+            return $data;
+        } catch (PDOException $e) {
+            echo $e;
+            die();
+        }
+    }
 }

@@ -144,6 +144,7 @@
                 </table>
             </div>
 
+            <?php if ($pagination['number_of_page'] > 1) { ?>
             <div class="row">
                 <div class="col-6">
                     <h6 class="text-muted">Showing <?= $pagination['page_first_result'] + 1 ?> to <?= count($datas) ?> of <?= $pagination['countRows'] ?> entries</h6>
@@ -151,25 +152,26 @@
                 <div class="col-6">
                     <?php
                     $links = "<ul class=\"pagination float-end\">
-            <li class=\"page-item " . ($pagination['current_page'] - 1 == 0 ? 'disabled' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . (intval($pagination['current_page']) - 1) . "\"><i class=\"fas fa-angle-left\"></i></a></li>";
+            <li class=\"page-item " . ($pagination['current_page'] - 1 == 0 ? 'disabled' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . (intval($pagination['current_page']) - 1) . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\"><i class=\"fas fa-angle-left\"></i></a></li>";
                     if ($pagination['number_of_page'] >= 1 && $pagination['current_page'] <= $pagination['number_of_page']) {
                         $i = max(2, $pagination['current_page'] - 5);
-                        $links .= "<li class=\"page-item " . ($pagination['current_page'] == ($i - 1) ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=1\">1</a></li>";
+                        $links .= "<li class=\"page-item " . ($pagination['current_page'] == ($i - 1) ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=1&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\">1</a></li>";
                         if ($i > 2)
-                            $links .= "<li class=\"page-item\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . ($i - 1) . "\"> ... </a></li>";
+                            $links .= "<li class=\"page-item\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . ($i - 1) . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\"> ... </a></li>";
                         for (; $i < min($pagination['current_page'] + 6, $pagination['number_of_page']); $i++) {
-                            $links .= "<li class=\"page-item " . ($pagination['current_page'] == $i ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $i . "\">" . $i . "</a></li>";
+                            $links .= "<li class=\"page-item " . ($pagination['current_page'] == $i ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $i . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\">" . $i . "</a></li>";
                         }
                         if ($i != $pagination['number_of_page'])
-                            $links .= "<li class=\"page-item\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $i . "\"> ... </a></li>";
-                        $links .= "<li class=\"page-item " . ($pagination['current_page'] == $pagination['number_of_page'] ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $pagination['number_of_page'] . "\">" . $pagination['number_of_page'] . "</a></li>";
+                            $links .= "<li class=\"page-item\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $i . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\"> ... </a></li>";
+                        $links .= "<li class=\"page-item " . ($pagination['current_page'] == $pagination['number_of_page'] ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $pagination['number_of_page'] . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\">" . $pagination['number_of_page'] . "</a></li>";
                     }
-                    $links .= "<li class=\"page-item " . ($pagination['current_page'] + 1 > $pagination['number_of_page'] ? 'disabled' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . (intval($pagination['current_page']) + 1) . "\"><i class=\"fas fa-angle-right\"></i></a></li>
+                    $links .= "<li class=\"page-item " . ($pagination['current_page'] + 1 > $pagination['number_of_page'] ? 'disabled' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . (intval($pagination['current_page']) + 1) . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\"><i class=\"fas fa-angle-right\"></i></a></li>
             </ul>";
                     echo $links;
                     ?>
                 </div>
             </div>
+            <?php } ?>
 
         </div>
     </div>

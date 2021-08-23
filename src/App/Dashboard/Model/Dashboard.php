@@ -213,7 +213,7 @@ class Dashboard extends GlobalFunc
             $totalHarga = 0;
 
             foreach($dataGroupItem as $groupitem){
-                $totalHarga += $groupitem['jumlahItem'] * $groupitem['hargaItem'];
+                $totalHarga += intval($groupitem['jumlahItem']) * intval($groupitem['hargaItem']);
             }
 
             return $totalHarga;

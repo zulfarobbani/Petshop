@@ -19,9 +19,9 @@ class Produk extends GlobalFunc
         $this->conn = $globalFunc->conn;
     }
 
-    public function countRows()
+    public function countRows($where = "")
     {
-        $sql = "SELECT COUNT(".$this->primaryKey.") as count FROM " . $this->table;
+        $sql = "SELECT COUNT(".$this->primaryKey.") as count FROM " . $this->table . " " .$where;
 
         try {
             $query = $this->conn->prepare($sql);

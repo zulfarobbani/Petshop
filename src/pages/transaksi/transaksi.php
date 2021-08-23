@@ -104,10 +104,12 @@
                     </form>
                 </div> -->
                 <div class="col-12">
-                    <form method="GET" action="/transaksi/<?= $jenis_transaksi_text ?>?data_per_page=<?= $data_per_page ?>&page=1&filterWaktumasukFrom=<?= $filterWaktumasukFrom ?>&filterWaktumasukTo=<?= $filterWaktumasukTo ?>">
+                    <form method="GET" action="">
                         <div class="text-end">
                             <button type="submit" class="btn btn-success float-end">Submit</button>
-                            <input class="form-control w-50 float-end" type="search" name="search" placeholder="Search" aria-label="Search">
+                            <input class="form-control w-50 float-end" type="text" name="search" placeholder="Search" aria-label="Search">
+                            <input type="hidden" name="filterWaktumasukFrom" value="<?= $filterWaktumasukFrom ?>">
+                            <input type="hidden" name="filterWaktumasukTo" value="<?= $filterWaktumasukTo ?>">
                         </div>
                     </form>
                 </div>
@@ -141,6 +143,8 @@
                                     <a href="/transaksi/<?= $data['idTransaksi'] ?>/print-receipt" class="btn px-2 py-1 text-white btnHapus" id="btnIjo" target="_blank"><i class="fas fa-print"></i></a>
 
                                     <button type="button" class="btn px-2 py-1 text-white btnRetur btn-sm" id="btnMerah" data-bs-toggle="modal" data-bs-target="#modalreturproduct" data-bs-idTransaksi="<?= $data['idTransaksi'] ?>"><i class="fa fa-arrow-left"></i> Retur Produk</button>
+
+                                    <button type="button" class="btn px-2 py-1 me-1 text-white btnHapus" id="btnMerah" data-bs-toggle="modal" data-bs-target="#modalhapusproduct" data-bs-idTransaksi="<?= $data['idTransaksi'] ?>"><i class="fa fa-trash-alt"></i></button>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -148,23 +152,57 @@
                 </table>
             </div>
 
+            <?php if ($pagination['number_of_page'] > 1) { ?>
             <div class="row">
                 <div class="col-6">
                     <h6 class="text-muted">Showing <?= $pagination['page_first_result'] + 1 ?> to <?= count($datas) ?> of <?= $pagination['countRows'] ?> entries</h6>
                 </div>
                 <div class="col-6">
-                    <ul class="pagination float-end">
-                        <li class="page-item <?= $pagination['current_page'] - 1 == 0 ? 'disabled' : '' ?>"><a class="page-link" href="?page=<?= intval($pagination['current_page']) - 1 ?>&filterWaktumasukFrom=<?= $filterWaktumasukFrom ?>&filterWaktumasukTo=<?= $filterWaktumasukTo ?>"><i class="fas fa-angle-left"></i></a></li>
-                        <?php for ($page = 1; $page <= $pagination['number_of_page']; $page++) { ?>
-                            <li class="page-item <?= $pagination['current_page'] == $page ? 'active' : '' ?>"><a class="page-link" href="?data_per_page=<?= $pagination['result_per_page']  ?>&page=<?= $page ?>&filterWaktumasukFrom=<?= $filterWaktumasukFrom ?>&filterWaktumasukTo=<?= $filterWaktumasukTo ?>"><?= $page ?></a></li>
-                        <?php } ?>
-                        <li class="page-item <?= $pagination['current_page'] + 1 > $pagination['number_of_page'] ? 'disabled' : '' ?>"><a class="page-link" href="?page=<?= intval($pagination['current_page']) + 1 ?>&filterWaktumasukFrom=<?= $filterWaktumasukFrom ?>&filterWaktumasukTo=<?= $filterWaktumasukTo ?>"><i class="fas fa-angle-right"></i></a></li>
-                    </ul>
+                    <?php
+                    $links = "<ul class=\"pagination float-end\">
+            <li class=\"page-item " . ($pagination['current_page'] - 1 == 0 ? 'disabled' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . (intval($pagination['current_page']) - 1) . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\"><i class=\"fas fa-angle-left\"></i></a></li>";
+                    if ($pagination['number_of_page'] >= 1 && $pagination['current_page'] <= $pagination['number_of_page']) {
+                        $i = max(2, $pagination['current_page'] - 5);
+                        $links .= "<li class=\"page-item " . ($pagination['current_page'] == ($i - 1) ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=1&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\">1</a></li>";
+                        if ($i > 2)
+                            $links .= "<li class=\"page-item\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . ($i - 1) . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\"> ... </a></li>";
+                        for (; $i < min($pagination['current_page'] + 6, $pagination['number_of_page']); $i++) {
+                            $links .= "<li class=\"page-item " . ($pagination['current_page'] == $i ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $i . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\">" . $i . "</a></li>";
+                        }
+                        if ($i != $pagination['number_of_page'])
+                            $links .= "<li class=\"page-item\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $i . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\"> ... </a></li>";
+                        $links .= "<li class=\"page-item " . ($pagination['current_page'] == $pagination['number_of_page'] ? 'active' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . $pagination['number_of_page'] . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\">" . $pagination['number_of_page'] . "</a></li>";
+                    }
+                    $links .= "<li class=\"page-item " . ($pagination['current_page'] + 1 > $pagination['number_of_page'] ? 'disabled' : '') . "\"><a class=\"page-link\" href=\"?data_per_page=" . $pagination['result_per_page'] . "&page=" . (intval($pagination['current_page']) + 1) . "&filterWaktumasukFrom=".$filterWaktumasukFrom."&filterWaktumasukTo=".$filterWaktumasukTo."&search=".$search."\"><i class=\"fas fa-angle-right\"></i></a></li>
+            </ul>";
+                    echo $links;
+                    ?>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+
+    <!-- Modal Hapus Product-->
+    <div class="modal fade" id="modalhapusproduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><b>Hapus Product</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        Apakah anda yakin ingin menhapus data transaksi ini?
+                    </div>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn rounded-pill px-3 btn-sm text-white" id="btnMerah" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn rounded-pill px-3 btn-sm text-white btnActionHapus" id="btnKuning">Hapus</button>
+                    <form action="" method="post" class="d-none hapusForm"></form>
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- Modal Tambah Transaksi -->
     <div class="modal fade" id="ModalTambahTransaksi" tabindex="-1" aria-labelledby="ModalTambah" aria-hidden="true">

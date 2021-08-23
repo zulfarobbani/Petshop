@@ -74,7 +74,6 @@ class ProdukController extends GlobalFunc
         // }
 
         // pagination
-        $countRows = $this->model->countRows()['count'];
         $page = $request->query->get('page') ? $request->query->get('page') : '1';
 
         if ($request->query->get('data_per_page') != null){
@@ -93,6 +92,7 @@ class ProdukController extends GlobalFunc
 
         $search = $request->query->get('search');
         $where = $search != '' ? "WHERE namaItem LIKE '%$search%'" : "";
+        $countRows = $this->model->countRows($where)['count'];
 
         $page_first_result = ($page-1)*$result_per_page;
         $number_of_page = ceil($countRows/$result_per_page);
@@ -107,7 +107,7 @@ class ProdukController extends GlobalFunc
             'countRows' => $countRows
         ];
 
-        return $this->render_template('produk/produk', ['datas' => $datas, 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo, 'pagination' => $pagination]);
+        return $this->render_template('produk/produk', ['datas' => $datas, 'filterWaktumasukFrom' => $filterWaktumasukFrom, 'filterWaktumasukTo' => $filterWaktumasukTo, 'pagination' => $pagination, 'search' => $search]);
     }
 
     public function create(Request $request)
